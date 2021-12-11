@@ -65,6 +65,14 @@ flutter:
   assets:
     - assets/background.png
     - assets/logobar.png
+    - assets/images/
+    - assets/ball.png
+    - assets/sahabul.png
+    - assets/images/logobar.png
+    - assets/images/swirl_and_ball.png
+    - assets/images/Header-Saha-Bul.png
+    - assets/images/Header-Takim-Bul.png
+    - assets/images/Header-Rakip-Bul.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

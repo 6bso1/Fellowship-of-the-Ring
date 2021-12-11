@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "571354268192",
+    "project_id": "sportalauth",
+    "storage_bucket": "sportalauth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571354268192:android:cb80af98b596972e373245",
+        "android_client_info": {
+          "package_name": "com.example.sportal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571354268192-brvac0nfbllf2vm3muicdv6q95bdj92u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sportal",
+            "certificate_hash": "9699faa5218e0992785d00538fb9955d56d00cb3"
+          }
+        },
+        {
+          "client_id": "571354268192-hurn3ephnphmf8s22bshfvtki1m4q7ib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4yqxPo5YeXH_qL4Dp8uRTOfCermj2bSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571354268192-hurn3ephnphmf8s22bshfvtki1m4q7ib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

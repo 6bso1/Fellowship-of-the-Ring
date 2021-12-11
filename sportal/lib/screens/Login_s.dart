@@ -1,9 +1,9 @@
-import 'package:sportal/screens/home_s.dart';
-import 'package:sportal/screens/signup_s.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sportal/screens/signup_s.dart';
 
+import 'HomePage_s.dart';
 
 class Login_screen extends StatefulWidget {
   const Login_screen({Key? key}) : super(key: key);
@@ -28,7 +28,6 @@ class _Login_screenState extends State<Login_screen> {
 
   @override
   Widget build(BuildContext context) {
-
     final emailField = TextFormField(
         autofocus: false,
         controller: emailController,
@@ -108,10 +107,8 @@ class _Login_screenState extends State<Login_screen> {
         home: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/background.png"),fit: BoxFit.cover
-              )
-          ),
-
+                  image: AssetImage("assets/background.png"),
+                  fit: BoxFit.cover)),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Center(
@@ -146,8 +143,7 @@ class _Login_screenState extends State<Login_screen> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              Signup()));
+                                          builder: (context) => Signup()));
                                 },
                                 child: Text(
                                   "Kaydol",
@@ -174,15 +170,14 @@ class _Login_screenState extends State<Login_screen> {
         await _auth
             .signInWithEmailAndPassword(email: email, password: password)
             .then((uid) => {
-          Fluttertoast.showToast(msg: "Giriş Başarılı"),
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => HomeScreen())),
-        });
+                  Fluttertoast.showToast(msg: "Giriş Başarılı"),
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => HomePage())),
+                });
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
           case "invalid-email":
             errorMessage = "Mail adresiniz geçerli değil";
-
             break;
           case "wrong-password":
             errorMessage = "Şifreniz yanlış";

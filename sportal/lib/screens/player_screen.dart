@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'player_search_buildBody.dart';
 import 'edit_profile.dart';
-import '../page/bottom_bar_player_search.dart';
-import '../page/bottom_bar_floating_action_button.dart';
+import '../bars/bottom_bar_player_search.dart';
+import '../bars/bottom_bar_floating_action_button.dart';
 
 class ProfileUI extends StatelessWidget {
   int index;

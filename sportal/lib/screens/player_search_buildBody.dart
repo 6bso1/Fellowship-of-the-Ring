@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import 'Player.dart';
 import 'player_screen.dart';
-import '../page/local_search_appbar_page.dart';
+import '../bars/local_search_appbar_page.dart';
 
 class PlayerSearchBuildBody extends StatelessWidget{
 

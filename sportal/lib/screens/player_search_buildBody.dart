@@ -4,6 +4,7 @@ import 'Player.dart';
 import 'player_screen.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
+import '../screens/Background.dart';
 import '../bars/local_search_appbar_page.dart';
 
 class PlayerSearchBuildBody extends StatelessWidget{
@@ -20,6 +21,8 @@ class PlayerSearchBuildBody extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: buildHeader(),
+      extendBodyBehindAppBar:
+      true,
         body: buildBody(),
         floatingActionButton: true
         ? buildFloating(context)
@@ -30,6 +33,7 @@ class PlayerSearchBuildBody extends StatelessWidget{
   }
   Widget buildBody(){
     return Container(
+
         decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(
@@ -37,6 +41,7 @@ class PlayerSearchBuildBody extends StatelessWidget{
             fit: BoxFit.cover,
           ),
         ),
+
         child:Column(
         children: <Widget>[
           Expanded(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../bars/buildAppBar.dart';
 import 'Background.dart';
 import 'RakipBul_s.dart';
 import 'SahaBul_s.dart';
 import 'TakimBul_s.dart';
-import 'buildAppBar.dart';
 
 void main() {
   runApp(const MyApp());

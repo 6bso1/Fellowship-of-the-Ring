@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sportal/model/user_model.dart';
-import 'package:sportal/screens/home_s.dart';
+import 'package:sportal/screens/HomePage_s.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'Login_s.dart';
 
 
 class Signup extends StatefulWidget {
@@ -315,7 +316,7 @@ class SignupState extends State<Signup> {
 
     Navigator.pushAndRemoveUntil(
         (context),
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => Login_screen()),
             (route) => false);
   }
 }

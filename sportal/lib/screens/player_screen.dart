@@ -203,7 +203,7 @@ class ProfileUI extends StatelessWidget {
         ),
 
       floatingActionButton: true
-          ? buildFloating()
+          ? buildFloating(context)
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),

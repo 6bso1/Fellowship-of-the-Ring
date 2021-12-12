@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import 'Player.dart';
 import 'player_screen.dart';
+import '../bars/bottom_bar_floating_action_button.dart';
+import '../bars/bottom_bar_player_search.dart';
 import '../bars/local_search_appbar_page.dart';
 
 class PlayerSearchBuildBody extends StatelessWidget{
@@ -17,7 +19,13 @@ class PlayerSearchBuildBody extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: buildBody()
+        appBar: buildHeader(),
+        body: buildBody(),
+        floatingActionButton: true
+        ? buildFloating(context)
+        : null,
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    bottomNavigationBar: buildBottomBar(),
     );
   }
   Widget buildBody(){
@@ -81,6 +89,17 @@ class PlayerSearchBuildBody extends StatelessWidget{
 
     )
     );
+  }
+  AppBar buildHeader() {
+    return AppBar(
+        elevation: 0.0,
+        title: Center(
+            child: Image.asset('assets/images/Header-Takim-Bul.png',
+                height: AppBar()
+                    .preferredSize
+                    .height)), //image'i app bar'ın yüksekliğine görse resize ediyor
+        backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
+        automaticallyImplyLeading: false);
   }
 
 }

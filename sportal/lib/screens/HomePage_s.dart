@@ -6,6 +6,7 @@ import 'Background.dart';
 import 'RakipBul_s.dart';
 import 'SahaBul_s.dart';
 import 'TakimBul_s.dart';
+import 'player_search_buildBody.dart';
 
 void main() {
   runApp(const MyApp());
@@ -127,7 +128,7 @@ class HomePageMenu extends StatelessWidget {
           Navigator.push(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => RouteTakimBul(),
+              pageBuilder: (context, animation1, animation2) => PlayerSearchBuildBody(),
               transitionDuration: Duration.zero,
             ),
           );

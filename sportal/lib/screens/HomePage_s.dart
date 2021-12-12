@@ -6,6 +6,9 @@ import 'Background.dart';
 import 'RakipBul_s.dart';
 import 'SahaBul_s.dart';
 import 'TakimBul_s.dart';
+import 'player_search_buildBody.dart';
+import '../bars/bottom_bar_player_search.dart';
+import '../bars/bottom_bar_floating_action_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,9 +38,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: buildBottomAppBar(),
+        floatingActionButton: true
+            ? buildFloating(context)
+            : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: buildFloatingActionButton(context),
+        bottomNavigationBar: buildBottomBar(),
         appBar: buildAppBar(),
         extendBodyBehindAppBar:
             true, //Body'i appbar kısmına çekiyor (Arka planı uzatmak için)
@@ -127,7 +132,7 @@ class HomePageMenu extends StatelessWidget {
           Navigator.push(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => RouteTakimBul(),
+              pageBuilder: (context, animation1, animation2) => PlayerSearchBuildBody(),
               transitionDuration: Duration.zero,
             ),
           );

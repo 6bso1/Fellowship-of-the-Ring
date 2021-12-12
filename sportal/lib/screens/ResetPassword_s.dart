@@ -56,7 +56,9 @@ class _Reset_screenState extends State<Reset_screen> {
                       child: Text('Şifreyi sıfırla'),
                       onPressed: () {
                         auth.sendPasswordResetEmail(email: _email);
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) => Login_screen()),
+                        );
                       },
                       color: Color(0xFFCC3DE7),
                     ),

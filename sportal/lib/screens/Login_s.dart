@@ -32,6 +32,7 @@ class _Login_screenState extends State<Login_screen> {
         autofocus: false,
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
+        style: TextStyle(color: Colors.white),
         validator: (value) {
           if (value!.isEmpty) {
             return ("Email adresi giriniz");
@@ -62,6 +63,7 @@ class _Login_screenState extends State<Login_screen> {
         autofocus: false,
         controller: passwordController,
         obscureText: true,
+        style: TextStyle(color: Colors.white),
         validator: (value) {
           RegExp regex = new RegExp(r'^.{6,}$');
           if (value!.isEmpty) {

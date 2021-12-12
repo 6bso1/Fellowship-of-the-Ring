@@ -36,6 +36,7 @@ class SignupState extends State<Signup> {
         autofocus: false,
         controller: firstNameEditingController,
         keyboardType: TextInputType.name,
+        style: TextStyle(color: Colors.white),
         validator: (value) {
           RegExp regex = new RegExp(r'^.{3,}$');
           if (value!.isEmpty) {
@@ -65,6 +66,7 @@ class SignupState extends State<Signup> {
         autofocus: false,
         controller: secondNameEditingController,
         keyboardType: TextInputType.name,
+        style: TextStyle(color: Colors.white),
         validator: (value) {
           if (value!.isEmpty) {
             return ("Soyisim boş bırakılamaz");
@@ -90,6 +92,7 @@ class SignupState extends State<Signup> {
         autofocus: false,
         controller: emailEditingController,
         keyboardType: TextInputType.emailAddress,
+        style: TextStyle(color: Colors.white),
         validator: (value) {
           if (value!.isEmpty) {
             return ("Email adresi girin");
@@ -120,6 +123,7 @@ class SignupState extends State<Signup> {
         autofocus: false,
         controller: passwordEditingController,
         obscureText: true,
+        style: TextStyle(color: Colors.white),
         validator: (value) {
           RegExp regex = new RegExp(r'^.{6,}$');
           if (value!.isEmpty) {
@@ -148,6 +152,7 @@ class SignupState extends State<Signup> {
         autofocus: false,
         controller: confirmPasswordEditingController,
         obscureText: true,
+        style: TextStyle(color: Colors.white),
         validator: (value) {
           if (confirmPasswordEditingController.text !=
               passwordEditingController.text) {

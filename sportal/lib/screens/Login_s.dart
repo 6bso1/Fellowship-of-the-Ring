@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sportal/screens/signup_s.dart';
 
 import 'HomePage_s.dart';
+import 'ResetPassword_s.dart';
 
 class Login_screen extends StatefulWidget {
   const Login_screen({Key? key}) : super(key: key);
@@ -135,6 +136,27 @@ class _Login_screenState extends State<Login_screen> {
                         passwordField,
                         SizedBox(height: 35),
                         loginButton,
+                        SizedBox(height: 15),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text("Şifrenizi mi unuttunuz  "),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Reset_screen()));
+                                },
+                                child: Text(
+                                  "Şifreyi sıfırla",
+                                  style: TextStyle(
+                                      color: Color(0xFF4AC5F6),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                              )
+                            ]),
                         SizedBox(height: 15),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,

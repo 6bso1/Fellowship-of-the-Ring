@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'player_search_buildBody.dart';
 import 'player_screen.dart';
-import 'package:dcdg/dcdg.dart';
+
 //import 'package:settings_ui/pages/settings.dart';
 
 class SettingsUI extends StatelessWidget {

@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sportal/screens/signup_s.dart';
-import 'package:dcdg/dcdg.dart';
 
 import 'HomePage_s.dart';
 import 'ResetPassword_s.dart';

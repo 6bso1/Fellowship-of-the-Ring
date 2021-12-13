@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:dcdg/dcdg.dart';
 import '../bars/buildAppBar.dart';
 import 'Background.dart';
 import 'RakipBul_s.dart';

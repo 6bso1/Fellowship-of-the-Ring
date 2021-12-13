@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dcdg/dcdg.dart';
 import '../main.dart';
 import 'Player.dart';
 import 'player_screen.dart';

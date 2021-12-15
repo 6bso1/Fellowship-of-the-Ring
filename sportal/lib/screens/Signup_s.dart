@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'Login_s.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+class Sign_up extends StatefulWidget {
+  const Sign_up({Key? key}) : super(key: key);
 
   @override
-  SignupState createState() => SignupState();
+  Sign_upState createState() => Sign_upState();
 }
 
-class SignupState extends State<Signup> {
+class Sign_upState extends State<Sign_up> {
   final _auth = FirebaseAuth.instance;
 
   // string for displaying the error Message
@@ -266,25 +266,25 @@ class SignupState extends State<Signup> {
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
           case "invalid-email":
-            errorMessage = "Your email address appears to be malformed.";
+            errorMessage = "Email adresiniz geçerli değil.";
             break;
           case "wrong-password":
-            errorMessage = "Your password is wrong.";
+            errorMessage = "Şifreniz hatalı.";
             break;
           case "user-not-found":
-            errorMessage = "User with this email doesn't exist.";
+            errorMessage = "Böyle bir kullanıcı yok.";
             break;
           case "user-disabled":
-            errorMessage = "User with this email has been disabled.";
+            errorMessage = "Bu hesap kaldırıldı.";
             break;
           case "too-many-requests":
-            errorMessage = "Too many requests";
+            errorMessage = "Çok fazla istek";
             break;
           case "operation-not-allowed":
-            errorMessage = "Signing in with Email and Password is not enabled.";
+            errorMessage = "Görev başarısız.";
             break;
           default:
-            errorMessage = "An undefined Error happened.";
+            errorMessage = "Bilinmeyen bir hata meydana geldi.";
         }
         Fluttertoast.showToast(msg: errorMessage!);
         print(error.code);
@@ -311,7 +311,7 @@ class SignupState extends State<Signup> {
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
-    Fluttertoast.showToast(msg: "Account created successfully :) ");
+    Fluttertoast.showToast(msg: "Hesap başarıyla oluşturuldu :) ");
 
     Navigator.pushAndRemoveUntil(
         (context),

@@ -1,19 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import 'Background.dart';
-import 'HomePage_s.dart';
 
+//added again
 class RouteSahaBul extends StatelessWidget {
   const RouteSahaBul({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: true
-          ? buildFloating(context)
-          : null,
+      floatingActionButton: true ? buildFloating(context) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
       appBar: buildHeader(),

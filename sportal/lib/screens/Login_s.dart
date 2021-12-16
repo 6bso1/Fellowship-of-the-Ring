@@ -1,10 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+<<<<<<< Updated upstream
 import 'package:sportal/screens/signup_s.dart';
+=======
+import 'package:dcdg/dcdg.dart';
+>>>>>>> Stashed changes
 
 import 'HomePage_s.dart';
 import 'ResetPassword_s.dart';
+import 'Signup_s.dart';
 
 class Login_screen extends StatefulWidget {
   const Login_screen({Key? key}) : super(key: key);
@@ -167,7 +172,7 @@ class _Login_screenState extends State<Login_screen> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Signup()));
+                                          builder: (context) => Sign_up()));
                                 },
                                 child: Text(
                                   "Kaydol",

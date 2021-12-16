@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../screens/player_screen.dart';
 
 Widget buildBottomBar() {
   return _DemoBottomAppBar(
@@ -36,7 +36,7 @@ class _DemoBottomAppBar extends StatelessWidget {
         child: Row(
           children: <Widget>[
             IconButton(
-              tooltip: 'Open navigation menu',
+              tooltip: 'Favorite',
               icon: const Icon(Icons.favorite),
               iconSize: 35,
               color: Colors.black,
@@ -44,18 +44,24 @@ class _DemoBottomAppBar extends StatelessWidget {
             ),
             if (centerLocations.contains(fabLocation)) const Spacer(),
             IconButton(
-              tooltip: 'Search',
+              tooltip: 'Message',
               icon: const Icon(Icons.message),
               iconSize: 35,
               color: Colors.black,
               onPressed: () {},
             ),
             IconButton(
-              tooltip: 'Favorite',
+              tooltip: 'Profile',
               icon: const Icon(Icons.account_circle),
               iconSize: 35,
               color: Colors.black,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ProfileUI(0)));
+              },
             ),
           ],
         ),

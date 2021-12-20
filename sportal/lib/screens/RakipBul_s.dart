@@ -11,9 +11,11 @@ class RouteRakipBul extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: buildBottomAppBar(),
+      floatingActionButton: true
+          ? buildFloating(context)
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: buildFloatingActionButton(context),
+      bottomNavigationBar: buildBottomBar(),
       appBar: buildHeader(),
       extendBodyBehindAppBar:
       true, //Body'i appbar kısmına çekiyor (Arka planı uzatmak için)

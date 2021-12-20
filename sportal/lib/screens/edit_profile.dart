@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'player_search_buildBody.dart';
 import 'player_profile.dart';
+import 'my_profile.dart';
 
 //import 'package:settings_ui/pages/settings.dart';
 
@@ -131,12 +132,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
               SizedBox(
-                height: 35,
+                height: 30,
               ),
               buildTextField(1, "Ad Soyad", false),
               buildTextField(2, "E-mail", false),
               buildTextField(3, "Şifre", true),
               buildTextField(4, "Pendik,İstanbul ", false),
+              buildTextField(5, "Mevki", false),
               SizedBox(
                 height: 35,
               ),
@@ -147,7 +149,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     padding: EdgeInsets.symmetric(horizontal: 50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyProfileUI(0)));
+                    },
                     child: Text("CANCEL",
                         style: TextStyle(
                             fontSize: 14,
@@ -187,7 +195,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         decoration: InputDecoration(
             //_moneyCounter > 1000 ? Colors.green : _moneyCounter > 2000 ? Colors.Blue : Colors.red
             prefixIcon: labelText==1 ? Icon(Icons.mail): labelText==2 ? Icon(Icons.account_circle):
-                                        labelText==3 ? Icon(Icons.vpn_key): labelText==4 ? Icon(Icons.location_on): null,
+                                        labelText==3 ? Icon(Icons.vpn_key): labelText==4 ? Icon(Icons.location_on):
+                                                                                                    labelText==5 ? Icon(Icons.sports_football):null,
 
            // prefixIcon: Icon(Icons.mail) ,
             suffixIcon: isPasswordTextField

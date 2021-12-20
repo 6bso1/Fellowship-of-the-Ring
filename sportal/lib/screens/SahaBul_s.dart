@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'Background.dart';
 import 'HomePage_s.dart';
+import '../bars/bottom_bar_player_search.dart';
+import '../bars/bottom_bar_floating_action_button.dart';
 
 class RouteSahaBul extends StatelessWidget {
   RouteSahaBul({Key? key}) : super(key: key);
@@ -12,9 +14,11 @@ class RouteSahaBul extends StatelessWidget {
   Widget build(BuildContext context) {
     CollectionReference sahaRef = firestore.collection('user');
     return Scaffold(
-      bottomNavigationBar: buildBottomAppBar(),
+      floatingActionButton: true
+          ? buildFloating(context)
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: buildFloatingActionButton(context),
+      bottomNavigationBar: buildBottomBar(),
       appBar: buildHeader(),
       extendBodyBehindAppBar:
           true, //Body'i appbar kısmına çekiyor (Arka planı uzatmak için)

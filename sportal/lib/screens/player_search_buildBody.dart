@@ -3,6 +3,7 @@ import 'Player.dart';
 import 'player_profile.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
+import 'HomePage_s.dart';
 import '../screens/Background.dart';
 import '../bars/local_search_appbar_page.dart';
 
@@ -19,7 +20,7 @@ class PlayerSearchBuildBody extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: buildHeader(),
+        appBar: buildHeader(context),
       extendBodyBehindAppBar:
       true,
         body: buildBody(),
@@ -94,9 +95,22 @@ class PlayerSearchBuildBody extends StatelessWidget{
     )
     );
   }
-  AppBar buildHeader() {
+  AppBar buildHeader(BuildContext context) {
     return AppBar(
         elevation: 0.0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyApp()));
+          },
+        ),
         title: Center(
             child: Image.asset('assets/images/Header-Takim-Bul.png',
                 height: AppBar()

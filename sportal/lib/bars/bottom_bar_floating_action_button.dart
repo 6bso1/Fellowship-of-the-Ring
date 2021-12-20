@@ -5,12 +5,10 @@ Widget buildFloating(BuildContext context){
   return FloatingActionButton(
     onPressed: () {
       Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => MyApp(),
-          transitionDuration: Duration.zero,
-        ),
-      );
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  MyApp()));
     },
     child: CircleAvatar(
       radius: 30,

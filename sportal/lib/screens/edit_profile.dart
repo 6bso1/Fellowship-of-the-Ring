@@ -140,7 +140,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               buildTextField(4, "Pendik,İstanbul ", false),
               buildTextField(5, "Mevki", false),
               SizedBox(
-                height: 35,
+                height: 5,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

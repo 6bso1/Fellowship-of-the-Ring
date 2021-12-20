@@ -41,36 +41,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.green,
-          ),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ProfileUI(index)));
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.green,
-            ),
-            onPressed: () {
-              /*Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => SettingsPage()));*/
-            },
-          ),
-        ],
-      ),
+      appBar: buildHeader(context, index),
+      extendBodyBehindAppBar:
+                            true,
+
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(
+                "https://github.com/okantorun/Vector-Graphics-Libraray-C/blob/main/JPGs/background%20(1).png?raw=true"),
+            fit: BoxFit.cover,
+          ),
+        ),
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: GestureDetector(
           onTap: () {
@@ -79,8 +61,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: ListView(
             children: [
               Text(
-                "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                "Profili Düzenle",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500,color: Colors.white ),
               ),
               SizedBox(
                 height: 15,
@@ -145,22 +127,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  OutlineButton(
+                  RaisedButton(
+                    onPressed: () {},
+                    color: Colors.green,
                     padding: EdgeInsets.symmetric(horizontal: 50),
+                    elevation: 2,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyProfileUI(0)));
-                    },
-                    child: Text("CANCEL",
-                        style: TextStyle(
-                            fontSize: 14,
-                            letterSpacing: 2.2,
-                            color: Colors.black)),
+                    child: Text(
+                      "CANCEL",
+                      style: TextStyle(
+                          fontSize: 14,
+                          letterSpacing: 2.2,
+                          color: Colors.white),
+                    ),
                   ),
                   RaisedButton(
                     onPressed: () {},
@@ -193,10 +173,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: TextField(
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
-            //_moneyCounter > 1000 ? Colors.green : _moneyCounter > 2000 ? Colors.Blue : Colors.red
-            prefixIcon: labelText==1 ? Icon(Icons.mail): labelText==2 ? Icon(Icons.account_circle):
-                                        labelText==3 ? Icon(Icons.vpn_key): labelText==4 ? Icon(Icons.location_on):
-                                                                                                    labelText==5 ? Icon(Icons.sports_football):null,
+            prefixIcon: labelText==1 ? Icon(Icons.mail,color: Colors.white): labelText==2 ? Icon(Icons.account_circle,color: Colors.white):
+                        labelText==3 ? Icon(Icons.vpn_key,color: Colors.white): labelText==4 ? Icon(Icons.location_on,color: Colors.white):
+                                        labelText==5 ? Icon(Icons.sports_football,color: Colors.white):null,
 
            // prefixIcon: Icon(Icons.mail) ,
             suffixIcon: isPasswordTextField
@@ -219,9 +198,33 @@ class _EditProfilePageState extends State<EditProfilePage> {
             hintStyle: TextStyle(
               fontSize: 16,
               //fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Colors.white,
             )),
       ),
     );
+  }
+  AppBar buildHeader(BuildContext context,int index) {
+    return AppBar(
+        elevation: 0.0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyProfileUI(index)));
+          },
+        ),
+        /*title: Center(
+            child: Image.asset('assets/images/Header-Takim-Bul.png',
+                height: AppBar()
+                    .preferredSize
+                    .height)),*///image'i app bar'ın yüksekliğine görse resize ediyor
+        backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
+        automaticallyImplyLeading: false);
   }
 }

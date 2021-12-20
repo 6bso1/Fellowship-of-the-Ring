@@ -22,7 +22,7 @@ class PlayerSearchBuildBody extends StatelessWidget{
     return Scaffold(
         appBar: buildHeader(context),
       extendBodyBehindAppBar:
-      true,
+                        true,
         body: buildBody(),
         floatingActionButton: true
         ? buildFloating(context)

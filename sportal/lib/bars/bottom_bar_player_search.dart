@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../screens/player_screen.dart';
+import '../screens/player_profile.dart';
+import '../screens/my_profile.dart';
 
 Widget buildBottomBar() {
   return _DemoBottomAppBar(
@@ -60,7 +61,7 @@ class _DemoBottomAppBar extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            ProfileUI(0)));
+                            MyProfileUI(0)));
               },
             ),
           ],

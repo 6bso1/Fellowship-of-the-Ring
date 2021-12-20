@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'player_search_buildBody.dart';
-import 'player_screen.dart';
+import 'player_profile.dart';
 
 //import 'package:settings_ui/pages/settings.dart';
 

@@ -76,23 +76,7 @@ class ProfileUI extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              ButtonTheme(
-                buttonColor: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
-                minWidth: 0, //wraps child's width
-                height: 0, //wraps child's height
-                child: RaisedButton(
-                    onPressed: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                              SettingsUI(index)));
-                    },
-                    child: Text("Profili Düzenle")
-                ), //your original button
-              ),
+            
               SizedBox(
                 height: 20,
               ),

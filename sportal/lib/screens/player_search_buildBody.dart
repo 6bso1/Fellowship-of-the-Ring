@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Player.dart';
-import 'player_screen.dart';
+import 'player_profile.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import '../screens/Background.dart';

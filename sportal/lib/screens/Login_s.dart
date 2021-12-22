@@ -53,7 +53,7 @@ class _Login_screenState extends State<Login_screen> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail),
+          prefixIcon: Icon(Icons.mail,color: Colors.white),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Email",
           hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),
@@ -82,7 +82,7 @@ class _Login_screenState extends State<Login_screen> {
         },
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key),
+          prefixIcon: Icon(Icons.vpn_key,color: Colors.white),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Şifre",
           hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),

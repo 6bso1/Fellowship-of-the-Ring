@@ -42,15 +42,13 @@ class PlayerSearchBuildBody extends StatelessWidget{
           ),
         ),
 
-        child:Column(
-        children: <Widget>[
+        child:Column(children: <Widget>[
           Expanded(
             child: ListView.builder(
               itemCount: players.length ,
               itemBuilder: (BuildContext context, int index)
               {
                 return ListTile(
-
                   title: Text(players[index].firstName+" "+players[index].lastName,
                     style: TextStyle(
                         //fontSize: 10.0,
@@ -69,8 +67,10 @@ class PlayerSearchBuildBody extends StatelessWidget{
                   ),
                 ),
 
-                  trailing: Icon(Icons.exit_to_app_outlined), // for Left
-
+                  trailing: GestureDetector(onTap: (){
+                    ///do something heres
+                      print("okan");
+                  },child: Container(child: Icon(Icons.message,color: Colors.white))),
 
                   leading: CircleAvatar(
                       radius: 25.0,
@@ -90,6 +90,7 @@ class PlayerSearchBuildBody extends StatelessWidget{
             ),
 
           )
+
         ]
 
     )

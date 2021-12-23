@@ -4,6 +4,7 @@ import 'player_search_buildBody.dart';
 import 'edit_profile.dart';
 import '../bars/bottom_bar_player_search.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MyProfileUI extends StatelessWidget {
   int index;

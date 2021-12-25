@@ -45,6 +45,13 @@ class _DemoBottomAppBar extends StatelessWidget {
               color: Colors.black,
               onPressed: () {},
             ),
+            IconButton(
+              tooltip: 'Search',
+              icon: const Icon(Icons.search),
+              iconSize: 35,
+              color: Colors.black,
+              onPressed: () {},
+            ),
             if (centerLocations.contains(fabLocation)) const Spacer(),
             IconButton(
               tooltip: 'Message',

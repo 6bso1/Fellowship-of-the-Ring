@@ -2,22 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Background.dart';
-import 'HomePage_s.dart';
-import '../bars/bottom_bar_player_search.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import '../bars/bottom_bar_player_search.dart';
+import 'Background.dart';
 
 class RouteSahaBul extends StatelessWidget {
   RouteSahaBul({Key? key}) : super(key: key);
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
-    CollectionReference sahaRef = firestore.collection('user');
+    CollectionReference sahaRef = firestore.collection('sahalar');
     return Scaffold(
-      floatingActionButton: true
-          ? buildFloating(context)
-          : null,
+      floatingActionButton: true ? buildFloating(context) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
       appBar: buildHeader(),
@@ -42,7 +38,10 @@ class RouteSahaBul extends StatelessWidget {
                       child: ListView.builder(
                           itemCount: listOfFields.length,
                           itemBuilder: (context, index) {
-                            return Card(
+                            return fieldCards(
+                              fieldVar: listOfFields[index],
+                            );
+                            /*Card(
                               color: Colors.red,
                               child: ListTile(
                                 title: Text(
@@ -54,7 +53,7 @@ class RouteSahaBul extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: 12, color: Colors.white)),
                               ),
-                            );
+                            );*/
                           }),
                     );
                   } else {
@@ -79,5 +78,49 @@ class RouteSahaBul extends StatelessWidget {
                     .height)), //image'i app bar'ın yüksekliğine görse resize ediyor
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
+  }
+}
+
+class fieldCards extends StatelessWidget {
+  final DocumentSnapshot fieldVar;
+  fieldCards({required this.fieldVar});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Stack(children: <Widget>[
+            Image.asset('assets/images/Header-Saha-Bul.png')
+          ]),
+          Container(
+            color: Colors.white70,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      fieldVar.get('name'),
+                      style: TextStyle(fontSize: 24, color: Colors.black),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        fieldVar.get('adress'),
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

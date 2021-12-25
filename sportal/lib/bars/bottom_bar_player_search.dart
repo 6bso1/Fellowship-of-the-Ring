@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sportal/screens/messageSearch_s.dart';
 import '../screens/player_profile.dart';
 import '../screens/my_profile.dart';
+import '../screens/messageSearch_s.dart';
 
 Widget buildBottomBar() {
   return _DemoBottomAppBar(
@@ -49,7 +51,13 @@ class _DemoBottomAppBar extends StatelessWidget {
               icon: const Icon(Icons.message),
               iconSize: 35,
               color: Colors.black,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MessageSearchScreen()));
+              },
             ),
             IconButton(
               tooltip: 'Profile',

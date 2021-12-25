@@ -21,7 +21,7 @@ class _DemoBottomAppBar extends StatelessWidget {
   final NotchedShape? shape;
 
   static final List<FloatingActionButtonLocation> centerLocations =
-  <FloatingActionButtonLocation>[
+      <FloatingActionButtonLocation>[
     FloatingActionButtonLocation.centerDocked,
     FloatingActionButtonLocation.centerFloat,
   ];
@@ -32,10 +32,7 @@ class _DemoBottomAppBar extends StatelessWidget {
       shape: shape,
       color: Color(0xFF4AC5F6),
       child: IconTheme(
-        data: IconThemeData(color: Theme
-            .of(context)
-            .colorScheme
-            .onPrimary),
+        data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
         child: Row(
           children: <Widget>[
             IconButton(
@@ -62,8 +59,7 @@ class _DemoBottomAppBar extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            MessageSearchScreen()));
+                        builder: (context) => MessageSearchScreen()));
               },
             ),
             IconButton(
@@ -72,11 +68,8 @@ class _DemoBottomAppBar extends StatelessWidget {
               iconSize: 35,
               color: Colors.black,
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MyProfileUI(0)));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyProfileUI(0)));
               },
             ),
           ],
@@ -85,6 +78,3 @@ class _DemoBottomAppBar extends StatelessWidget {
     );
   }
 }
-
-
-

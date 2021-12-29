@@ -44,6 +44,48 @@ class PlayerSearchBuildBody extends StatelessWidget{
         ),
 
         child:Column(children: <Widget>[
+        Container(
+          //color: Colors.white,
+          decoration: new BoxDecoration(
+            borderRadius: new BorderRadius.circular(12.0),
+            color: Color.fromRGBO(255, 255, 255, 0.4),
+          ),
+          margin: EdgeInsets.only(top:90.0),
+          padding: EdgeInsets.only(left:30.0,right: 30),
+         child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top:10.0,bottom: 10),
+
+                 child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg"
+                    ),
+                    radius: 30.0,
+                  ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+
+                  const Text('COOK:'),
+                  const Text('1 hr'),
+                ],
+              ),
+              Column(
+                children: [
+                  Icon(Icons.restaurant, color: Colors.green[500]),
+                  const Text('FEEDS:'),
+                  const Text('4-6'),
+                ],
+              ),
+          ]
+        ),
+        ),
           Expanded(
             child: ListView.builder(
               itemCount: players.length ,

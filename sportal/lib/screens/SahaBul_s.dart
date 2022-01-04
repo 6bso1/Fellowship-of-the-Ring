@@ -88,36 +88,59 @@ class fieldCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
-          Stack(children: <Widget>[
-            Image.asset('assets/images/Header-Saha-Bul.png')
-          ]),
+          Container(
+            height: 250,
+            width: double.infinity,
+            child: Image.network(
+              fieldVar.get('photos')[0],
+              fit: BoxFit.cover,
+            ),
+          ),
           Container(
             color: Colors.white70,
             child: Column(
               children: [
                 Row(
                   children: [
-                    Text(
-                      fieldVar.get('name'),
-                      style: TextStyle(fontSize: 24, color: Colors.black),
+                    Container(
+                      child: Text(
+                        fieldVar.get('name'),
+                        style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      padding: EdgeInsets.all(10.0),
                     )
                   ],
                 ),
                 Row(
                   children: [
-                    Align(
-                      alignment: Alignment.topRight,
+                    Container(
                       child: Text(
                         fieldVar.get('adress'),
                         style: TextStyle(fontSize: 18, color: Colors.black),
                       ),
+                      padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
+                    ),
+                    Align(
+                      child: SafeArea(
+                        child: Container(
+                            child: Text(fieldVar.get('cost')),
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 10.0)),
+                      ),
+                      alignment: Alignment.centerRight,
                     )
                   ],
                 )
               ],
             ),
+          ),
+          SizedBox(
+            height: 15,
           )
         ],
       ),

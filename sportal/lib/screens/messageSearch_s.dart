@@ -108,7 +108,7 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
               if (userMap != null) ListTile(
                 onTap: () {
                   String roomId = chatRoomId(
-                      'burcu',
+                      'Burcu Sultan',
                       userMap!['firstName']);
 
                   Navigator.of(context).push(

@@ -38,27 +38,7 @@ class ChatRoom extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: StreamBuilder<DocumentSnapshot>(
-          stream:
-          _firestore.collection("users").doc(userMap['uid']).snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.data != null) {
-              return Container(
-                child: Column(
-                  children: [
-                    Text(userMap['name']),
-                    Text(
-                      snapshot.data!['status'],
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return Container();
-            }
-          },
-        ),
+        title: Text(userMap['firstName']),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -71,7 +51,6 @@ class ChatRoom extends StatelessWidget {
                     .collection('chatroom')
                     .doc(chatRoomId)
                     .collection('chats')
-                    .orderBy("time", descending: false)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -79,8 +58,9 @@ class ChatRoom extends StatelessWidget {
                     return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
-                        Map<String, dynamic> map = snapshot.data!.docs[index]
-                            .data() as Map<String, dynamic>;
+                        Map<String, dynamic> map =
+                            snapshot.data!.docs[index]
+                                .data() as Map<String, dynamic>;
                         return messages(size, map);
                       },
                     );
@@ -100,6 +80,19 @@ class ChatRoom extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+
+                    Container(
+                      height: size.height / 17,
+                      width: size.width / 1.3,
+                      child: TextField(
+                        controller: _message,
+                        decoration: InputDecoration(
+                            hintText: "Send Message",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            )),
+                      ),
+                    ),
 
                     IconButton(
                         icon: Icon(Icons.send), onPressed: onSendMessage),

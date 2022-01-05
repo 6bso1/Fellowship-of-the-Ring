@@ -183,7 +183,7 @@ class Sign_upState extends State<Sign_up> {
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
-            signUp(emailEditingController.text, passwordEditingController.text);
+            signUp(firstNameEditingController.text, emailEditingController.text, passwordEditingController.text);
           },
           child: Text(
             "Kaydol",
@@ -254,7 +254,7 @@ class Sign_upState extends State<Sign_up> {
             ),
           ),));
   }
-  void signUp(String email, String password) async {
+  void signUp(String name, String email, String password) async {
     if (_formKey.currentState!.validate()) {
       try {
         await _auth
@@ -299,6 +299,7 @@ class Sign_upState extends State<Sign_up> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
+
     UserModel userModel = UserModel();
 
     // writing all the values
@@ -306,6 +307,8 @@ class Sign_upState extends State<Sign_up> {
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
     userModel.secondName = secondNameEditingController.text;
+
+
 
     await firebaseFirestore
         .collection("users")

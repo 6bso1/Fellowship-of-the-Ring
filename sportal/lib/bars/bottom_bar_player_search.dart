@@ -47,7 +47,13 @@ class _DemoBottomAppBar extends StatelessWidget {
               icon: const Icon(Icons.search),
               iconSize: 35,
               color: Colors.black,
-              onPressed: () {},
+              onPressed: () {
+
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MessageSearchScreen()));
+              },
             ),
             if (centerLocations.contains(fabLocation)) const Spacer(),
             IconButton(
@@ -56,10 +62,7 @@ class _DemoBottomAppBar extends StatelessWidget {
               iconSize: 35,
               color: Colors.black,
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MessageSearchScreen()));
+
               },
             ),
             IconButton(

@@ -12,8 +12,19 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
   Map<String, dynamic>? userMap;
   bool isLoading = false;
   final TextEditingController _search = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
+
+  String chatRoomId(String user1, String user2) {
+    if (user1[0].toLowerCase().codeUnits[0] >
+        user2.toLowerCase().codeUnits[0]) {
+      return "$user1$user2";
+    } else {
+      return "$user2$user1";
+    }
+  }
 
   void onSearch() async {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -38,71 +49,94 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Home Screen"),
-      ),
-      body: isLoading
-          ? Center(
-        child: Container(
-          height: size.height / 20,
-          width: size.height / 20,
-          child: CircularProgressIndicator(),
-        ),
-      )
-          : Column(
-        children: [
-          SizedBox(
-            height: size.height / 20,
+    return MaterialApp(
+        title: "welcome",
+        home: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/background.png"),
+                    fit: BoxFit.cover)),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Color(0xFF631FC9),
+            title: Text("Kullanıcı ara",
+            style: TextStyle(fontSize: 20, color: Color(0xFF4AC5F6), fontWeight: FontWeight.bold)),
           ),
-          Container(
-            height: size.height / 14,
-            width: size.width,
-            alignment: Alignment.center,
+          body: isLoading
+              ? Center(
             child: Container(
-              height: size.height / 14,
-              width: size.width / 1.15,
-              child: TextField(
-                controller: _search,
-                decoration: InputDecoration(
-                  hintText: "Search",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+              height: size.height / 20,
+              width: size.height / 20,
+              child: CircularProgressIndicator(),
+            ),
+          )
+              : Column(
+            children: [
+              SizedBox(
+                height: size.height / 20,
+              ),
+              Container(
+                height: size.height / 14,
+                width: size.width,
+                alignment: Alignment.center,
+                child: Container(
+                  height: size.height / 14,
+                  width: size.width / 1.15,
+                  child: TextField(
+                    controller: _search,
+                    decoration: InputDecoration(
+                      hintText: "Mail adresi",
+                      hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          SizedBox(
-            height: size.height / 50,
-          ),
-          ElevatedButton(
-            onPressed: onSearch,
-            child: Text("Search"),
-          ),
-          SizedBox(
-            height: size.height / 30,
-          ),
-          userMap != null
-              ? ListTile(
-            onTap: () {},
-
-            leading: Icon(Icons.account_box, color: Colors.black),
-            title: Text(
-              userMap!['firstName'],
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 17,
-                fontWeight: FontWeight.w500,
+              SizedBox(
+                height: size.height / 50,
               ),
-            ),
-            subtitle: Text(userMap!['email']),
-            trailing: Icon(Icons.chat, color: Colors.black),
-          )
-              :Container(),
-        ],
-      ),
+              ElevatedButton(
+                onPressed: onSearch,
+                child: Text("Search"),
+              ),
+              SizedBox(
+                height: size.height / 30,
+              ),
+              if (userMap != null) ListTile(
+                onTap: () {
+                  String roomId = chatRoomId(
+                      'burcu',
+                      userMap!['firstName']);
+
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ChatRoom(
+                        chatRoomId: roomId,
+                        userMap: userMap!,
+                      ),
+                    ),
+                  );
+                },
+
+                leading: Icon(Icons.account_box, color: Colors.black),
+                title: Text(
+                  userMap!['firstName'],
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                subtitle: Text(userMap!['email']),
+                trailing: Icon(Icons.chat, color: Colors.black),
+              ) else Container(),
+            ],
+          ),
+        ),
+      )
     );
   }
 }

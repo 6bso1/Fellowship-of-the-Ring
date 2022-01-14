@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'Player.dart';
 import 'player_profile.dart';
@@ -10,6 +11,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PlayerSearchBuildBody extends StatelessWidget{
 
+  final _firestore=FirebaseFirestore.instance;
   static List<Player> players = [
     Player(1, "Okan", "Torun", 22,"SLA","https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg","Türkiye","Bursa"),
     Player(2, "Samet", "Nalbant", 27,"MO","https://pbs.twimg.com/profile_images/1410182514652729345/lwIVc69M_400x400.jpg","Türkiye","Bilecik"),
@@ -20,6 +22,8 @@ class PlayerSearchBuildBody extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference userRef = _firestore.collection('user');
+
     return Scaffold(
         appBar: buildHeader(context),
       extendBodyBehindAppBar:

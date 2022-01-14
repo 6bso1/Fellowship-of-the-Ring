@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import 'Background.dart';
+import 'field_profile.dart';
 
 class RouteSahaBul extends StatelessWidget {
   RouteSahaBul({Key? key}) : super(key: key);
@@ -41,19 +42,6 @@ class RouteSahaBul extends StatelessWidget {
                             return fieldCards(
                               fieldVar: listOfFields[index],
                             );
-                            /*Card(
-                              color: Colors.red,
-                              child: ListTile(
-                                title: Text(
-                                    '${listOfFields[index].get('name')}',
-                                    style: TextStyle(
-                                        fontSize: 24, color: Colors.white)),
-                                subtitle: Text(
-                                    '${listOfFields[index].get('adress')}',
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.white)),
-                              ),
-                            );*/
                           }),
                     );
                   } else {
@@ -83,66 +71,78 @@ class RouteSahaBul extends StatelessWidget {
 
 class fieldCards extends StatelessWidget {
   final DocumentSnapshot fieldVar;
+
   fieldCards({required this.fieldVar});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          Container(
-            height: 250,
-            width: double.infinity,
-            child: Image.network(
-              fieldVar.get('photos')[0],
-              fit: BoxFit.cover,
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FieldProfile(
+                      fieldVar: fieldVar,
+                    )));
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            Container(
+              height: 250,
+              width: double.infinity,
+              child: Image.network(
+                fieldVar.get('photos')[0],
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Container(
-            color: Colors.white70,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      child: Text(
-                        fieldVar.get('name'),
-                        style: TextStyle(
-                            fontSize: 24,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
+            Container(
+              color: Colors.white70,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        child: Text(
+                          fieldVar.get('name'),
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        padding: EdgeInsets.all(10.0),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        child: Text(
+                          fieldVar.get('adress'),
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                        ),
+                        padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
                       ),
-                      padding: EdgeInsets.all(10.0),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Container(
-                      child: Text(
-                        fieldVar.get('adress'),
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                      padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
-                    ),
-                    Align(
-                      child: SafeArea(
-                        child: Container(
-                            child: Text(fieldVar.get('cost')),
-                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 10.0)),
-                      ),
-                      alignment: Alignment.centerRight,
-                    )
-                  ],
-                )
-              ],
+                      Align(
+                        child: SafeArea(
+                          child: Container(
+                              child: Text(fieldVar.get('cost')),
+                              padding:
+                                  EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 10.0)),
+                        ),
+                        alignment: Alignment.centerRight,
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 15,
-          )
-        ],
+            SizedBox(
+              height: 15,
+            )
+          ],
+        ),
       ),
     );
   }

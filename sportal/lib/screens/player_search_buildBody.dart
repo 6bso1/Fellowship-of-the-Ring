@@ -1,6 +1,8 @@
 // ignore_for_file: unnecessary_new, file_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'Player.dart';
 import 'player_profile.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
@@ -65,6 +67,11 @@ class PlayerSearchBuildBody extends StatefulWidget {
 
 class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
   // form key
+  final rb1 = 'Oyuncu Arıyorum';
+  final rb2 = 'Takım Arıyorum';
+  var status1=1;
+  var status2=0;
+  final descrController = new TextEditingController();
 
   static List<Player> players = [
     Player(
@@ -140,14 +147,14 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
 
   @override
   Widget build(BuildContext context) {
-    final emailText = Theme(
+    final anncText = Theme(
       data: new ThemeData(
         primaryColor: Colors.green,
         hintColor: Colors.grey,
       ),
       child: Center(
-        child: TextField(
-          controller: emailController,
+        child: TextFormField(
+          controller: descrController,
           obscureText: false,
           style: const TextStyle(
             fontFamily: 'Poppins',
@@ -155,6 +162,9 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
             color: Color(0xffffffff),
             height: 1.5,
           ),
+          onSaved: (value) {
+            descrController.text = value!;
+          },
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             focusedBorder: const OutlineInputBorder(
@@ -227,36 +237,62 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                         radius: 30.0,
                       ),
                     ),
-                    Center(child: emailText),
+                    Center(child: anncText),
                     ListTile(
-                      title: const Text('Takım Arıyorum'),
+                      title:  Text(rb1),
                       leading: Radio<SingingCharacter>(
                         value: SingingCharacter.lafayette,
                         groupValue: _character,
                         onChanged: (SingingCharacter? value) {
                           setState(() {
                             _character = value;
+                            status1=1;
+                            status2=0;
                           });
                         },
+
                       ),
                     ),
                     ListTile(
-                      title: const Text('Oyuncu Arıyorum'),
+                      title: Text(rb2),
                       leading: Radio<SingingCharacter>(
                         value: SingingCharacter.jefferson,
                         groupValue: _character,
                         onChanged: (SingingCharacter? value) {
                           setState(() {
                             _character = value;
+                            status1=0;
+                            status2=1;
                           });
                         },
                       ),
                     ),
-                    ElevatedButton(
+                    ButtonTheme(
+                      buttonColor: Colors.white,
+                      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+                      minWidth: 0, //wraps child's width
+                      height: 0, //wraps child's height
+                      child: RaisedButton(
+                          onPressed: (){
+                            if(status1==1){
+                              addAnnouncement(descrController.text,rb1);
+                            }
+                            if(status2==1) {
+                              addAnnouncement(descrController.text, rb1);
+                              print(descrController.text);
+                            }
+                            descrController.clear();
+
+                          },
+                          child: Text("Gönder")
+                      ), //your original button
+                    ),
+                   /*ElevatedButton(
                       style: raisedButtonStyle,
                       onPressed: () {},
                       child: const Text('Send'),
-                    ),
+                    ),*/
                   ],
                 )),
             Expanded(
@@ -330,4 +366,12 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
       bottomNavigationBar: buildBottomBar(),
     );
   }
+  void addAnnouncement(String descr,String status){
+     FirebaseFirestore firestore = FirebaseFirestore.instance;
+     CollectionReference announcementRef =
+            FirebaseFirestore.instance.collection("announcement");
+     announcementRef.add({'desc': '$descr','status': '$status'});
+     Fluttertoast.showToast(msg: "İlan başarıyla paylaşıldı ");
+  }
+
 }

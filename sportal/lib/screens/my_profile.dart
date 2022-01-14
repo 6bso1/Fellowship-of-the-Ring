@@ -78,7 +78,7 @@ class MyProfileUI extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                PlayerSearchBuildBody.players[index].age.toString()+","+PlayerSearchBuildBody.players[index].city+"/"+PlayerSearchBuildBody.players[index].country,
+                streamSnapshot.data?['age']+","+streamSnapshot.data?['city']+"/"+streamSnapshot.data?['country'],
                 style: TextStyle(
                     fontSize: 14.0,
                     color:Colors.white,
@@ -133,7 +133,7 @@ class MyProfileUI extends StatelessWidget {
                   //color: Colors.red,
                   alignment: Alignment(-0.9,3.5),
                   child: Text(
-                    "Kaleci\nDefans",
+                    streamSnapshot.data?['position'],
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         fontSize: 11.0,
@@ -166,7 +166,7 @@ class MyProfileUI extends StatelessWidget {
                       //color: Colors.red,
                       alignment: Alignment(-0.7,4),
                       child: Text(
-                        "0533 027 28 93",
+                        streamSnapshot.data?['phoneNumber'],
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 13.0,
@@ -198,7 +198,7 @@ class MyProfileUI extends StatelessWidget {
                       //color: Colors.red,
                       alignment: Alignment(-0.7,4),
                       child: Text(
-                        "Istanbul/Pendik",
+                        streamSnapshot.data?['town']+"/"+streamSnapshot.data?['city'],
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 13.0,

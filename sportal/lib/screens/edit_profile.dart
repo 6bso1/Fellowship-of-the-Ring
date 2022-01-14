@@ -116,11 +116,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 30,
               ),
-              buildTextField(1, "Ad Soyad", false),
-              buildTextField(2, "E-mail", false),
-              buildTextField(3, "Şifre", true),
-              buildTextField(4, "Pendik,İstanbul ", false),
-              buildTextField(5, "Mevki", false),
+              buildTextField(1, "Ad", false),
+              buildTextField(2, "Soyad", false),
+              buildTextField(3, "E-mail", false),
+              buildTextField(4, "Şifre", true),
+              buildTextField(5, "Pendik", false),
+              buildTextField(6, "İstanbul", false),
+              buildTextField(7, "Telefon", false),
+              buildTextField(8, "Yaş", false),
+              buildTextField(9, "Mevki", false),
               SizedBox(
                 height: 5,
               ),
@@ -171,11 +175,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
+        style: TextStyle(color: Colors.white),
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
-            prefixIcon: labelText==1 ? Icon(Icons.mail,color: Colors.white): labelText==2 ? Icon(Icons.account_circle,color: Colors.white):
-                        labelText==3 ? Icon(Icons.vpn_key,color: Colors.white): labelText==4 ? Icon(Icons.location_on,color: Colors.white):
-                                        labelText==5 ? Icon(Icons.sports_football,color: Colors.white):null,
+            prefixIcon: labelText==1 ? Icon(Icons.account_circle,color: Colors.white): labelText==2 ? Icon(Icons.account_circle,color: Colors.white):
+                        labelText==3 ? Icon(Icons.mail,color: Colors.white):labelText==4 ? Icon(Icons.lock,color: Colors.white):
+                        labelText==5 ? Icon(Icons.location_on,color: Colors.white): labelText==6 ? Icon(Icons.location_on,color: Colors.white):
+                        labelText==7 ? Icon(Icons.phone,color: Colors.white): labelText==8 ? Icon(Icons.calendar_today,color: Colors.white):
+                        labelText==9 ? Icon(Icons.sports_football,color: Colors.white):null,
 
            // prefixIcon: Icon(Icons.mail) ,
             suffixIcon: isPasswordTextField
@@ -197,7 +204,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
             hintText: placeholder,
             hintStyle: TextStyle(
               fontSize: 16,
-              //fontWeight: FontWeight.bold,
               color: Colors.white,
             )),
       ),

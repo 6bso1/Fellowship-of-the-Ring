@@ -105,39 +105,61 @@ class fieldCards extends StatelessWidget {
               color: Colors.white70,
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        child: Text(
-                          fieldVar.get('name'),
-                          style: TextStyle(
-                              fontSize: 24,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10.0, 10, 10, 5),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            fieldVar.get('name'),
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        padding: EdgeInsets.all(10.0),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        child: Text(
-                          fieldVar.get('adress'),
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                        ),
-                        padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
-                      ),
-                      Align(
-                        child: SafeArea(
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
                           child: Container(
-                              child: Text(fieldVar.get('cost')),
-                              padding:
-                                  EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 10.0)),
+                            color: Colors.green,
+                            padding: EdgeInsets.all(3),
+                            child: Row(
+                              children: [
+                                rate(),
+                                SizedBox(width: 2),
+                                Image.asset(
+                                  'assets/images/star.png',
+                                  height: 16,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10.0, 0, 10, 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            fieldVar.get('adress'),
+                            style: TextStyle(fontSize: 14, color: Colors.black),
+                          ),
                         ),
-                        alignment: Alignment.centerRight,
-                      )
-                    ],
+                        Text(
+                          fieldVar.get('cost'),
+                          style: TextStyle(fontSize: 14, color: Colors.black),
+                        ),
+                        Text(
+                          '₺',
+                          style: TextStyle(fontSize: 14, color: Colors.black),
+                        )
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -148,6 +170,23 @@ class fieldCards extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget rate() {
+    String r = fieldVar.get('rate').toString();
+
+    if (r.length < 3) {
+      r = r + '.0';
+    }
+    print(r);
+    if (r.length > 3) {
+      r = r[0] + r[1] + r[2];
+    }
+    return Text(
+      r,
+      style: TextStyle(
+          fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
     );
   }
 }

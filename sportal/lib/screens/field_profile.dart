@@ -21,6 +21,7 @@ class FieldProfileState extends State<FieldProfile> {
   FieldProfileState({required this.fieldVar});
   late PageController _pageController;
   int activePage = 0;
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +31,6 @@ class FieldProfileState extends State<FieldProfile> {
   @override
   Widget build(BuildContext context) {
     List<String> images = List.from(fieldVar.get('photos'));
-
     return Scaffold(
       floatingActionButton: true ? buildFloating(context) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -60,7 +60,10 @@ class FieldProfileState extends State<FieldProfile> {
                       },
                       itemBuilder: (context, pagePosition) {
                         return Container(
-                          child: Image.network(images[pagePosition]),
+                          child: Image.network(
+                            images[pagePosition],
+                            fit: BoxFit.fill,
+                          ),
                         );
                       })),
               Row(

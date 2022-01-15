@@ -76,101 +76,118 @@ class fieldCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FieldProfile(
-                      fieldVar: fieldVar,
-                    )));
-      },
-      child: Container(
-        margin: EdgeInsets.all(5),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            Container(
-              height: 250,
-              width: double.infinity,
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-                child: Image.network(
-                  fieldVar.get('photos')[0],
-                  fit: BoxFit.cover,
+    return Stack(children: [
+      InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => FieldProfile(
+                        fieldVar: fieldVar,
+                      )));
+        },
+        child: Container(
+          margin: EdgeInsets.all(5),
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: [
+              Container(
+                height: 250,
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.0)),
+                  child: Image.network(
+                    fieldVar.get('photos')[0],
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              color: Colors.white70,
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10.0, 10, 10, 5),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            fieldVar.get('name'),
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Container(
-                            color: Colors.green,
-                            padding: EdgeInsets.all(3),
-                            child: Row(
-                              children: [
-                                rate(),
-                                SizedBox(width: 2),
-                                Image.asset(
-                                  'assets/images/star.png',
-                                  height: 16,
-                                ),
-                              ],
+              Container(
+                color: Colors.white70,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10.0, 10, 10, 5),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              fieldVar.get('name'),
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
-                        )
-                      ],
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: Container(
+                              color: Colors.green,
+                              padding: EdgeInsets.all(3),
+                              child: Row(
+                                children: [
+                                  rate(),
+                                  SizedBox(width: 2),
+                                  Image.asset(
+                                    'assets/images/star.png',
+                                    height: 16,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10.0, 0, 10, 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            fieldVar.get('adress'),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10.0, 0, 10, 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              fieldVar.get('adress'),
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.black),
+                            ),
+                          ),
+                          Text(
+                            fieldVar.get('cost'),
                             style: TextStyle(fontSize: 14, color: Colors.black),
                           ),
-                        ),
-                        Text(
-                          fieldVar.get('cost'),
-                          style: TextStyle(fontSize: 14, color: Colors.black),
-                        ),
-                        Text(
-                          '₺',
-                          style: TextStyle(fontSize: 14, color: Colors.black),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+                          Text(
+                            '₺',
+                            style: TextStyle(fontSize: 14, color: Colors.black),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 15,
-            )
-          ],
+              SizedBox(
+                height: 15,
+              )
+            ],
+          ),
         ),
       ),
-    );
+      Positioned(
+        right: 15,
+        top: 15,
+        child: InkWell(
+          onTap: () {
+            print('calisti');
+          },
+          child: Image.asset(
+            'assets/images/heart.png',
+            height: 35,
+          ),
+        ),
+      ),
+    ]);
   }
 
   Widget rate() {
@@ -188,5 +205,9 @@ class fieldCards extends StatelessWidget {
       style: TextStyle(
           fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
     );
+  }
+
+  addFav() {
+    print('oldu');
   }
 }

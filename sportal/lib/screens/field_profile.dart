@@ -19,9 +19,18 @@ class FieldProfileState extends State<FieldProfile> {
   final DocumentSnapshot fieldVar;
 
   FieldProfileState({required this.fieldVar});
+  late PageController _pageController;
+  int activePage = 0;
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.8);
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<String> images = List.from(fieldVar.get('photos'));
+
     return Scaffold(
       floatingActionButton: true ? buildFloating(context) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -39,15 +48,25 @@ class FieldProfileState extends State<FieldProfile> {
               height: 20,
             ),
             SizedBox(
-              height: 250,
-              width: double.infinity,
-              child: ImageCarousel(fieldVar: fieldVar),
-              /*
-              child: Image.network(
-                fieldVar.get('photos')[0],
-                fit: BoxFit.cover,
-              ),*/
-            ),
+                height: 250,
+                width: double.infinity,
+                child: PageView.builder(
+                    itemCount: images.length,
+                    pageSnapping: true,
+                    controller: _pageController,
+                    onPageChanged: (page) {
+                      setState(() {
+                        activePage = page;
+                      });
+                    },
+                    itemBuilder: (context, pagePosition) {
+                      return Container(
+                        child: Image.network(images[pagePosition]),
+                      );
+                    })),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: indicators(images.length, activePage)),
             SizedBox(
               height: 15,
             ),
@@ -100,73 +119,105 @@ class FieldProfileState extends State<FieldProfile> {
               fieldVar.get('properties'),
               style: TextStyle(fontSize: 14, color: Colors.white),
             ),
-            Column(children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/location.png',
-                    height: 25,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    fieldVar.get('adress').toString(),
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/price.png',
-                    height: 25,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    fieldVar.get('cost').toString(),
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/clock.png',
-                    height: 25,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    fieldVar.get('adress').toString(),
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/phone.png',
-                    height: 25,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    fieldVar.get('phone').toString(),
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ],
-              ),
-            ]),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Column(children: [
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/location.png',
+                      height: 25,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      fieldVar.get('adress').toString(),
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/price.png',
+                      height: 25,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      fieldVar.get('cost').toString(),
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/clock.png',
+                      height: 25,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      fieldVar.get('adress').toString(),
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/phone.png',
+                      height: 25,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      fieldVar.get('phone').toString(),
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/phone.png',
+                      height: 25,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      fieldVar.get('phone').toString(),
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ]),
+            ),
           ],
         ))
       ]),
     );
+  }
+
+  List<Widget> indicators(imagesLength, currentIndex) {
+    return List<Widget>.generate(imagesLength, (index) {
+      return Container(
+        margin: EdgeInsets.all(3),
+        width: 10,
+        height: 10,
+        decoration: BoxDecoration(
+            color: currentIndex == index ? Colors.white : Colors.white24,
+            shape: BoxShape.circle),
+      );
+    });
   }
 
   AppBar buildHeader() {
@@ -179,27 +230,5 @@ class FieldProfileState extends State<FieldProfile> {
                     .height)), //image'i app bar'ın yüksekliğine görse resize ediyor
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
-  }
-}
-
-class ImageCarousel extends StatelessWidget {
-  final DocumentSnapshot fieldVar;
-
-  ImageCarousel({required this.fieldVar});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-    /*return CarouselImages(
-      height: 150.0,
-      listImages: fieldVar.get('photos'),
-      scaleFactor: 0.7,
-      borderRadius: 30.0,
-      cachedNetworkImage: true,
-      verticalAlignment: Alignment.bottomCenter,
-      onTap: (index) {
-        print('Tapped on page $index');
-      },
-    );*/
   }
 }

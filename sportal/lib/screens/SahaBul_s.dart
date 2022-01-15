@@ -167,9 +167,6 @@ class fieldCards extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 15,
-              )
             ],
           ),
         ),
@@ -178,9 +175,7 @@ class fieldCards extends StatelessWidget {
         right: 15,
         top: 15,
         child: InkWell(
-          onTap: () {
-            print('calisti');
-          },
+          onTap: () {},
           child: Image.asset(
             'assets/images/heart.png',
             height: 35,
@@ -196,7 +191,7 @@ class fieldCards extends StatelessWidget {
     if (r.length < 3) {
       r = r + '.0';
     }
-    print(r);
+
     if (r.length > 3) {
       r = r[0] + r[1] + r[2];
     }
@@ -205,9 +200,5 @@ class fieldCards extends StatelessWidget {
       style: TextStyle(
           fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
     );
-  }
-
-  addFav() {
-    print('oldu');
   }
 }

@@ -5,6 +5,7 @@ import 'package:sportal/bars/bottom_bar_floating_action_button.dart';
 import 'package:sportal/bars/bottom_bar_player_search.dart';
 
 import 'Background.dart';
+import 'field_comments.dart';
 
 class FieldProfile extends StatefulWidget {
   final DocumentSnapshot fieldVar;
@@ -81,13 +82,26 @@ class FieldProfileState extends State<FieldProfile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    fieldVar.get('commenNum').toString(),
-                    style: const TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                  const Text(
-                    ' Değerlendirme   ',
-                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FieldComments(
+                                    fieldVar: fieldVar,
+                                  )));
+                    },
+                    child: Row(children: [
+                      Text(
+                        fieldVar.get('commenNum').toString(),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.white),
+                      ),
+                      const Text(
+                        ' Değerlendirme   ',
+                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      ),
+                    ]),
                   ),
                   Text(
                     fieldVar.get('rate').toString(),

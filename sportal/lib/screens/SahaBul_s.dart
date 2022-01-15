@@ -86,15 +86,19 @@ class fieldCards extends StatelessWidget {
                     )));
       },
       child: Container(
+        margin: EdgeInsets.all(5),
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
             Container(
               height: 250,
               width: double.infinity,
-              child: Image.network(
-                fieldVar.get('photos')[0],
-                fit: BoxFit.cover,
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                child: Image.network(
+                  fieldVar.get('photos')[0],
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Container(

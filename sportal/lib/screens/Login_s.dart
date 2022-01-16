@@ -107,10 +107,25 @@ class _Login_screenState extends State<Login_screen> {
           child: Text(
             "Giriş Yap",
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 25,
-                color: Colors.white60,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 25, color: Colors.white60),
+          )),
+    );
+
+    final signUpButton = Material(
+      elevation: 5,
+      borderRadius: BorderRadius.circular(7),
+      color: Color(0x5FCC3DE7),
+      child: MaterialButton(
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+          minWidth: MediaQuery.of(context).size.width,
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Sign_up()));
+          },
+          child: Text(
+            "Yeni Hesap Oluştur",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 25, color: Colors.white60),
           )),
     );
     return MaterialApp(
@@ -154,35 +169,14 @@ class _Login_screenState extends State<Login_screen> {
                               child: Text(
                                 "Şifreni mi Unuttun?",
                                 style: TextStyle(
-                                    color: Colors.white60,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15),
+                                    color: Colors.white60, fontSize: 15),
                               ),
                             ),
                           ],
                         ),
                         SizedBox(height: 15),
                         SizedBox(height: 15),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text("Hesabınız yok mu?  "),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Sign_up()));
-                                },
-                                child: Text(
-                                  "Kaydol",
-                                  style: TextStyle(
-                                      color: Color(0xFF4AC5F6),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                              )
-                            ])
+                        signUpButton,
                       ],
                     ),
                   ),

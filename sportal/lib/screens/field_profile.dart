@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sportal/bars/bottom_bar_floating_action_button.dart';
 import 'package:sportal/bars/bottom_bar_player_search.dart';
+import 'package:sportal/bars/buildAppBar.dart';
 
 import 'Background.dart';
 import 'field_comments.dart';
@@ -36,7 +37,7 @@ class FieldProfileState extends State<FieldProfile> {
       floatingActionButton: true ? buildFloating(context) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
-      appBar: buildHeader(),
+      appBar: buildAppBar(),
       extendBodyBehindAppBar:
           true, //Body'i appbar kısmına çekiyor (Arka planı uzatmak için)
       body: Stack(children: <Widget>[
@@ -222,17 +223,5 @@ class FieldProfileState extends State<FieldProfile> {
             shape: BoxShape.circle),
       );
     });
-  }
-
-  AppBar buildHeader() {
-    return AppBar(
-        elevation: 0.0,
-        title: Center(
-            child: Image.asset('assets/images/logobar.png',
-                height: AppBar()
-                    .preferredSize
-                    .height)), //image'i app bar'ın yüksekliğine görse resize ediyor
-        backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
-        automaticallyImplyLeading: false);
   }
 }

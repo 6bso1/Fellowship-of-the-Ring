@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sportal/model/user_model.dart';
-import 'package:sportal/screens/HomePage_s.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sportal/bars/buildAppBar.dart';
+import 'package:sportal/model/user_model.dart';
+
+import 'Background.dart';
 import 'Login_s.dart';
 
 class Sign_up extends StatefulWidget {
@@ -18,7 +20,6 @@ class Sign_upState extends State<Sign_up> {
 
   // string for displaying the error Message
   String? errorMessage;
-
 
   // our form key
   final _formKey = GlobalKey<FormState>();
@@ -52,12 +53,15 @@ class Sign_upState extends State<Sign_up> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.account_circle),
+          prefixIcon: Icon(Icons.account_circle, color: Colors.white70),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "İsim",
-          hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+          hintStyle: TextStyle(fontSize: 20.0, color: Colors.white70),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white24, width: 2),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.cyan, width: 2),
           ),
         ));
 
@@ -78,12 +82,15 @@ class Sign_upState extends State<Sign_up> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.account_circle),
+          prefixIcon: Icon(Icons.account_circle, color: Colors.white70),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Soyisim",
-          hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+          hintStyle: TextStyle(fontSize: 20.0, color: Colors.white70),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white24, width: 2),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.cyan, width: 2),
           ),
         ));
 
@@ -109,12 +116,15 @@ class Sign_upState extends State<Sign_up> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail),
+          prefixIcon: Icon(Icons.mail, color: Colors.white70),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Email",
-          hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+          hintStyle: TextStyle(fontSize: 20.0, color: Colors.white70),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white24, width: 2),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.cyan, width: 2),
           ),
         ));
 
@@ -138,12 +148,15 @@ class Sign_upState extends State<Sign_up> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key),
+          prefixIcon: Icon(Icons.vpn_key, color: Colors.white70),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Şifre",
-          hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+          hintStyle: TextStyle(fontSize: 20.0, color: Colors.white70),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white24, width: 2),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.cyan, width: 2),
           ),
         ));
 
@@ -165,95 +178,88 @@ class Sign_upState extends State<Sign_up> {
         },
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key),
+          prefixIcon: Icon(Icons.vpn_key, color: Colors.white70),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Şifre tekrar",
-          hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+          hintStyle: TextStyle(fontSize: 20.0, color: Colors.white70),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white24, width: 2),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.cyan, width: 2),
           ),
         ));
 
     //signup button
     final signUpButton = Material(
       elevation: 5,
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.circular(7),
       color: Color(0xFFCC3DE7),
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
-            signUp(firstNameEditingController.text, emailEditingController.text, passwordEditingController.text);
+            signUp(firstNameEditingController.text, emailEditingController.text,
+                passwordEditingController.text);
           },
           child: Text(
             "Kaydol",
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, color: Colors.white70),
           )),
     );
 
-    return MaterialApp(
-        title: "welcome",
-        home: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/background.png"),fit: BoxFit.cover
-              )
-          ),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: Color(0xFF4AC5F6),),
-                onPressed: () {
-                  // passing this to our root
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-            body: Center(
-              child: SingleChildScrollView(
-                child: Container(
-                  color: Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.all(36.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                              height: 90,
-                              child: Image.asset(
-                                "assets/logobar.png",
-                                fit: BoxFit.contain,
-                              )),
-                          SizedBox(height: 45),
-                          firstNameField,
-                          SizedBox(height: 20),
-                          secondNameField,
-                          SizedBox(height: 20),
-                          emailField,
-                          SizedBox(height: 20),
-                          passwordField,
-                          SizedBox(height: 20),
-                          confirmPasswordField,
-                          SizedBox(height: 20),
-                          signUpButton,
-                          SizedBox(height: 15),
-                        ],
-                      ),
-                    ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: buildAppBar(),
+      extendBodyBehindAppBar:
+          true, //Body'i appbar kısmına çekiyor (Arka planı uzatmak için)
+      body: Stack(
+        children: [
+          Background(),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(36.0),
+              child: Form(
+                key: _formKey,
+                child: Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(height: 65),
+                      Text('Hesabını Oluştur',
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.bold)),
+                      SizedBox(height: 30),
+                      firstNameField,
+                      secondNameField,
+                      emailField,
+                      passwordField,
+                      confirmPasswordField,
+                      SizedBox(height: 20),
+                      Text(
+                          'Kaydolduğunda Hizmet Şartları’nı ve Çerez Kullanımı dahil olmak üzere Gizlilik Politikası’nı kabul etmiş olursun. Gizlilik Seçeneklerini buna göre belirlediğinde başkaları seni e-postan veya telefon numaranla bulabilir.',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white70,
+                          )),
+                      SizedBox(height: 20),
+                      signUpButton,
+                    ],
                   ),
                 ),
               ),
             ),
-          ),));
+          ),
+        ],
+      ),
+    );
   }
+
   void signUp(String name, String email, String password) async {
     if (_formKey.currentState!.validate()) {
       try {
@@ -291,6 +297,7 @@ class Sign_upState extends State<Sign_up> {
       }
     }
   }
+
   postDetailsToFirestore() async {
     // calling our firestore
     // calling our user model
@@ -299,7 +306,6 @@ class Sign_upState extends State<Sign_up> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-
     UserModel userModel = UserModel();
 
     // writing all the values
@@ -307,8 +313,6 @@ class Sign_upState extends State<Sign_up> {
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
     userModel.secondName = secondNameEditingController.text;
-
-
 
     await firebaseFirestore
         .collection("users")
@@ -319,6 +323,6 @@ class Sign_upState extends State<Sign_up> {
     Navigator.pushAndRemoveUntil(
         (context),
         MaterialPageRoute(builder: (context) => Login_screen()),
-            (route) => false);
+        (route) => false);
   }
 }

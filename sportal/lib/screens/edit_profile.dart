@@ -43,7 +43,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       appBar: buildHeader(context, index),
       extendBodyBehindAppBar:
-                            true,
+      true,
 
       body: Container(
         decoration: const BoxDecoration(
@@ -184,12 +184,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
         },
         decoration: InputDecoration(
             prefixIcon: labelText==1 ? Icon(Icons.account_circle,color: Colors.white): labelText==2 ? Icon(Icons.account_circle,color: Colors.white):
-                        labelText==3 ? Icon(Icons.mail,color: Colors.white):labelText==4 ? Icon(Icons.lock,color: Colors.white):
-                        labelText==5 ? Icon(Icons.location_on,color: Colors.white): labelText==6 ? Icon(Icons.location_on,color: Colors.white):
-                        labelText==7 ? Icon(Icons.phone,color: Colors.white): labelText==8 ? Icon(Icons.calendar_today,color: Colors.white):
-                        labelText==9 ? Icon(Icons.sports_football,color: Colors.white):null,
+            labelText==3 ? Icon(Icons.mail,color: Colors.white):labelText==4 ? Icon(Icons.lock,color: Colors.white):
+            labelText==5 ? Icon(Icons.location_on,color: Colors.white): labelText==6 ? Icon(Icons.location_on,color: Colors.white):
+            labelText==7 ? Icon(Icons.phone,color: Colors.white): labelText==8 ? Icon(Icons.calendar_today,color: Colors.white):
+            labelText==9 ? Icon(Icons.sports_football,color: Colors.white):null,
 
-           // prefixIcon: Icon(Icons.mail) ,
+            // prefixIcon: Icon(Icons.mail) ,
             suffixIcon: isPasswordTextField
                 ? IconButton(
               onPressed: () {
@@ -230,11 +230,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         MyProfileUI(index)));
           },
         ),
-        /*title: Center(
-            child: Image.asset('assets/images/Header-Takim-Bul.png',
-                height: AppBar()
-                    .preferredSize
-                    .height)),*///image'i app bar'ın yüksekliğine görse resize ediyor
+
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
   }

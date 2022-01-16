@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new, file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'Player.dart';
@@ -72,6 +73,12 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
   var status1=1;
   var status2=0;
   final descrController = new TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user = FirebaseAuth.instance.currentUser;
+  CollectionReference usersCollection =
+  FirebaseFirestore.instance.collection('users');
 
   static List<Player> players = [
     Player(
@@ -154,6 +161,8 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
       ),
       child: Center(
         child: TextFormField(
+
+          key: _formKey,
           controller: descrController,
           obscureText: false,
           style: const TextStyle(
@@ -210,167 +219,178 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
       appBar: buildHeader(context),
       extendBodyBehindAppBar: true,
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(
-                "https://github.com/okantorun/Vector-Graphics-Libraray-C/blob/main/JPGs/background%20(1).png?raw=true"),
-            fit: BoxFit.cover,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/background.png"),
+                  fit: BoxFit.cover)
           ),
-        ),
-        child: Column(
-          children: [
-            Container(
-                decoration: new BoxDecoration(
-                  borderRadius: new BorderRadius.circular(12.0),
-                  color: const Color.fromRGBO(255, 255, 255, 0.4),
-                ),
-                height: MediaQuery.of(context).size.height / 2.5,
-                margin: const EdgeInsets.only(top: 150.0),
-                padding: const EdgeInsets.only(left: 30.0, right: 30),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                      child: const CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg"),
-                        radius: 30.0,
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: StreamBuilder<DocumentSnapshot>(
+          stream: usersCollection.doc(user?.uid).snapshots(),
+            builder: (ctx, streamSnapshot) {
+              /*if (streamSnapshot.connectionState == ConnectionState.waiting) {
+                 return Center(
+                  child: CircularProgressIndicator(
+                      color: Colors.blue,
+                  ),
+                );
+              }*/
+              return Column(
+                children: [
+                  Container(
+                      decoration: new BoxDecoration(
+                        borderRadius: new BorderRadius.circular(12.0),
+                        color: const Color.fromRGBO(255, 255, 255, 0.4),
                       ),
-                    ),
-                    Center(child: anncText),
-                    ListTile(
-                      title:  Text(rb1),
-                      leading: Radio<SingingCharacter>(
-                        value: SingingCharacter.lafayette,
-                        groupValue: _character,
-                        onChanged: (SingingCharacter? value) {
-                          setState(() {
-                            _character = value;
-                            status1=1;
-                            status2=0;
-                          });
-                        },
+                      height: MediaQuery.of(context).size.height / 2.5,
+                      margin: const EdgeInsets.only(top: 150.0),
+                      padding: const EdgeInsets.only(left: 30.0, right: 30),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                            child: const CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg"),
+                              radius: 30.0,
+                            ),
+                          ),
+                          anncText,
+                          ListTile(
+                            title:  Text(rb1),
+                            leading: Radio<SingingCharacter>(
+                              value: SingingCharacter.lafayette,
+                              groupValue: _character,
+                              onChanged: (SingingCharacter? value) {
+                                setState(() {
+                                  _character = value;
+                                  status1=1;
+                                  status2=0;
+                                });
+                              },
 
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(rb2),
-                      leading: Radio<SingingCharacter>(
-                        value: SingingCharacter.jefferson,
-                        groupValue: _character,
-                        onChanged: (SingingCharacter? value) {
-                          setState(() {
-                            _character = value;
-                            status1=0;
-                            status2=1;
-                          });
-                        },
-                      ),
-                    ),
-                    ButtonTheme(
-                      buttonColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
-                      minWidth: 0, //wraps child's width
-                      height: 0, //wraps child's height
-                      child: RaisedButton(
-                          onPressed: (){
-                            if(status1==1){
-                              addAnnouncement(descrController.text,rb1);
-                            }
-                            if(status2==1) {
-                              addAnnouncement(descrController.text, rb1);
-                              print(descrController.text);
-                            }
-                            descrController.clear();
+                            ),
+                          ),
+                          ListTile(
+                            title: Text(rb2),
+                            leading: Radio<SingingCharacter>(
+                              value: SingingCharacter.jefferson,
+                              groupValue: _character,
+                              onChanged: (SingingCharacter? value) {
+                                setState(() {
+                                  _character = value;
+                                  status1=0;
+                                  status2=1;
+                                });
+                              },
+                            ),
+                          ),
+                          ButtonTheme(
+                            buttonColor: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+                            minWidth: 0, //wraps child's width
+                            height: 0, //wraps child's height
+                            child: RaisedButton(
+                                onPressed: (){
+                                  final firstName= streamSnapshot.data?['firstName'];
+                                  final secondName= streamSnapshot.data?['secondName'];
+                                  final age= streamSnapshot.data?['age'];
+                                  if(status1==1){
+                                    addAnnouncement(descrController.text,rb1,firstName,secondName,age);
+                                  }
+                                  if(status2==1) {
+                                    addAnnouncement(descrController.text,rb2,firstName,secondName,age);
+                                  }
+                                  descrController.clear();
 
-                          },
-                          child: Text("Gönder")
-                      ), //your original button
-                    ),
-                   /*ElevatedButton(
+                                },
+                                child: Text("Gönder")
+                            ), //your original button
+                          ),
+                          /*ElevatedButton(
                       style: raisedButtonStyle,
                       onPressed: () {},
                       child: const Text('Send'),
                     ),*/
-                  ],
-                )),
-            Expanded(
-              child: Container(
-                  child: players.isNotEmpty
-                      ? ListView.builder(
-                    itemCount: players.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return index >= 0
-                          ? ListTile(
-                        title: Text(
-                          players[index].firstName +
-                              " " +
-                              players[index].lastName,
-                          style: const TextStyle(
-                            //fontSize: 10.0,
-                            color: Colors.white,
-                            //letterSpacing: 2.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "Yaş:" +
-                              players[index].age.toString() +
-                              "\nPozisyon:" +
-                              players[index].position,
-                          style: const TextStyle(
-                            fontSize: 13.0,
-                            color: Colors.white,
-
-                            //letterSpacing: 2.0,
-                            //fontWeight: FontWeight.w400
-                          ),
-                        ),
-                        trailing: GestureDetector(
-                            onTap: () {
-                              ///do something heres
-                              // print("okan");
-                            },
-                            child: const Icon(Icons.message,
-                                color: Colors.white)),
-                        leading: CircleAvatar(
-                            radius: 25.0,
-                            backgroundImage: NetworkImage(
-                                players[index].imageAddress)),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProfileUI(index)));
-                        },
-                      )
-                          : const SizedBox(
-                        height: 0,
-                        width: 0,
-                      );
-                    },
-                  )
-                      : const SizedBox(
-                    height: 0,
-                    width: 0,
-                  )
-              ),
-            ),
-          ],
-        ),
+                        ],
+                      )),
+                  Expanded(
+                    child: Container(
+                        child: players.isNotEmpty
+                            ? ListView.builder(
+                          itemCount: players.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return index >= 0
+                                ? ListTile(
+                              title: Text(
+                                players[index].firstName +
+                                    " " +
+                                    players[index].lastName,
+                                style: const TextStyle(
+                                  //fontSize: 10.0,
+                                  color: Colors.white,
+                                  //letterSpacing: 2.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                "Yaş:" +
+                                    players[index].age.toString() +
+                                    "\nPozisyon:" +
+                                    players[index].position,
+                                style: const TextStyle(
+                                  fontSize: 13.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              trailing: GestureDetector(
+                                  onTap: () {
+                                    ///do something heres
+                                    // print("okan");
+                                  },
+                                  child: const Icon(Icons.message,
+                                      color: Colors.white)),
+                              leading: CircleAvatar(
+                                  radius: 25.0,
+                                  backgroundImage: NetworkImage(
+                                      players[index].imageAddress)),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProfileUI(index)));
+                              },
+                            )
+                                : const SizedBox(
+                              height: 0,
+                              width: 0,
+                            );
+                          },
+                        )
+                            : const SizedBox(
+                          height: 0,
+                          width: 0,
+                        )
+                    ),
+                  ),
+                ],
+              );
+            }
+        )
       ),
       floatingActionButton: buildFloating(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
     );
   }
-  void addAnnouncement(String descr,String status){
+  void addAnnouncement(String descr,String status,String firstName,String secondName,String age){
      FirebaseFirestore firestore = FirebaseFirestore.instance;
      CollectionReference announcementRef =
             FirebaseFirestore.instance.collection("announcement");
-     announcementRef.add({'desc': '$descr','status': '$status'});
+     announcementRef.add({'desc': '$descr','status': '$status','firstName': '$firstName',
+                                'secondName': '$secondName','age': '$age', 'uid':FirebaseAuth.instance.currentUser!.uid});
      Fluttertoast.showToast(msg: "İlan başarıyla paylaşıldı ");
   }
 

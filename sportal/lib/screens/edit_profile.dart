@@ -46,12 +46,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             true,
 
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(
-                "https://github.com/okantorun/Vector-Graphics-Libraray-C/blob/main/JPGs/background%20(1).png?raw=true"),
-            fit: BoxFit.cover,
-          ),
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/background.png"),
+                fit: BoxFit.cover)
         ),
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: GestureDetector(
@@ -105,9 +103,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             ),
                             color: Colors.green,
                           ),
-                          child: Icon(
-                            Icons.edit,
+                          child: IconButton(
+                            //Icons.edit,
+                            icon: Icon(Icons.edit),
                             color: Colors.white,
+                            onPressed: (){
+                              print("okan");
+                            },
                           ),
                         )),
                   ],
@@ -177,6 +179,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: TextField(
         style: TextStyle(color: Colors.white),
         obscureText: isPasswordTextField ? showPassword : false,
+        onChanged: (text) {
+          print('First text field: $text');
+        },
         decoration: InputDecoration(
             prefixIcon: labelText==1 ? Icon(Icons.account_circle,color: Colors.white): labelText==2 ? Icon(Icons.account_circle,color: Colors.white):
                         labelText==3 ? Icon(Icons.mail,color: Colors.white):labelText==4 ? Icon(Icons.lock,color: Colors.white):

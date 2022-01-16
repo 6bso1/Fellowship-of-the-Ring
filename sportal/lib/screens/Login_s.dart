@@ -2,11 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'Signup_s.dart';
-
-
 import 'HomePage_s.dart';
 import 'ResetPassword_s.dart';
+import 'Signup_s.dart';
 
 class Login_screen extends StatefulWidget {
   const Login_screen({Key? key}) : super(key: key);
@@ -52,12 +50,15 @@ class _Login_screenState extends State<Login_screen> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail,color: Colors.white),
+          prefixIcon: Icon(Icons.mail, color: Colors.white24),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Email",
-          hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+          hintStyle: TextStyle(fontSize: 20.0, color: Colors.white24),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white24, width: 2),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.cyan, width: 2),
           ),
         ));
 
@@ -81,30 +82,35 @@ class _Login_screenState extends State<Login_screen> {
         },
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key,color: Colors.white),
+          prefixIcon: Icon(Icons.vpn_key, color: Colors.white24),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Şifre",
-          hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFF631FC9)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+          hintStyle: TextStyle(fontSize: 20.0, color: Colors.white24),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white24, width: 2),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.cyan, width: 2),
           ),
         ));
 
     final loginButton = Material(
       elevation: 5,
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.circular(7),
       color: Color(0xFFCC3DE7),
       child: MaterialButton(
-          padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
             signIn(emailController.text, passwordController.text);
           },
           child: Text(
-            "Giriş",
+            "Giriş Yap",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                fontSize: 25,
+                color: Colors.white60,
+                fontWeight: FontWeight.bold),
           )),
     );
     return MaterialApp(
@@ -119,12 +125,10 @@ class _Login_screenState extends State<Login_screen> {
             body: Center(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(40.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
                             height: 200,
@@ -132,33 +136,32 @@ class _Login_screenState extends State<Login_screen> {
                               "assets/logobar.png",
                               fit: BoxFit.contain,
                             )),
-                        SizedBox(height: 45),
-                        emailField,
                         SizedBox(height: 25),
-                        passwordField,
-                        SizedBox(height: 35),
-                        loginButton,
+                        Column(
+                          children: [
+                            emailField,
+                            passwordField,
+                            SizedBox(height: 25),
+                            loginButton,
+                            SizedBox(height: 15),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Reset_screen()));
+                              },
+                              child: Text(
+                                "Şifreni mi Unuttun?",
+                                style: TextStyle(
+                                    color: Colors.white60,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15),
+                              ),
+                            ),
+                          ],
+                        ),
                         SizedBox(height: 15),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text("Şifrenizi mi unuttunuz  "),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Reset_screen()));
-                                },
-                                child: Text(
-                                  "Şifreyi sıfırla",
-                                  style: TextStyle(
-                                      color: Color(0xFF4AC5F6),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                              )
-                            ]),
                         SizedBox(height: 15),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,

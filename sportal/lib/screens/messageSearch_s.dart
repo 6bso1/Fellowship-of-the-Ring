@@ -10,10 +10,13 @@ class MessageSearchScreen extends StatefulWidget {
 
 class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsBindingObserver {
   Map<String, dynamic>? userMap;
+  Map<String, dynamic>? userMap2;
   bool isLoading = false;
   final TextEditingController _search = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+
 
   @override
 
@@ -46,8 +49,35 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
     });
   }
 
+
+
+  void getCurrentUser() async {
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    final User? user = _auth.currentUser;
+    String uuid = user!.uid.toString();
+
+    setState(() {
+      isLoading = true;
+    });
+
+    await _firestore
+        .collection('users')
+        .where("uid", isEqualTo: uuid)
+        .get()
+        .then((value) {
+      setState(() {
+        userMap2 = value.docs[0].data();
+        isLoading = false;
+      });
+      print(userMap);
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
     return MaterialApp(
         title: "welcome",
@@ -108,7 +138,7 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
               if (userMap != null) ListTile(
                 onTap: () {
                   String roomId = chatRoomId(
-                      'Burcu Sultan',
+                      userMap2!['firstName'],
                       userMap!['firstName']);
 
                   Navigator.of(context).push(

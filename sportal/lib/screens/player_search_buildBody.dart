@@ -305,11 +305,17 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                   final image= streamSnapshot.data?['image'];
                                   final email= streamSnapshot.data?['email'];
                                   final position= streamSnapshot.data?['position'];
+                                  final phoneNumber= streamSnapshot.data?['phoneNumber'];
+                                  final country= streamSnapshot.data?['country'];
+                                  final city= streamSnapshot.data?['city'];
+                                  final town= streamSnapshot.data?['town'];
                                   if(status1==1){
-                                    addAnnouncement(descrController.text,rb1,firstName,secondName,age,email,position,image);
+                                    addAnnouncement(descrController.text,rb1,firstName,secondName,phoneNumber
+                                                      ,town,city,country,age,email,position,image);
                                   }
                                   if(status2==1) {
-                                    addAnnouncement(descrController.text,rb2,firstName,secondName,age,email,position,image);
+                                    addAnnouncement(descrController.text,rb2,firstName,secondName,phoneNumber
+                                                      ,town,city,country,age,email,position,image);
                                   }
                                   descrController.clear();
 
@@ -343,9 +349,7 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                     " " +
                                     listOfFields[index].get("secondName"),
                                 style: const TextStyle(
-                                  //fontSize: 10.0,
                                   color: Colors.white,
-                                  //letterSpacing: 2.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -377,7 +381,10 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            ProfileUI(index)));
+                                            ProfileUI(listOfFields[index].get("firstName"),listOfFields[index].get("secondName"),
+                                                listOfFields[index].get("age"),listOfFields[index].get("city"),listOfFields[index].get("town"),listOfFields[index].get("country"),
+                                                listOfFields[index].get("phoneNumber"),listOfFields[index].get("position"),
+                                                listOfFields[index].get("image"))));
                               },
                             )
                                 : const SizedBox(
@@ -404,14 +411,15 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
       bottomNavigationBar: buildBottomBar(),
     );
   }
-  void addAnnouncement(String descr,String status,String firstName,String secondName,
-                                          String age,String email,String position,String image){
+  void addAnnouncement(String descr,String status,String firstName,String secondName,String phoneNumber,String town,
+          String city,String country,String age,String email,String position,String image){
      FirebaseFirestore firestore = FirebaseFirestore.instance;
      CollectionReference announcementRef =
             FirebaseFirestore.instance.collection("announcement");
-     announcementRef.add({'desc': '$descr','status': '$status','firstName': '$firstName',
-          'secondName': '$secondName','age': '$age', 'email': '$email','position': '$position',
-          'image': '$image','uid':FirebaseAuth.instance.currentUser!.uid});
+     announcementRef.add({'desc': '$descr','status': '$status','firstName': '$firstName', 'secondName': '$secondName',
+                          'phoneNumber': '$phoneNumber','age': '$age','town': '$town','city': '$city',
+                          'country': '$country', 'email': '$email','position': '$position',
+                          'image': '$image','uid':FirebaseAuth.instance.currentUser!.uid});
      Fluttertoast.showToast(msg: "İlan başarıyla paylaşıldı ");
   }
 }

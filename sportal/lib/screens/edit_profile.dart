@@ -1,47 +1,78 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'player_search_buildBody.dart';
-import 'player_profile.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'my_profile.dart';
-
-//import 'package:settings_ui/pages/settings.dart';
+import 'my_profile.dart';
+import 'dart:io';
+import 'dart:async';
+import 'HomePage_s.dart';
 
 class SettingsUI extends StatelessWidget {
-  int index;
-  SettingsUI(int this.index)
-  {
-    this.index=index;
-  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Setting UI",
-      home: EditProfilePage(index),
+      home: EditProfilePage(),
     );
   }
 }
 
 class EditProfilePage extends StatefulWidget {
-  int index;
-  EditProfilePage(int this.index)
-  {
-    this.index=index;
-  }
+
   @override
-  _EditProfilePageState createState() => _EditProfilePageState(index);
+  _EditProfilePageState createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  int index;
-  _EditProfilePageState(int this.index)
-  {
-    this.index=index;
-  }
+
+
+  File _image = File('your initial file');
+  String? firstName = MyProfileUI.myMap["firstName"];
+  String? secondName = MyProfileUI.myMap["secondName"];
+  String? age = MyProfileUI.myMap["age"];
+  String? mail = MyProfileUI.myMap["email"];
+  String? imageURL = MyProfileUI.myMap["image"];
+  String? uid = MyProfileUI.myMap["uid"];
+
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
+    Future getImage() async {
+      var image = await ImagePicker.platform.getImage(source: ImageSource.gallery);
+
+      setState(() {
+        _image = File(image!.path);
+        print('Image Path $_image');
+      });
+    }
+    Future uploadPic(BuildContext context) async{
+      String fileName = basename(_image.path);
+      Reference reference = FirebaseStorage.instance.ref().child("images").child(
+          new DateTime.now().millisecondsSinceEpoch.toString() +
+              "." +
+              _image.path);
+      UploadTask uploadTask = reference.putFile(_image);
+      fileName = await (await uploadTask).ref.getDownloadURL();
+      DatabaseReference databaseReference =
+        FirebaseDatabase.instance.ref().child("Data");
+      String? uploadID = databaseReference.push().key;
+
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(MyProfileUI.myMap["uid"])
+          .update({'image': fileName});
+      setState(() {
+        print("Profile Picture uploaded");
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+      });
+    }
     return Scaffold(
-      appBar: buildHeader(context, index),
+      appBar: buildHeader(context),
       extendBodyBehindAppBar:
       true,
 
@@ -68,30 +99,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Center(
                 child: Stack(
                   children: [
-                    Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 10))
-                          ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                PlayerSearchBuildBody.players[index].imageAddress,
-                              ))),
+                    Align(
+                      alignment: Alignment.center,
+                      child: CircleAvatar(
+                        radius: 70,
+                        backgroundColor: Color(0xff476cfb),
+                        child: ClipOval(
+                          child: new SizedBox(
+                            width: 180.0,
+                            height: 180.0,
+                            child: (_image!=null)?Image.file(
+                              _image,
+                              fit: BoxFit.fill,
+                            ):Image.network(
+                              "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     Positioned(
                         bottom: 0,
-                        right: 0,
+                        right: 100,
                         child: Container(
                           height: 40,
                           width: 40,
@@ -108,7 +138,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             icon: Icon(Icons.edit),
                             color: Colors.white,
                             onPressed: (){
-                              print("okan");
+                              getImage();
                             },
                           ),
                         )),
@@ -134,7 +164,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+                    },
                     color: Colors.green,
                     padding: EdgeInsets.symmetric(horizontal: 50),
                     elevation: 2,
@@ -149,7 +181,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                   ),
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      uploadPic(context);
+                    },
                     color: Colors.green,
                     padding: EdgeInsets.symmetric(horizontal: 50),
                     elevation: 2,
@@ -214,7 +248,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
-  AppBar buildHeader(BuildContext context,int index) {
+  AppBar buildHeader(BuildContext context) {
     return AppBar(
         elevation: 0.0,
         leading: IconButton(
@@ -227,7 +261,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        MyProfileUI(index)));
+                        MyProfileUI()));
           },
         ),
 

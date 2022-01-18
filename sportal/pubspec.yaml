@@ -39,6 +39,13 @@ dependencies:
   fluttertoast: ^8.0.8
   dcdg: ^4.0.0
   firebase_messaging: ^11.2.4
+  firebase_storage: ^10.0.1
+  image_picker: ^0.8.2
+  path: ^1.8.0
+  firebase_database: ^9.0.4
+
+
+
 
 dev_dependencies:
   flutter_test:

@@ -133,197 +133,196 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                   image: AssetImage("assets/images/background.png"),
                   fit: BoxFit.cover)
           ),
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: StreamBuilder<DocumentSnapshot>(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: StreamBuilder<DocumentSnapshot>(
 
-          stream: usersCollection.doc(user?.uid).snapshots(),
+              stream: usersCollection.doc(user?.uid).snapshots(),
 
-            builder: (ctx, streamSnapshot) {
-              if(usersCollection.doc() == null){
-                return Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.blue,
-                    )
-                );
-              }
-              /*if (streamSnapshot.connectionState == ConnectionState.waiting) {
+              builder: (ctx, streamSnapshot) {
+                if(usersCollection.doc() == null){
+                  return Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      )
+                  );
+                }
+                /*if (streamSnapshot.connectionState == ConnectionState.waiting) {
                  return Center(
                   child: CircularProgressIndicator(
                       color: Colors.blue,
                   ),
                 );
               }*/
-              return Column(
-                children: [
-                  Container(
-                      decoration: new BoxDecoration(
-                        borderRadius: new BorderRadius.circular(12.0),
-                        color: const Color.fromRGBO(255, 255, 255, 0.4),
-                      ),
-                      height: MediaQuery.of(context).size.height / 2.5,
-                      margin: const EdgeInsets.only(top: 150.0),
-                      padding: const EdgeInsets.only(left: 30.0, right: 30),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                            child:  CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  streamSnapshot.data?['image']),
-                              radius: 30.0,
+                return Column(
+                  children: [
+                    Container(
+                        decoration: new BoxDecoration(
+                          borderRadius: new BorderRadius.circular(12.0),
+                          color: const Color.fromRGBO(255, 255, 255, 0.4),
+                        ),
+                        height: MediaQuery.of(context).size.height / 2.5,
+                        margin: const EdgeInsets.only(top: 150.0),
+                        padding: const EdgeInsets.only(left: 30.0, right: 30),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                              child:  CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    streamSnapshot.data?['image']),
+                                radius: 30.0,
+                              ),
                             ),
-                          ),
-                          anncText,
-                          ListTile(
-                            title:  Text(rb1),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.lafayette,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter? value) {
-                                setState(() {
-                                  _character = value;
-                                  status1=1;
-                                  status2=0;
-                                });
-                              },
-
-                            ),
-                          ),
-                          ListTile(
-                            title: Text(rb2),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.jefferson,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter? value) {
-                                setState(() {
-                                  _character = value;
-                                  status1=0;
-                                  status2=1;
-                                });
-                              },
-                            ),
-                          ),
-                          ButtonTheme(
-                            buttonColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
-                            minWidth: 0, //wraps child's width
-                            height: 0, //wraps child's height
-                            child: RaisedButton(
-                                onPressed: (){
-                                  final firstName= streamSnapshot.data?['firstName'];
-                                  final secondName= streamSnapshot.data?['secondName'];
-                                  final age= streamSnapshot.data?['age'];
-                                  final image= streamSnapshot.data?['image'];
-                                  final email= streamSnapshot.data?['email'];
-                                  final position= streamSnapshot.data?['position'];
-                                  final phoneNumber= streamSnapshot.data?['phoneNumber'];
-                                  final country= streamSnapshot.data?['country'];
-                                  final city= streamSnapshot.data?['city'];
-                                  final town= streamSnapshot.data?['town'];
-                                  if(status1==1){
-                                    addAnnouncement(descrController.text,rb1,firstName,secondName,phoneNumber
-                                                      ,town,city,country,age,email,position,image);
-                                  }
-                                  if(status2==1) {
-                                    addAnnouncement(descrController.text,rb2,firstName,secondName,phoneNumber
-                                                      ,town,city,country,age,email,position,image);
-                                  }
-                                  descrController.clear();
-
+                            anncText,
+                            ListTile(
+                              title:  Text(rb1),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.lafayette,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter? value) {
+                                  setState(() {
+                                    _character = value;
+                                    status1=1;
+                                    status2=0;
+                                  });
                                 },
-                                child: Text("Gönder")
-                            ), //your original button
-                          ),
-                          /*ElevatedButton(
-                      style: raisedButtonStyle,
-                      onPressed: () {},
-                      child: const Text('Send'),
-                    ),*/
-                        ],
-                      )),
-                  StreamBuilder<QuerySnapshot>(
-                  stream: annRef.snapshots(),
-                  builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                    List<DocumentSnapshot> listOfFields =
-                    asyncSnapshot.data.docs;
 
-                  return Expanded(
-                    child: Container(
-                        child: listOfFields.isNotEmpty
-                            ? ListView.builder(
-                          itemCount: listOfFields.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return index >= 0
-                                ? ListTile(
-                              title: Text(
-                                listOfFields[index].get("firstName") +
-                                    " " +
-                                    listOfFields[index].get("secondName"),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
                               ),
-                              subtitle: Text(
-                                    "Açıklama:" +
-                                    listOfFields[index].get("desc")+
-                                    "\nYaş:" +
-                                    listOfFields[index].get("age") +
-                                    "\nPozisyon:" +
-                                    listOfFields[index].get("position")+
-                                    "\nStatus:" +
-                                    listOfFields[index].get("status"),
-                                style: const TextStyle(
-                                  fontSize: 13.0,
-                                  color: Colors.white,
-                                ),
+                            ),
+                            ListTile(
+                              title: Text(rb2),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.jefferson,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter? value) {
+                                  setState(() {
+                                    _character = value;
+                                    status1=0;
+                                    status2=1;
+                                  });
+                                },
                               ),
-                              trailing:FirebaseAuth.instance.currentUser!.uid==listOfFields[index].get("uid") ?GestureDetector(
-                                  onTap: () {
+                            ),
+                            ButtonTheme(
+                              buttonColor: Colors.white,
+                              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+                              minWidth: 0, //wraps child's width
+                              height: 0, //wraps child's height
+                              child: RaisedButton(
+                                  onPressed: (){
+                                    final firstName= streamSnapshot.data?['firstName'];
+                                    final secondName= streamSnapshot.data?['secondName'];
+                                    final age= streamSnapshot.data?['age'];
+                                    final image= streamSnapshot.data?['image'];
+                                    final email= streamSnapshot.data?['email'];
+                                    final position= streamSnapshot.data?['position'];
+                                    final phoneNumber= streamSnapshot.data?['phoneNumber'];
+                                    final country= streamSnapshot.data?['country'];
+                                    final city= streamSnapshot.data?['city'];
+                                    final town= streamSnapshot.data?['town'];
+                                    if(status1==1){
+                                      addAnnouncement(descrController.text,rb1,firstName,secondName,phoneNumber
+                                          ,town,city,country,age,email,position,image);
+                                    }
+                                    if(status2==1) {
+                                      addAnnouncement(descrController.text,rb2,firstName,secondName,phoneNumber
+                                          ,town,city,country,age,email,position,image);
+                                    }
+                                    descrController.clear();
+
                                   },
-                                  child: const Icon(Icons.delete,
-                                      color: Colors.white)
-                              ):
-                              GestureDetector(
-                                  onTap: () {
+                                  child: Text("Gönder")
+                              ), //your original button
+                            ),
+                          ],
+                        )),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: annRef.snapshots(),
+                        builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                          List<DocumentSnapshot> listOfFields =
+                              asyncSnapshot.data.docs;
+
+                          return Expanded(
+                            child: Container(
+                                child: listOfFields.isNotEmpty
+                                    ? ListView.builder(
+                                  itemCount: listOfFields.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return index >= 0 && listOfFields[index].get("validity")=="1"
+                                        ? ListTile(
+                                      title: Text(
+                                        listOfFields[index].get("firstName") +
+                                            " " +
+                                            listOfFields[index].get("secondName"),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        "Açıklama:" +
+                                            listOfFields[index].get("desc")+
+                                            "\nYaş:" +
+                                            listOfFields[index].get("age") +
+                                            "\nPozisyon:" +
+                                            listOfFields[index].get("position")+
+                                            "\nStatus:" +
+                                            listOfFields[index].get("status"),
+                                        style: const TextStyle(
+                                          fontSize: 13.0,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      trailing:FirebaseAuth.instance.currentUser!.uid==listOfFields[index].get("uid") ?GestureDetector(
+                                          onTap: () {
+                                           String ?docId= listOfFields[index].get("docId");
+                                            annRef
+                                                .doc(docId!.substring(1)) // <-- Doc ID where data should be updated.
+                                                .update({'validity' : '0'});
+                                          },
+                                          child: const Icon(Icons.delete,
+                                              color: Colors.white)
+                                      ):
+                                      GestureDetector(
+                                          onTap: () {
+                                          },
+                                          child: const Icon(Icons.message,
+                                              color: Colors.white)
+                                      ),
+                                      leading: CircleAvatar(
+                                          radius: 25.0,
+                                          backgroundImage: NetworkImage(
+                                              listOfFields[index].get("image"))),
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfileUI(listOfFields[index].get("firstName"),listOfFields[index].get("secondName"),
+                                                        listOfFields[index].get("age"),listOfFields[index].get("city"),listOfFields[index].get("town"),listOfFields[index].get("country"),
+                                                        listOfFields[index].get("phoneNumber"),listOfFields[index].get("position"),
+                                                        listOfFields[index].get("image"))));
+                                      },
+                                    )
+                                        : const SizedBox(
+                                      height: 0,
+                                      width: 0,
+                                    );
                                   },
-                                  child: const Icon(Icons.message,
-                                      color: Colors.white)
-                              ),
-                              leading: CircleAvatar(
-                                  radius: 25.0,
-                                  backgroundImage: NetworkImage(
-                                      listOfFields[index].get("image"))),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ProfileUI(listOfFields[index].get("firstName"),listOfFields[index].get("secondName"),
-                                                listOfFields[index].get("age"),listOfFields[index].get("city"),listOfFields[index].get("town"),listOfFields[index].get("country"),
-                                                listOfFields[index].get("phoneNumber"),listOfFields[index].get("position"),
-                                                listOfFields[index].get("image"))));
-                              },
-                            )
-                                : const SizedBox(
-                              height: 0,
-                              width: 0,
-                            );
-                          },
-                        )
-                            : const SizedBox(
-                          height: 0,
-                          width: 0,
-                        )
-                    ),
-                  );
-                }
-                  )
-                ],
-              );
-            }
-        )
+                                )
+                                    : const SizedBox(
+                                  height: 0,
+                                  width: 0,
+                                )
+                            ),
+                          );
+                        }
+                    )
+                  ],
+                );
+              }
+          )
       ),
       floatingActionButton: buildFloating(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -331,14 +330,17 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
     );
   }
   void addAnnouncement(String descr,String status,String firstName,String secondName,String phoneNumber,String town,
-          String city,String country,String age,String email,String position,String image){
-     FirebaseFirestore firestore = FirebaseFirestore.instance;
-     CollectionReference announcementRef =
-            FirebaseFirestore.instance.collection("announcement");
-     announcementRef.add({'desc': '$descr','status': '$status','firstName': '$firstName', 'secondName': '$secondName',
-                          'phoneNumber': '$phoneNumber','age': '$age','town': '$town','city': '$city',
-                          'country': '$country', 'email': '$email','position': '$position',
-                          'image': '$image','uid':FirebaseAuth.instance.currentUser!.uid});
-     Fluttertoast.showToast(msg: "İlan başarıyla paylaşıldı ");
+      String city,String country,String age,String email,String position,String image){
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference announcementRef =
+    FirebaseFirestore.instance.collection("announcement");
+    String docId=announcementRef.doc().id;
+
+    announcementRef.doc(docId).set({'desc': '$descr','status': '$status','firstName': '$firstName', 'secondName': '$secondName',
+      'phoneNumber': '$phoneNumber','age': '$age','town': '$town','city': '$city',
+      'country': '$country', 'email': '$email','position': '$position',
+      'image': '$image','validity': '1','docId': docId,'uid':FirebaseAuth.instance.currentUser!.uid});
+    Fluttertoast.showToast(msg: "İlan başarıyla paylaşıldı ");
+
   }
 }

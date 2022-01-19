@@ -279,11 +279,18 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                   color: Colors.white,
                                 ),
                               ),
-                              trailing: GestureDetector(
+                              trailing:FirebaseAuth.instance.currentUser!.uid==listOfFields[index].get("uid") ?GestureDetector(
+                                  onTap: () {
+                                  },
+                                  child: const Icon(Icons.delete,
+                                      color: Colors.white)
+                              ):
+                              GestureDetector(
                                   onTap: () {
                                   },
                                   child: const Icon(Icons.message,
-                                      color: Colors.white)),
+                                      color: Colors.white)
+                              ),
                               leading: CircleAvatar(
                                   radius: 25.0,
                                   backgroundImage: NetworkImage(

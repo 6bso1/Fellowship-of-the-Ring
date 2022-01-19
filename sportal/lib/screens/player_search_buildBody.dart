@@ -14,53 +14,6 @@ enum SingingCharacter { lafayette, jefferson }
 
 class PlayerSearchBuildBody extends StatefulWidget {
   const PlayerSearchBuildBody({Key? key}) : super(key: key);
-  static List<Player> players = [
-    Player(
-        1,
-        "Okan",
-        "Torun",
-        22,
-        "SLA",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Bursa"),
-    Player(
-        2,
-        "Samet",
-        "Nalbant",
-        27,
-        "MO",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Bilecik"),
-    Player(
-        3,
-        "Mehmet Yalçın",
-        "Alaman",
-        18,
-        "STP",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Almanya",
-        "Hamburg"),
-    Player(
-        4,
-        "Ömer Faruk",
-        "Erol",
-        35,
-        "SLB",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "İstanbul"),
-    Player(
-        5,
-        "Ahmet Fırat",
-        "İdi",
-        24,
-        "STP",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Tokat"),
-  ];
 
   @override
   _PlayerSearchBuildBodyState createState() => _PlayerSearchBuildBodyState();
@@ -81,56 +34,6 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
   FirebaseFirestore.instance.collection('users');
 
 
-  /*final QuerySnapshot result =
-      await Firestore.instance.collection('myCollection').getDocuments();
-  final List<DocumentSnapshot> documents = result.documents;*/
-  static List<Player> players = [
-    Player(
-        1,
-        "Okan",
-        "Torun",
-        22,
-        "SLA",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Bursa"),
-    Player(
-        2,
-        "Samet",
-        "Nalbant",
-        27,
-        "MO",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Bilecik"),
-    Player(
-        3,
-        "Mehmet Yalçın",
-        "Alaman",
-        18,
-        "STP",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Almanya",
-        "Hamburg"),
-    Player(
-        4,
-        "Ömer Faruk",
-        "Erol",
-        35,
-        "SLB",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "İstanbul"),
-    Player(
-        5,
-        "Ahmet Fırat",
-        "İdi",
-        24,
-        "STP",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Tokat"),
-  ];
   TextEditingController emailController = TextEditingController();
   SingingCharacter? _character = SingingCharacter.lafayette;
 
@@ -232,8 +135,17 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
           ),
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: StreamBuilder<DocumentSnapshot>(
+
           stream: usersCollection.doc(user?.uid).snapshots(),
+
             builder: (ctx, streamSnapshot) {
+              if(usersCollection.doc() == null){
+                return Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.blue,
+                    )
+                );
+              }
               /*if (streamSnapshot.connectionState == ConnectionState.waiting) {
                  return Center(
                   child: CircularProgressIndicator(

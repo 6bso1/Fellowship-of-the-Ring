@@ -31,7 +31,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
 
 
-  File _image = File('your initial file');
+  File _image = File(MyProfileUI.myMap["firstName"].toString());
   String? firstName = MyProfileUI.myMap["firstName"];
   String? secondName = MyProfileUI.myMap["secondName"];
   String? age = MyProfileUI.myMap["age"];
@@ -148,15 +148,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 30,
               ),
-              buildTextField(1, "Ad", false),
-              buildTextField(2, "Soyad", false),
-              buildTextField(3, "E-mail", false),
-              buildTextField(4, "Şifre", true),
-              buildTextField(5, "Pendik", false),
-              buildTextField(6, "İstanbul", false),
-              buildTextField(7, "Telefon", false),
-              buildTextField(8, "Yaş", false),
-              buildTextField(9, "Mevki", false),
+              buildTextField(1, MyProfileUI.myMap["firstName"].toString(), false),
+              buildTextField(2, MyProfileUI.myMap["secondName"].toString(), false),
+              buildTextField(3, MyProfileUI.myMap["email"].toString(), false),
+              buildTextField(5, MyProfileUI.myMap["town"].toString(), false),
+              buildTextField(6, MyProfileUI.myMap["city"].toString(), false),
+              buildTextField(7, MyProfileUI.myMap["phone"].toString(), false),
+              buildTextField(8, MyProfileUI.myMap["age"].toString(), false),
+              buildTextField(9, MyProfileUI.myMap["position"].toString(), false),
               SizedBox(
                 height: 5,
               ),
@@ -165,7 +164,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 children: [
                   RaisedButton(
                     onPressed: () {
-
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => HomePage()));
                     },
                     color: Colors.green,
                     padding: EdgeInsets.symmetric(horizontal: 50),
@@ -183,6 +183,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   RaisedButton(
                     onPressed: () {
                       uploadPic(context);
+                          child: CircularProgressIndicator(
+                            color: Colors.blue,
+                          );
+
+                      Future.delayed(Duration(seconds: 5), () =>
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => MyProfileUI())));
                     },
                     color: Colors.green,
                     padding: EdgeInsets.symmetric(horizontal: 50),
@@ -243,7 +250,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             hintText: placeholder,
             hintStyle: TextStyle(
               fontSize: 16,
-              color: Colors.white,
+              color: Colors.white.withOpacity(0.3),
             )),
       ),
     );

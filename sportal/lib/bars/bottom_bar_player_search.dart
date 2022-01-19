@@ -77,7 +77,7 @@ class _DemoBottomAppBar extends StatelessWidget {
                 color: Colors.black,
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyProfileUI(0)));
+                      MaterialPageRoute(builder: (context) => MyProfileUI()));
                 },
               ),
             ],

@@ -8,10 +8,27 @@ import '../bars/bottom_bar_player_search.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
 
 class ProfileUI extends StatelessWidget {
-  int index;
-  ProfileUI(int this.index)
+  String firstName;
+  String secondName;
+  String age;
+  String city;
+  String town;
+  String country;
+  String phoneNumber;
+  String position;
+  String image;
+  ProfileUI(String this.firstName,String this.secondName,String this.age,String this.city,String this.town,
+                          String this.country,String this.phoneNumber,String this.position,String this.image)
   {
-    this.index=index;
+    this.firstName=firstName;
+    this.secondName=secondName;
+    this.age=age;
+    this.city=city;
+    this.town=town;
+    this.country=country;
+    this.phoneNumber=phoneNumber;
+    this.position=position;
+    this.image=image;
   }
 
   @override
@@ -20,16 +37,10 @@ class ProfileUI extends StatelessWidget {
         
         body: Container(
 
-           // child: Image.asset("assets/"),
-            decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                    "https://github.com/okantorun/Vector-Graphics-Libraray-C/blob/main/JPGs/background%20(1).png?raw=true"),
-                fit: BoxFit.cover,
-              ),
-
-          ),
-         //child: Image.asset("assets/")
+                  image: AssetImage("assets/images/background.png"),
+                  fit: BoxFit.cover)),
 
           child: Column(
 
@@ -43,7 +54,7 @@ class ProfileUI extends StatelessWidget {
                     alignment: Alignment(0.0,3.5),
                     child: CircleAvatar(
                       backgroundImage: NetworkImage(
-                          PlayerSearchBuildBody.players[index].imageAddress
+                          image
                       ),
                       radius: 70.0,
                     ),
@@ -55,7 +66,7 @@ class ProfileUI extends StatelessWidget {
                 height: 80,
               ),
               Text(
-                PlayerSearchBuildBody.players[index].firstName+" "+ PlayerSearchBuildBody.players[index].lastName
+                firstName+" "+ secondName
                 ,style: TextStyle(
                   fontSize: 25.0,
                   color:Colors.white,
@@ -67,7 +78,7 @@ class ProfileUI extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                PlayerSearchBuildBody.players[index].age.toString()+","+PlayerSearchBuildBody.players[index].city+"/"+PlayerSearchBuildBody.players[index].country,
+                age+","+city+"/"+country,
                 style: TextStyle(
                   fontSize: 14.0,
                   color:Colors.white,
@@ -106,7 +117,7 @@ class ProfileUI extends StatelessWidget {
                   //color: Colors.red,
                   alignment: Alignment(-0.9,3.5),
                   child: Text(
-                    "Kaleci\nDefans",
+                    position,
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         fontSize: 11.0,
@@ -139,7 +150,7 @@ class ProfileUI extends StatelessWidget {
                     //color: Colors.red,
                     alignment: Alignment(-0.7,4),
                     child: Text(
-                      "0533 027 28 93",
+                      phoneNumber,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontSize: 13.0,
@@ -171,7 +182,7 @@ class ProfileUI extends StatelessWidget {
                       //color: Colors.red,
                       alignment: Alignment(-0.7,4),
                       child: Text(
-                        "Istanbul/Pendik",
+                        city+"/"+town,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 13.0,

@@ -1,7 +1,6 @@
-// ignore_for_file: unnecessary_new, file_names
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'Player.dart';
@@ -10,57 +9,11 @@ import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import 'HomePage_s.dart';
 
+
 enum SingingCharacter { lafayette, jefferson }
 
 class PlayerSearchBuildBody extends StatefulWidget {
   const PlayerSearchBuildBody({Key? key}) : super(key: key);
-  static List<Player> players = [
-    Player(
-        1,
-        "Okan",
-        "Torun",
-        22,
-        "SLA",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Bursa"),
-    Player(
-        2,
-        "Samet",
-        "Nalbant",
-        27,
-        "MO",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Bilecik"),
-    Player(
-        3,
-        "Mehmet Yalçın",
-        "Alaman",
-        18,
-        "STP",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Almanya",
-        "Hamburg"),
-    Player(
-        4,
-        "Ömer Faruk",
-        "Erol",
-        35,
-        "SLB",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "İstanbul"),
-    Player(
-        5,
-        "Ahmet Fırat",
-        "İdi",
-        24,
-        "STP",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Tokat"),
-  ];
 
   @override
   _PlayerSearchBuildBodyState createState() => _PlayerSearchBuildBodyState();
@@ -80,53 +33,7 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
   CollectionReference usersCollection =
   FirebaseFirestore.instance.collection('users');
 
-  static List<Player> players = [
-    Player(
-        1,
-        "Okan",
-        "Torun",
-        22,
-        "SLA",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Bursa"),
-    Player(
-        2,
-        "Samet",
-        "Nalbant",
-        27,
-        "MO",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Bilecik"),
-    Player(
-        3,
-        "Mehmet Yalçın",
-        "Alaman",
-        18,
-        "STP",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Almanya",
-        "Hamburg"),
-    Player(
-        4,
-        "Ömer Faruk",
-        "Erol",
-        35,
-        "SLB",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "İstanbul"),
-    Player(
-        5,
-        "Ahmet Fırat",
-        "İdi",
-        24,
-        "STP",
-        "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg",
-        "Türkiye",
-        "Tokat"),
-  ];
+
   TextEditingController emailController = TextEditingController();
   SingingCharacter? _character = SingingCharacter.lafayette;
 
@@ -151,9 +58,11 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
   }
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference annRef = firestore.collection('announcement');
     final anncText = Theme(
       data: new ThemeData(
         primaryColor: Colors.green,
@@ -226,8 +135,17 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
           ),
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: StreamBuilder<DocumentSnapshot>(
+
           stream: usersCollection.doc(user?.uid).snapshots(),
+
             builder: (ctx, streamSnapshot) {
+              if(usersCollection.doc() == null){
+                return Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.blue,
+                    )
+                );
+              }
               /*if (streamSnapshot.connectionState == ConnectionState.waiting) {
                  return Center(
                   child: CircularProgressIndicator(
@@ -249,9 +167,9 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                         children: [
                           Container(
                             padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                            child: const CircleAvatar(
+                            child:  CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  "https://pbs.twimg.com/profile_images/1334061742742245376/XIEEBIvv_400x400.jpg"),
+                                  streamSnapshot.data?['image']),
                               radius: 30.0,
                             ),
                           ),
@@ -296,11 +214,20 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                   final firstName= streamSnapshot.data?['firstName'];
                                   final secondName= streamSnapshot.data?['secondName'];
                                   final age= streamSnapshot.data?['age'];
+                                  final image= streamSnapshot.data?['image'];
+                                  final email= streamSnapshot.data?['email'];
+                                  final position= streamSnapshot.data?['position'];
+                                  final phoneNumber= streamSnapshot.data?['phoneNumber'];
+                                  final country= streamSnapshot.data?['country'];
+                                  final city= streamSnapshot.data?['city'];
+                                  final town= streamSnapshot.data?['town'];
                                   if(status1==1){
-                                    addAnnouncement(descrController.text,rb1,firstName,secondName,age);
+                                    addAnnouncement(descrController.text,rb1,firstName,secondName,phoneNumber
+                                                      ,town,city,country,age,email,position,image);
                                   }
                                   if(status2==1) {
-                                    addAnnouncement(descrController.text,rb2,firstName,secondName,age);
+                                    addAnnouncement(descrController.text,rb2,firstName,secondName,phoneNumber
+                                                      ,town,city,country,age,email,position,image);
                                   }
                                   descrController.clear();
 
@@ -315,52 +242,68 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                     ),*/
                         ],
                       )),
-                  Expanded(
+                  StreamBuilder<QuerySnapshot>(
+                  stream: annRef.snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                    List<DocumentSnapshot> listOfFields =
+                    asyncSnapshot.data.docs;
+
+                  return Expanded(
                     child: Container(
-                        child: players.isNotEmpty
+                        child: listOfFields.isNotEmpty
                             ? ListView.builder(
-                          itemCount: players.length,
+                          itemCount: listOfFields.length,
                           itemBuilder: (BuildContext context, int index) {
                             return index >= 0
                                 ? ListTile(
                               title: Text(
-                                players[index].firstName +
+                                listOfFields[index].get("firstName") +
                                     " " +
-                                    players[index].lastName,
+                                    listOfFields[index].get("secondName"),
                                 style: const TextStyle(
-                                  //fontSize: 10.0,
                                   color: Colors.white,
-                                  //letterSpacing: 2.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               subtitle: Text(
-                                "Yaş:" +
-                                    players[index].age.toString() +
+                                    "Açıklama:" +
+                                    listOfFields[index].get("desc")+
+                                    "\nYaş:" +
+                                    listOfFields[index].get("age") +
                                     "\nPozisyon:" +
-                                    players[index].position,
+                                    listOfFields[index].get("position")+
+                                    "\nStatus:" +
+                                    listOfFields[index].get("status"),
                                 style: const TextStyle(
                                   fontSize: 13.0,
                                   color: Colors.white,
                                 ),
                               ),
-                              trailing: GestureDetector(
+                              trailing:FirebaseAuth.instance.currentUser!.uid==listOfFields[index].get("uid") ?GestureDetector(
                                   onTap: () {
-                                    ///do something heres
-                                    // print("okan");
+                                  },
+                                  child: const Icon(Icons.delete,
+                                      color: Colors.white)
+                              ):
+                              GestureDetector(
+                                  onTap: () {
                                   },
                                   child: const Icon(Icons.message,
-                                      color: Colors.white)),
+                                      color: Colors.white)
+                              ),
                               leading: CircleAvatar(
                                   radius: 25.0,
                                   backgroundImage: NetworkImage(
-                                      players[index].imageAddress)),
+                                      listOfFields[index].get("image"))),
                               onTap: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            ProfileUI(index)));
+                                            ProfileUI(listOfFields[index].get("firstName"),listOfFields[index].get("secondName"),
+                                                listOfFields[index].get("age"),listOfFields[index].get("city"),listOfFields[index].get("town"),listOfFields[index].get("country"),
+                                                listOfFields[index].get("phoneNumber"),listOfFields[index].get("position"),
+                                                listOfFields[index].get("image"))));
                               },
                             )
                                 : const SizedBox(
@@ -374,7 +317,9 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                           width: 0,
                         )
                     ),
-                  ),
+                  );
+                }
+                  )
                 ],
               );
             }
@@ -385,13 +330,15 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
       bottomNavigationBar: buildBottomBar(),
     );
   }
-  void addAnnouncement(String descr,String status,String firstName,String secondName,String age){
+  void addAnnouncement(String descr,String status,String firstName,String secondName,String phoneNumber,String town,
+          String city,String country,String age,String email,String position,String image){
      FirebaseFirestore firestore = FirebaseFirestore.instance;
      CollectionReference announcementRef =
             FirebaseFirestore.instance.collection("announcement");
-     announcementRef.add({'desc': '$descr','status': '$status','firstName': '$firstName',
-                                'secondName': '$secondName','age': '$age', 'uid':FirebaseAuth.instance.currentUser!.uid});
+     announcementRef.add({'desc': '$descr','status': '$status','firstName': '$firstName', 'secondName': '$secondName',
+                          'phoneNumber': '$phoneNumber','age': '$age','town': '$town','city': '$city',
+                          'country': '$country', 'email': '$email','position': '$position',
+                          'image': '$image','uid':FirebaseAuth.instance.currentUser!.uid});
      Fluttertoast.showToast(msg: "İlan başarıyla paylaşıldı ");
   }
-
 }

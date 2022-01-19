@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../screens/Chat_s.dart';
+import 'package:sportal/model/user_model.dart';
 
 class MessageSearchScreen extends StatefulWidget {
   @override
@@ -54,8 +55,9 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
   void getCurrentUser() async {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    final User? user = _auth.currentUser;
-    String uuid = user!.uid.toString();
+    User? user = _auth.currentUser;
+    final uuid = user!.uid;
+    print(uuid);
 
     setState(() {
       isLoading = true;
@@ -70,7 +72,7 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
         userMap2 = value.docs[0].data();
         isLoading = false;
       });
-      print(userMap);
+      print(userMap2);
     });
   }
 

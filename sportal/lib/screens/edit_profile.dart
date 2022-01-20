@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+
   File _image = File("not updated");
   int flagImage=0;
   TextEditingController firstName = TextEditingController();
@@ -51,7 +53,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _image = File(image!.path);
         print('Image Path $_image');
       });
+
       flagImage=1;
+
     }
 
     Future uploadPic(BuildContext context) async {
@@ -113,9 +117,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         radius: 70,
                         backgroundColor: Color(0xff476cfb),
                         child: ClipOval(
-                          child: new SizedBox(
+                          child: SizedBox(
                             width: 180.0,
                             height: 180.0,
+
                             child: (flagImage == 0)
                                 ? Image.network(
                               MyProfileUI.myMap["image"].toString(),
@@ -158,10 +163,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 30,
               ),
-              buildTextField(
-                  1, MyProfileUI.myMap["firstName"].toString(), false,firstName),
-              buildTextField(
-                  2, MyProfileUI.myMap["secondName"].toString(), false,secondName),
+
+              buildTextField(1, MyProfileUI.myMap["firstName"].toString(), false,firstName),
+              buildTextField(2, MyProfileUI.myMap["secondName"].toString(), false,secondName),
               buildTextField(3, MyProfileUI.myMap["email"].toString(), false,email),
               buildTextField(5, MyProfileUI.myMap["town"].toString(), false,town),
               buildTextField(6, MyProfileUI.myMap["city"].toString(), false,city),
@@ -239,9 +243,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
+        controller: ctrl,
         style: TextStyle(color: Colors.white),
         obscureText: isPasswordTextField ? showPassword : false,
-        controller: ctrl,
         decoration: InputDecoration(
             prefixIcon: labelText == 1
                 ? Icon(Icons.account_circle, color: Colors.white)

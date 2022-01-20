@@ -20,6 +20,7 @@ class PlayerSearchBuildBody extends StatefulWidget {
 
 class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
   // form key
+  bool firstEntry = true;
   final rb1 = 'Oyuncu Arıyorum';
   final rb2 = 'Takım Arıyorum';
   var status1 = 1;
@@ -44,8 +45,12 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const MyApp()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          current_user: null,
+                        )));
           },
         ),
         title: Center(
@@ -134,19 +139,26 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
           child: StreamBuilder<DocumentSnapshot>(
               stream: usersCollection.doc(user?.uid).snapshots(),
               builder: (ctx, streamSnapshot) {
+                if (firstEntry) {
+                  if (streamSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      ),
+                    );
+                  } else {
+                    firstEntry = false;
+                  }
+                }
+
                 if (usersCollection == null) {
                   return Center(
                       child: CircularProgressIndicator(
                     color: Colors.blue,
                   ));
                 }
-                if (streamSnapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.blue,
-                    ),
-                  );
-                }
+
                 return Column(
                   children: [
                     Container(

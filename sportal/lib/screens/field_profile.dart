@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sportal/bars/bottom_bar_floating_action_button.dart';
@@ -10,17 +11,18 @@ import 'field_comments.dart';
 
 class FieldProfile extends StatefulWidget {
   final DocumentSnapshot fieldVar;
-
-  const FieldProfile({required this.fieldVar});
+  final User? current_user;
+  const FieldProfile({required this.current_user, required this.fieldVar});
 
   @override
-  FieldProfileState createState() => FieldProfileState(fieldVar: fieldVar);
+  FieldProfileState createState() =>
+      FieldProfileState(current_user: current_user, fieldVar: fieldVar);
 }
 
 class FieldProfileState extends State<FieldProfile> {
   final DocumentSnapshot fieldVar;
-
-  FieldProfileState({required this.fieldVar});
+  final User? current_user;
+  FieldProfileState({required this.current_user, required this.fieldVar});
   late PageController _pageController;
   int activePage = 0;
 
@@ -89,6 +91,7 @@ class FieldProfileState extends State<FieldProfile> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => FieldComments(
+                                    current_user: current_user,
                                     fieldVar: fieldVar,
                                   )));
                     },

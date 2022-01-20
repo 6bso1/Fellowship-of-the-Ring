@@ -21,7 +21,7 @@ class Dropdownlist {
 
   Future<void> fillIlces() async {
     List<dynamic> _ilceListesi = [];
-    String jsonString = await rootBundle.loadString("assets/js/ilce.json");
+    String jsonString = await rootBundle.loadString('assets/js/ilce.json');
     var list = json.decode(jsonString);
     _ilceListesi = list.map((x) => Ilce.fromJson(x)).toList();
     for (int i = 0; i < _ilceListesi.length; i++) {

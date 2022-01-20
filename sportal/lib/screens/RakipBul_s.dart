@@ -20,15 +20,13 @@ class RouteRakipBul extends StatefulWidget {
 
 class _RouteRakipBul extends State<RouteRakipBul> {
   // form key
-  final rb1 = 'Oyuncu Arıyorum';
-  final rb2 = 'Takım Arıyorum';
   final descrController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
   CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('users');
+  FirebaseFirestore.instance.collection('users');
 
   TextEditingController emailController = TextEditingController();
   SingingCharacter? _character = SingingCharacter.lafayette;
@@ -49,7 +47,7 @@ class _RouteRakipBul extends State<RouteRakipBul> {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference annRef = firestore.collection('announcement');
+    CollectionReference annRef = firestore.collection('rakipbul');
     final anncText = Theme(
       data: new ThemeData(
         primaryColor: Colors.green,
@@ -113,6 +111,12 @@ class _RouteRakipBul extends State<RouteRakipBul> {
           child: StreamBuilder<DocumentSnapshot>(
               stream: usersCollection.doc(user?.uid).snapshots(),
               builder: (ctx, streamSnapshot) {
+                if (usersCollection == null) {
+                  return Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      ));
+                }
                 if (streamSnapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(
@@ -134,16 +138,16 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                           children: [
                             Container(
                               padding:
-                                  const EdgeInsets.only(top: 10.0, bottom: 10),
+                              const EdgeInsets.only(top: 10.0, bottom: 10),
                               child: CircleAvatar(
                                 backgroundImage:
-                                    NetworkImage(streamSnapshot.data?['image']),
+                                NetworkImage(streamSnapshot.data?['image']),
                                 radius: 30.0,
                               ),
                             ),
                             anncText,
-                            const SizedBox(
-                              height: 10,
+                            SizedBox(
+                              height: 15,
                               width: 0,
                             ),
                             ButtonTheme(
@@ -151,7 +155,7 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                               padding: EdgeInsets.symmetric(
                                   vertical: 4.0,
                                   horizontal:
-                                      8.0), //adds padding inside the button
+                                  8.0), //adds padding inside the button
                               materialTapTargetSize: MaterialTapTargetSize
                                   .shrinkWrap, //limits the touch area to the button area
                               minWidth: 0, //wraps child's width
@@ -159,33 +163,34 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                               child: RaisedButton(
                                   onPressed: () {
                                     final firstName =
-                                        streamSnapshot.data?['firstName'];
+                                    streamSnapshot.data?['firstName'];
                                     final secondName =
-                                        streamSnapshot.data?['secondName'];
+                                    streamSnapshot.data?['secondName'];
                                     final age = streamSnapshot.data?['age'];
                                     final image = streamSnapshot.data?['image'];
                                     final email = streamSnapshot.data?['email'];
                                     final position =
-                                        streamSnapshot.data?['position'];
+                                    streamSnapshot.data?['position'];
                                     final phoneNumber =
-                                        streamSnapshot.data?['phoneNumber'];
+                                    streamSnapshot.data?['phoneNumber'];
                                     final country =
-                                        streamSnapshot.data?['country'];
+                                    streamSnapshot.data?['country'];
                                     final city = streamSnapshot.data?['city'];
                                     final town = streamSnapshot.data?['town'];
 
-                                    addAnnouncement(
-                                        descrController.text,
-                                        firstName,
-                                        secondName,
-                                        phoneNumber,
-                                        town,
-                                        city,
-                                        country,
-                                        age,
-                                        email,
-                                        position,
-                                        image);
+
+                                      addAnnouncement(
+                                          descrController.text,
+                                          firstName,
+                                          secondName,
+                                          phoneNumber,
+                                          town,
+                                          city,
+                                          country,
+                                          age,
+                                          email,
+                                          position,
+                                          image);
 
                                     descrController.clear();
                                   },
@@ -203,101 +208,153 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                               listOfFields = asyncSnapshot.data.docs;
                             }
                           }
-
                           return Expanded(
                             child: Container(
                                 child: listOfFields.isNotEmpty
                                     ? ListView.builder(
-                                        itemCount: listOfFields.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return index >= 0
-                                              ? ListTile(
-                                                  title: Text(
+                                  itemCount: listOfFields.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return index >= 0 &&
+                                        listOfFields[index]
+                                            .get("validity") ==
+                                            "1"
+                                        ? ListTile(
+                                      title: Text(
+                                        listOfFields[index]
+                                            .get("firstName") +
+                                            " " +
+                                            listOfFields[index]
+                                                .get("secondName"),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight:
+                                          FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        "Açıklama:" +
+                                            listOfFields[index]
+                                                .get("desc") +
+                                            "\nYaş:" +
+                                            listOfFields[index]
+                                                .get("age") +
+                                            "\ne-mail:" +
+                                            listOfFields[index]
+                                                .get("email"),
+                                        style: const TextStyle(
+                                          fontSize: 13.0,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      trailing:
+                                      FirebaseAuth
+                                          .instance
+                                          .currentUser!
+                                          .uid ==
+                                          listOfFields[
+                                          index]
+                                              .get("uid")
+                                          ? GestureDetector(
+                                          onTap:
+                                              () =>
+                                              showDialog<
+                                                  String>(
+                                                context:
+                                                context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                    AlertDialog(
+                                                      title:
+                                                      const Text('Dikkat'),
+                                                      content:
+                                                      const Text('İlanı kaldırmak istediğinize emein misiniz ?'),
+                                                      actions: <
+                                                          Widget>[
+                                                        TextButton(
+                                                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                                                          child: const Text('Hayır'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            String? docId = listOfFields[index].get("docId");
+                                                            annRef
+                                                                .doc(
+                                                                docId) // <-- Doc ID where data should be updated.
+                                                                .update({
+                                                              'validity': '0'
+                                                            });
+                                                            Navigator.pop(context, 'Cancel');
+                                                            Fluttertoast.showToast(msg: "İlan başarıyla silindi ");
+                                                          },
+                                                          child: const Text('Evet'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                              ),
+                                          child: const Icon(
+                                              Icons.delete,
+                                              color: Colors
+                                                  .white))
+                                          : GestureDetector(
+                                          onTap: () {},
+                                          child: const Icon(
+                                              Icons.message,
+                                              color: Colors
+                                                  .white)),
+                                      leading: CircleAvatar(
+                                          radius: 25.0,
+                                          backgroundImage:
+                                          NetworkImage(
+                                              listOfFields[
+                                              index]
+                                                  .get(
+                                                  "image"))),
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ProfileUI(
+                                                    listOfFields[index].get(
+                                                        "firstName"),
+                                                    listOfFields[index].get(
+                                                        "secondName"),
                                                     listOfFields[index]
-                                                            .get("firstName") +
-                                                        " " +
-                                                        listOfFields[index]
-                                                            .get("secondName"),
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  subtitle: Text(
-                                                    "Açıklama:" +
-                                                        listOfFields[index]
-                                                            .get("desc") +
-                                                        "\nYaş:" +
-                                                        listOfFields[index]
-                                                            .get("age") +
-                                                        "\nPozisyon:" +
-                                                        listOfFields[index]
-                                                            .get("position"),
-                                                    style: const TextStyle(
-                                                      fontSize: 13.0,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  trailing: GestureDetector(
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                          Icons.message,
-                                                          color: Colors.white)),
-                                                  leading: CircleAvatar(
-                                                      radius: 25.0,
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                              listOfFields[
-                                                                      index]
-                                                                  .get(
-                                                                      "image"))),
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) => ProfileUI(
-                                                                listOfFields[index].get(
-                                                                    "firstName"),
-                                                                listOfFields[index].get(
-                                                                    "secondName"),
-                                                                listOfFields[index]
-                                                                    .get("age"),
-                                                                listOfFields[index]
-                                                                    .get(
-                                                                        "city"),
-                                                                listOfFields[index]
-                                                                    .get(
-                                                                        "town"),
-                                                                listOfFields[
-                                                                        index]
-                                                                    .get(
-                                                                        "country"),
-                                                                listOfFields[index].get(
-                                                                    "phoneNumber"),
-                                                                listOfFields[index].get(
-                                                                    "position"),
-                                                                listOfFields[
-                                                                        index]
-                                                                    .get(
-                                                                        "image"),
-                                                                listOfFields[
-                                                                        index]
-                                                                    .get(
-                                                                        "email"))));
-                                                  },
-                                                )
-                                              : const SizedBox(
-                                                  height: 0,
-                                                  width: 0,
-                                                );
-                                        },
-                                      )
+                                                        .get("age"),
+                                                    listOfFields[index]
+                                                        .get(
+                                                        "city"),
+                                                    listOfFields[index]
+                                                        .get(
+                                                        "town"),
+                                                    listOfFields[
+                                                    index]
+                                                        .get(
+                                                        "country"),
+                                                    listOfFields[index].get(
+                                                        "phoneNumber"),
+                                                    listOfFields[index].get(
+                                                        "position"),
+                                                    listOfFields[
+                                                    index]
+                                                        .get(
+                                                        "image"),
+                                                    listOfFields[
+                                                    index]
+                                                        .get(
+                                                        "email"))));
+                                      },
+                                    )
+                                        : const SizedBox(
+                                      height: 0,
+                                      width: 0,
+                                    );
+                                  },
+                                )
                                     : const SizedBox(
-                                        height: 0,
-                                        width: 0,
-                                      )),
+                                  height: 0,
+                                  width: 0,
+                                )),
                           );
                         })
                   ],
@@ -323,8 +380,10 @@ class _RouteRakipBul extends State<RouteRakipBul> {
       String image) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference announcementRef =
-        FirebaseFirestore.instance.collection("rakipbul");
-    announcementRef.add({
+    FirebaseFirestore.instance.collection("rakipbul");
+    String docId = announcementRef.doc().id;
+
+    announcementRef.doc(docId).set({
       'desc': '$descr',
       'firstName': '$firstName',
       'secondName': '$secondName',
@@ -336,6 +395,8 @@ class _RouteRakipBul extends State<RouteRakipBul> {
       'email': '$email',
       'position': '$position',
       'image': '$image',
+      'validity': '1',
+      'docId': docId,
       'uid': FirebaseAuth.instance.currentUser!.uid
     });
     Fluttertoast.showToast(msg: "İlan başarıyla paylaşıldı ");

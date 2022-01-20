@@ -17,7 +17,7 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
   final TextEditingController _search = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  String? name;
   @override
   String chatRoomId(String user1, String user2) {
     if (user1[0].toLowerCase().codeUnits[0] >
@@ -29,6 +29,7 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
   }
 
   void onSearch() async {
+    getCurrentUser();
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     setState(() {
@@ -40,15 +41,16 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
         .where("email", isEqualTo: _search.text)
         .get()
         .then((value) {
-      if (value.docs[0].data().isEmpty) {
+      if (value.docs.isEmpty) {
         isLoading = false;
       } else {
         setState(() {
-          userMap = value.docs[0].data();
+          if (!value.docs[0].data().isEmpty) {
+            userMap = value.docs[0].data();
+          }
           isLoading = false;
         });
       }
-
       print(userMap);
     });
   }
@@ -60,20 +62,21 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
     print(user!.uid);
     final uuid = user.uid;
     print(uuid);
-
-    setState(() {
-      isLoading = true;
-    });
-
     await _firestore
         .collection('users')
         .where("uid", isEqualTo: uuid)
         .get()
         .then((value) {
-      setState(() {
-        userMap2 = value.docs[0].data();
+      if (value.docs.isEmpty) {
         isLoading = false;
-      });
+      } else {
+        setState(() {
+          if (!value.docs[0].data().isEmpty) {
+            userMap2 = value.docs[0].data();
+          }
+          isLoading = false;
+        });
+      }
       print(userMap2);
     });
   }

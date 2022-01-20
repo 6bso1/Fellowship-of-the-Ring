@@ -197,8 +197,12 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                         stream: annRef.snapshots(),
                         builder: (BuildContext context,
                             AsyncSnapshot asyncSnapshot) {
-                          List<DocumentSnapshot> listOfFields =
-                              asyncSnapshot.data.docs;
+                          List<DocumentSnapshot> listOfFields = [];
+                          if (asyncSnapshot.data != null) {
+                            if (asyncSnapshot.data.docs != null) {
+                              listOfFields = asyncSnapshot.data.docs;
+                            }
+                          }
 
                           return Expanded(
                             child: Container(

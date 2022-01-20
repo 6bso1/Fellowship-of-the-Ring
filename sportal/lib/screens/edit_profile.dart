@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+
   File _image = File("not updated");
   int flagImage=0;
   TextEditingController firstName = TextEditingController();
@@ -51,7 +53,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _image = File(image!.path);
         print('Image Path $_image');
       });
+
       flagImage=1;
+
     }
 
     Future uploadPic(BuildContext context) async {
@@ -113,9 +117,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         radius: 70,
                         backgroundColor: Color(0xff476cfb),
                         child: ClipOval(
-                          child: new SizedBox(
+                          child: SizedBox(
                             width: 180.0,
                             height: 180.0,
+
                             child: (flagImage == 0)
                                 ? Image.network(
                               MyProfileUI.myMap["image"].toString(),
@@ -158,10 +163,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 30,
               ),
-              buildTextField(
-                  1, MyProfileUI.myMap["firstName"].toString(), false,firstName),
-              buildTextField(
-                  2, MyProfileUI.myMap["secondName"].toString(), false,secondName),
+
+              buildTextField(1, MyProfileUI.myMap["firstName"].toString(), false,firstName),
+              buildTextField(2, MyProfileUI.myMap["secondName"].toString(), false,secondName),
               buildTextField(3, MyProfileUI.myMap["email"].toString(), false,email),
               buildTextField(5, MyProfileUI.myMap["town"].toString(), false,town),
               buildTextField(6, MyProfileUI.myMap["city"].toString(), false,city),
@@ -199,6 +203,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   RaisedButton(
                     onPressed: () {
                       uploadPic(context);
+                      updateInformation();
                       child:
                       CircularProgressIndicator(
                         color: Colors.blue,
@@ -238,9 +243,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
+        controller: ctrl,
         style: TextStyle(color: Colors.white),
         obscureText: isPasswordTextField ? showPassword : false,
-        controller: ctrl,
         decoration: InputDecoration(
             prefixIcon: labelText == 1
                 ? Icon(Icons.account_circle, color: Colors.white)
@@ -310,9 +315,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void updateInformation(){
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference userRef = firestore.collection('users');
+    if(firstName.text!="")
+        MyProfileUI.myMap["firstName"]=firstName.text;
+    if(secondName.text!="")
+      MyProfileUI.myMap["secondName"]=secondName.text;
+    if(age.text!="")
+      MyProfileUI.myMap["age"]=age.text;
+    if(town.text!="")
+      MyProfileUI.myMap["town"]=town.text;
+    if(city.text!="")
+      MyProfileUI.myMap["city"]=city.text;
+    if(phone.text!="")
+      MyProfileUI.myMap["phone"]=phone.text;
+    if(email.text!="")
+      MyProfileUI.myMap["email"]=email.text;
+    if(position.text!="")
+      MyProfileUI.myMap["position"]=position.text;
+    print("bbbbbbbbb   "+MyProfileUI.myMap["docId"].toString());
     userRef.doc(MyProfileUI.myMap["docId"]) // <-- Doc ID where data should be updated.
                 .update({'firstName': MyProfileUI.myMap["firstName"],'secondName': MyProfileUI.myMap["secondName"],
-                      'town': MyProfileUI.myMap["town"],'city': MyProfileUI.myMap["city"],'age': MyProfileUI.myMap["age"],
-                      'phoneNumber': MyProfileUI.myMap["phone"],'email': MyProfileUI.myMap["email"],'position': MyProfileUI.myMap["position"]});
+            'town': MyProfileUI.myMap["town"],'city': MyProfileUI.myMap["city"],'age': MyProfileUI.myMap["age"],
+            'phoneNumber': MyProfileUI.myMap["phone"],'email': MyProfileUI.myMap["email"],'position': MyProfileUI.myMap["position"]});
   }
 }

@@ -196,7 +196,7 @@ class _Login_screenState extends State<Login_screen> {
                   Fluttertoast.showToast(msg: "Giriş Başarılı"),
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => HomePage(
-                            current_mail: email,
+                            current_user: _auth.currentUser,
                           ))),
                 });
       } on FirebaseAuthException catch (error) {

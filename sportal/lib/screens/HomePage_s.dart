@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -27,21 +28,22 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  final String current_mail;
+  final User? current_user;
 
-  HomePage({required this.current_mail});
+  HomePage({required this.current_user});
   @override
-  State<HomePage> createState() => _HomePageState(current_mail: current_mail);
+  State<HomePage> createState() => _HomePageState(current_user: current_user);
 }
 
 class _HomePageState extends State<HomePage> {
-  final String current_mail;
+  final User? current_user;
 
-  _HomePageState({required this.current_mail});
+  _HomePageState({required this.current_user});
 
   @override
   Widget build(BuildContext context) {
-    print(current_mail);
+    print(current_user!.uid);
+    print(current_user);
     return Scaffold(
         floatingActionButton: true ? buildFloating(context) : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -56,15 +58,15 @@ class _HomePageState extends State<HomePage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  HomePageMenu('assets/images/sahabul.png', 1),
+                  HomePageMenu(current_user, 'assets/images/sahabul.png', 1),
                   const SizedBox(
                     height: 10,
                   ),
-                  HomePageMenu('assets/images/takimbul.png', 2),
+                  HomePageMenu(current_user, 'assets/images/takimbul.png', 2),
                   const SizedBox(
                     height: 10,
                   ),
-                  HomePageMenu('assets/images/rakipbul.png', 3),
+                  HomePageMenu(current_user, 'assets/images/rakipbul.png', 3),
                 ],
               ),
             ),
@@ -114,9 +116,11 @@ BottomAppBar buildBottomAppBar() {
 class HomePageMenu extends StatelessWidget {
   final String path;
   final int mode;
+  final User? current_user;
 
-  HomePageMenu(String _path, int _mode)
-      : path = _path,
+  HomePageMenu(User? current_user, String _path, int _mode)
+      : current_user = current_user,
+        path = _path,
         mode = _mode;
 
   Widget build(BuildContext context) {
@@ -127,7 +131,8 @@ class HomePageMenu extends StatelessWidget {
           Navigator.push(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => RouteSahaBul(),
+              pageBuilder: (context, animation1, animation2) =>
+                  RouteSahaBul(current_user: current_user),
               transitionDuration: Duration.zero,
             ),
           );
@@ -158,7 +163,8 @@ class HomePageMenu extends StatelessWidget {
   }
 }
 
-FloatingActionButton buildFloatingActionButton(BuildContext context) {
+FloatingActionButton buildFloatingActionButton(
+    User? current_user, BuildContext context) {
   return FloatingActionButton(
     child: Tab(
       icon: Image.asset('assets/images/swirl_and_ball.png'),
@@ -170,7 +176,9 @@ FloatingActionButton buildFloatingActionButton(BuildContext context) {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => Login_screen(),
+          pageBuilder: (context, animation1, animation2) => HomePage(
+            current_user: current_user,
+          ),
           transitionDuration: Duration.zero,
         ),
       );

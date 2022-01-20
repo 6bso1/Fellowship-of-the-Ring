@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +28,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-
   File _image = File("not updated");
-  int flagImage=0;
+  int flagImage = 0;
   TextEditingController firstName = TextEditingController();
   TextEditingController secondName = TextEditingController();
   TextEditingController age = TextEditingController();
@@ -40,7 +38,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController phone = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController position = TextEditingController();
-
 
   bool showPassword = false;
   @override
@@ -54,8 +51,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         print('Image Path $_image');
       });
 
-      flagImage=1;
-
+      flagImage = 1;
     }
 
     Future uploadPic(BuildContext context) async {
@@ -118,19 +114,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         backgroundColor: Color(0xff476cfb),
                         child: ClipOval(
                           child: SizedBox(
-                            width: 180.0,
-                            height: 180.0,
-
-                            child: (flagImage == 0)
-                                ? Image.network(
-                              MyProfileUI.myMap["image"].toString(),
-                              fit: BoxFit.fill,
-                            ):Image.file(
-                                    _image,
-                                    fit: BoxFit.fill,
-                              )
-
-                          ),
+                              width: 180.0,
+                              height: 180.0,
+                              child: (flagImage == 0)
+                                  ? Image.network(
+                                      MyProfileUI.myMap["image"].toString(),
+                                      fit: BoxFit.fill,
+                                    )
+                                  : Image.file(
+                                      _image,
+                                      fit: BoxFit.fill,
+                                    )),
                         ),
                       ),
                     ),
@@ -163,15 +157,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 30,
               ),
-
-              buildTextField(1, MyProfileUI.myMap["firstName"].toString(), false,firstName),
-              buildTextField(2, MyProfileUI.myMap["secondName"].toString(), false,secondName),
-              buildTextField(3, MyProfileUI.myMap["email"].toString(), false,email),
-              buildTextField(5, MyProfileUI.myMap["town"].toString(), false,town),
-              buildTextField(6, MyProfileUI.myMap["city"].toString(), false,city),
-              buildTextField(7, MyProfileUI.myMap["phone"].toString(), false,phone),
-              buildTextField(8, MyProfileUI.myMap["age"].toString(), false,age),
-              buildTextField(9, MyProfileUI.myMap["position"].toString(), false,position),
+              buildTextField(1, MyProfileUI.myMap["firstName"].toString(),
+                  false, firstName),
+              buildTextField(2, MyProfileUI.myMap["secondName"].toString(),
+                  false, secondName),
+              buildTextField(
+                  3, MyProfileUI.myMap["email"].toString(), false, email),
+              buildTextField(
+                  5, MyProfileUI.myMap["town"].toString(), false, town),
+              buildTextField(
+                  6, MyProfileUI.myMap["city"].toString(), false, city),
+              buildTextField(
+                  7, MyProfileUI.myMap["phone"].toString(), false, phone),
+              buildTextField(
+                  8, MyProfileUI.myMap["age"].toString(), false, age),
+              buildTextField(
+                  9, MyProfileUI.myMap["position"].toString(), false, position),
               SizedBox(
                 height: 5,
               ),
@@ -184,7 +185,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => HomePage(
-                                    current_mail: '',
+                                    current_user: null,
                                   )));
                     },
                     color: Colors.green,
@@ -238,8 +239,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget buildTextField(
-      int labelText, String placeholder, bool isPasswordTextField,TextEditingController ctrl) {
+  Widget buildTextField(int labelText, String placeholder,
+      bool isPasswordTextField, TextEditingController ctrl) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
@@ -312,29 +313,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
   }
-  void updateInformation(){
+
+  void updateInformation() {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference userRef = firestore.collection('users');
-    if(firstName.text!="")
-        MyProfileUI.myMap["firstName"]=firstName.text;
-    if(secondName.text!="")
-      MyProfileUI.myMap["secondName"]=secondName.text;
-    if(age.text!="")
-      MyProfileUI.myMap["age"]=age.text;
-    if(town.text!="")
-      MyProfileUI.myMap["town"]=town.text;
-    if(city.text!="")
-      MyProfileUI.myMap["city"]=city.text;
-    if(phone.text!="")
-      MyProfileUI.myMap["phone"]=phone.text;
-    if(email.text!="")
-      MyProfileUI.myMap["email"]=email.text;
-    if(position.text!="")
-      MyProfileUI.myMap["position"]=position.text;
-    print("bbbbbbbbb   "+MyProfileUI.myMap["docId"].toString());
-    userRef.doc(MyProfileUI.myMap["docId"]) // <-- Doc ID where data should be updated.
-                .update({'firstName': MyProfileUI.myMap["firstName"],'secondName': MyProfileUI.myMap["secondName"],
-            'town': MyProfileUI.myMap["town"],'city': MyProfileUI.myMap["city"],'age': MyProfileUI.myMap["age"],
-            'phoneNumber': MyProfileUI.myMap["phone"],'email': MyProfileUI.myMap["email"],'position': MyProfileUI.myMap["position"]});
+    if (firstName.text != "") MyProfileUI.myMap["firstName"] = firstName.text;
+    if (secondName.text != "")
+      MyProfileUI.myMap["secondName"] = secondName.text;
+    if (age.text != "") MyProfileUI.myMap["age"] = age.text;
+    if (town.text != "") MyProfileUI.myMap["town"] = town.text;
+    if (city.text != "") MyProfileUI.myMap["city"] = city.text;
+    if (phone.text != "") MyProfileUI.myMap["phone"] = phone.text;
+    if (email.text != "") MyProfileUI.myMap["email"] = email.text;
+    if (position.text != "") MyProfileUI.myMap["position"] = position.text;
+    print("bbbbbbbbb   " + MyProfileUI.myMap["docId"].toString());
+    userRef
+        .doc(MyProfileUI
+            .myMap["docId"]) // <-- Doc ID where data should be updated.
+        .update({
+      'firstName': MyProfileUI.myMap["firstName"],
+      'secondName': MyProfileUI.myMap["secondName"],
+      'town': MyProfileUI.myMap["town"],
+      'city': MyProfileUI.myMap["city"],
+      'age': MyProfileUI.myMap["age"],
+      'phoneNumber': MyProfileUI.myMap["phone"],
+      'email': MyProfileUI.myMap["email"],
+      'position': MyProfileUI.myMap["position"]
+    });
   }
 }

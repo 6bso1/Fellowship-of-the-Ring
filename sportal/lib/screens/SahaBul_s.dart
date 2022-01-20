@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +9,13 @@ import 'Background.dart';
 import 'field_profile.dart';
 
 class RouteSahaBul extends StatelessWidget {
-  RouteSahaBul({Key? key}) : super(key: key);
+  final User? current_user;
+  RouteSahaBul({required this.current_user});
+
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
+    print(current_user!.uid);
     CollectionReference sahaRef = firestore.collection('sahalar');
     return Scaffold(
       floatingActionButton: true ? buildFloating(context) : null,
@@ -40,6 +44,7 @@ class RouteSahaBul extends StatelessWidget {
                           itemCount: listOfFields.length,
                           itemBuilder: (context, index) {
                             return fieldCards(
+                              current_user: current_user,
                               fieldVar: listOfFields[index],
                             );
                           }),
@@ -71,8 +76,8 @@ class RouteSahaBul extends StatelessWidget {
 
 class fieldCards extends StatelessWidget {
   final DocumentSnapshot fieldVar;
-
-  fieldCards({required this.fieldVar});
+  final User? current_user;
+  fieldCards({required this.current_user, required this.fieldVar});
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +88,7 @@ class fieldCards extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => FieldProfile(
+                        current_user: current_user,
                         fieldVar: fieldVar,
                       )));
         },

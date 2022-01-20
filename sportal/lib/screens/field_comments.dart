@@ -19,10 +19,12 @@ class FieldComments extends StatefulWidget {
 class _FieldCommentsState extends State<FieldComments> {
   final DocumentSnapshot fieldVar;
   final User? current_user;
+  TextEditingController reviewController = TextEditingController();
   _FieldCommentsState({required this.current_user, required this.fieldVar});
-
+  double rating = 3.5;
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     CollectionReference commentRef = fieldVar.reference.collection('Rewieves');
     return Scaffold(
         floatingActionButton: true ? buildFloating(context) : null,
@@ -47,20 +49,102 @@ class _FieldCommentsState extends State<FieldComments> {
                 ),
               ),
               SizedBox(height: 10),
-              Container(
-                color: Colors.blue,
-                padding: EdgeInsets.all(15),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      "  Yorum Ekleyin",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    )
-                  ],
+              InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Stack(
+                            overflow: Overflow.visible,
+                            children: <Widget>[
+                              Positioned(
+                                right: -40.0,
+                                top: -40.0,
+                                child: InkResponse(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: CircleAvatar(
+                                    child: Icon(Icons.close),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        controller: reviewController,
+                                        validator: (value) {
+                                          RegExp regex = new RegExp(r'^.{3,}$');
+                                          if (value!.isEmpty) {
+                                            return ("İsim boş bırakılamaz");
+                                          }
+                                          if (!regex.hasMatch(value)) {
+                                            return ("Geçerli bir isim giriniz (En az 3 karakter)");
+                                          }
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                            hintText: "Değerlendirmeniz"),
+                                      ),
+                                    ),
+                                    StarRating(
+                                      rating: rating,
+                                      onRatingChanged: (rating) =>
+                                          setState(() => this.rating = rating),
+                                      color: Colors.red,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: RaisedButton(
+                                        child: Text("Değerlendir"),
+                                        onPressed: () async {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            _formKey.currentState!.save();
+                                          }
+                                          Map<String, dynamic> reviewData = {
+                                            'userID': current_user!.uid,
+                                            'comment': reviewController.text,
+                                            'rate': rating,
+                                            'date': DateTime.now()
+                                          };
+
+                                          await commentRef
+                                              .doc()
+                                              .set(reviewData);
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                },
+                child: Container(
+                  color: Colors.blue,
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        "  Yorum Ekleyin",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      )
+                    ],
+                  ),
                 ),
               ),
               StreamBuilder<QuerySnapshot>(
@@ -132,6 +216,10 @@ class commentCards extends StatelessWidget {
             commentVar.get('comment'),
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
+          Text(
+            commentVar.get('rate').toString(),
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
         ]),
       );
     } else {
@@ -139,21 +227,51 @@ class commentCards extends StatelessWidget {
           style: TextStyle(color: Colors.white));
     }
   }
+}
 
-  Widget rate() {
-    String r = commentVar.get('rate').toString();
+typedef void RatingChangeCallback(double rating);
 
-    if (r.length < 3) {
-      r = r + '.0';
+class StarRating extends StatelessWidget {
+  final int starCount;
+  final double rating;
+  final RatingChangeCallback onRatingChanged;
+  final Color color;
+
+  StarRating(
+      {this.starCount = 5,
+      this.rating = .0,
+      required this.onRatingChanged,
+      required this.color});
+
+  Widget buildStar(BuildContext context, int index) {
+    Icon icon;
+    if (index >= rating) {
+      icon = new Icon(
+        Icons.star_border,
+        color: Theme.of(context).buttonColor,
+      );
+    } else if (index > rating - 1 && index < rating) {
+      icon = new Icon(
+        Icons.star_half,
+        color: Colors.grey,
+      );
+    } else {
+      icon = new Icon(
+        Icons.star,
+        color: Colors.grey,
+      );
     }
-
-    if (r.length > 3) {
-      r = r[0] + r[1] + r[2];
-    }
-    return Text(
-      r,
-      style: TextStyle(
-          fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
+    return new InkResponse(
+      onTap:
+          onRatingChanged == null ? null : () => onRatingChanged(index + 1.0),
+      child: icon,
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Row(
+        children:
+            new List.generate(starCount, (index) => buildStar(context, index)));
   }
 }

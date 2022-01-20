@@ -278,7 +278,7 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                           onTap: () {
                                            String ?docId= listOfFields[index].get("docId");
                                             annRef
-                                                .doc(docId!.substring(1)) // <-- Doc ID where data should be updated.
+                                                .doc(docId) // <-- Doc ID where data should be updated.
                                                 .update({'validity' : '0'});
                                           },
                                           child: const Icon(Icons.delete,

@@ -30,11 +30,28 @@ class ProfileUI extends StatelessWidget {
     this.position=position;
     this.image=image;
   }
+  AppBar buildHeader(BuildContext context) {
+    return AppBar(
+        elevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const PlayerSearchBuildBody()));
+          },
+        ),
 
+        backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
+        automaticallyImplyLeading: false);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        
+      appBar: buildHeader(context),
+      extendBodyBehindAppBar: true,
         body: Container(
 
           decoration: const BoxDecoration(

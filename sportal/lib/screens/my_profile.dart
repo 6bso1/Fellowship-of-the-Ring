@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sportal/screens/player_search_buildBody.dart';
 import 'edit_profile.dart';
 import '../bars/bottom_bar_player_search.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
+import 'HomePage_s.dart';
 
 class MyProfileUI extends StatelessWidget {
 
@@ -13,6 +15,24 @@ class MyProfileUI extends StatelessWidget {
   User? user = FirebaseAuth.instance.currentUser;
   CollectionReference usersCollection =
   FirebaseFirestore.instance.collection('users');
+
+  AppBar buildHeader(BuildContext context) {
+    return AppBar(
+        elevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const PlayerSearchBuildBody()));
+          },
+        ),
+       
+        backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
+        automaticallyImplyLeading: false);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +40,8 @@ class MyProfileUI extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
 
+      appBar: buildHeader(context),
+      extendBodyBehindAppBar: true,
     body: Container(
       decoration: const BoxDecoration(
           image: DecorationImage(

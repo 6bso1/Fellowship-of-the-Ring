@@ -9,7 +9,6 @@ import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import 'HomePage_s.dart';
 
-
 enum SingingCharacter { lafayette, jefferson }
 
 class PlayerSearchBuildBody extends StatefulWidget {
@@ -23,16 +22,15 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
   // form key
   final rb1 = 'Oyuncu Arıyorum';
   final rb2 = 'Takım Arıyorum';
-  var status1=1;
-  var status2=0;
+  var status1 = 1;
+  var status2 = 0;
   final descrController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
   CollectionReference usersCollection =
-  FirebaseFirestore.instance.collection('users');
-
+      FirebaseFirestore.instance.collection('users');
 
   TextEditingController emailController = TextEditingController();
   SingingCharacter? _character = SingingCharacter.lafayette;
@@ -58,6 +56,7 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
   }
+
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -70,7 +69,6 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
       ),
       child: Center(
         child: TextFormField(
-
           key: _formKey,
           controller: descrController,
           obscureText: false,
@@ -131,28 +129,24 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/images/background.png"),
-                  fit: BoxFit.cover)
-          ),
+                  fit: BoxFit.cover)),
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: StreamBuilder<DocumentSnapshot>(
-
               stream: usersCollection.doc(user?.uid).snapshots(),
-
               builder: (ctx, streamSnapshot) {
-                if(usersCollection.doc() == null){
+                if (usersCollection == null) {
                   return Center(
                       child: CircularProgressIndicator(
-                        color: Colors.blue,
-                      )
+                    color: Colors.blue,
+                  ));
+                }
+                if (streamSnapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.blue,
+                    ),
                   );
                 }
-                /*if (streamSnapshot.connectionState == ConnectionState.waiting) {
-                 return Center(
-                  child: CircularProgressIndicator(
-                      color: Colors.blue,
-                  ),
-                );
-              }*/
                 return Column(
                   children: [
                     Container(
@@ -166,27 +160,27 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                         child: Column(
                           children: [
                             Container(
-                              padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                              child:  CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    streamSnapshot.data?['image']),
+                              padding:
+                                  const EdgeInsets.only(top: 10.0, bottom: 10),
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(streamSnapshot.data?['image']),
                                 radius: 30.0,
                               ),
                             ),
                             anncText,
                             ListTile(
-                              title:  Text(rb1),
+                              title: Text(rb1),
                               leading: Radio<SingingCharacter>(
                                 value: SingingCharacter.lafayette,
                                 groupValue: _character,
                                 onChanged: (SingingCharacter? value) {
                                   setState(() {
                                     _character = value;
-                                    status1=1;
-                                    status2=0;
+                                    status1 = 1;
+                                    status2 = 0;
                                   });
                                 },
-
                               ),
                             ),
                             ListTile(
@@ -197,170 +191,284 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                 onChanged: (SingingCharacter? value) {
                                   setState(() {
                                     _character = value;
-                                    status1=0;
-                                    status2=1;
+                                    status1 = 0;
+                                    status2 = 1;
                                   });
                                 },
                               ),
                             ),
                             ButtonTheme(
                               buttonColor: Colors.white,
-                              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 4.0,
+                                  horizontal:
+                                      8.0), //adds padding inside the button
+                              materialTapTargetSize: MaterialTapTargetSize
+                                  .shrinkWrap, //limits the touch area to the button area
                               minWidth: 0, //wraps child's width
                               height: 0, //wraps child's height
                               child: RaisedButton(
-                                  onPressed: (){
-                                    final firstName= streamSnapshot.data?['firstName'];
-                                    final secondName= streamSnapshot.data?['secondName'];
-                                    final age= streamSnapshot.data?['age'];
-                                    final image= streamSnapshot.data?['image'];
-                                    final email= streamSnapshot.data?['email'];
-                                    final position= streamSnapshot.data?['position'];
-                                    final phoneNumber= streamSnapshot.data?['phoneNumber'];
-                                    final country= streamSnapshot.data?['country'];
-                                    final city= streamSnapshot.data?['city'];
-                                    final town= streamSnapshot.data?['town'];
-                                    if(status1==1){
-                                      addAnnouncement(descrController.text,rb1,firstName,secondName,phoneNumber
-                                          ,town,city,country,age,email,position,image);
+                                  onPressed: () {
+                                    final firstName =
+                                        streamSnapshot.data?['firstName'];
+                                    final secondName =
+                                        streamSnapshot.data?['secondName'];
+                                    final age = streamSnapshot.data?['age'];
+                                    final image = streamSnapshot.data?['image'];
+                                    final email = streamSnapshot.data?['email'];
+                                    final position =
+                                        streamSnapshot.data?['position'];
+                                    final phoneNumber =
+                                        streamSnapshot.data?['phoneNumber'];
+                                    final country =
+                                        streamSnapshot.data?['country'];
+                                    final city = streamSnapshot.data?['city'];
+                                    final town = streamSnapshot.data?['town'];
+                                    if (status1 == 1) {
+                                      addAnnouncement(
+                                          descrController.text,
+                                          rb1,
+                                          firstName,
+                                          secondName,
+                                          phoneNumber,
+                                          town,
+                                          city,
+                                          country,
+                                          age,
+                                          email,
+                                          position,
+                                          image);
                                     }
-                                    if(status2==1) {
-                                      addAnnouncement(descrController.text,rb2,firstName,secondName,phoneNumber
-                                          ,town,city,country,age,email,position,image);
+                                    if (status2 == 1) {
+                                      addAnnouncement(
+                                          descrController.text,
+                                          rb2,
+                                          firstName,
+                                          secondName,
+                                          phoneNumber,
+                                          town,
+                                          city,
+                                          country,
+                                          age,
+                                          email,
+                                          position,
+                                          image);
                                     }
                                     descrController.clear();
-
                                   },
-                                  child: Text("Gönder")
-                              ), //your original button
+                                  child: Text("Gönder")), //your original button
                             ),
                           ],
                         )),
                     StreamBuilder<QuerySnapshot>(
                         stream: annRef.snapshots(),
-                        builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                          List<DocumentSnapshot> listOfFields =
-                              asyncSnapshot.data.docs;
-
+                        builder: (BuildContext context,
+                            AsyncSnapshot asyncSnapshot) {
+                          List<DocumentSnapshot> listOfFields = [];
+                          if (asyncSnapshot.data != null) {
+                            if (asyncSnapshot.data.docs != null) {
+                              listOfFields = asyncSnapshot.data.docs;
+                            }
+                          }
                           return Expanded(
                             child: Container(
                                 child: listOfFields.isNotEmpty
                                     ? ListView.builder(
-                                  itemCount: listOfFields.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return index >= 0 && listOfFields[index].get("validity")=="1"
-                                        ? ListTile(
-                                      title: Text(
-                                        listOfFields[index].get("firstName") +
-                                            " " +
-                                            listOfFields[index].get("secondName"),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        "Açıklama:" +
-                                            listOfFields[index].get("desc")+
-                                            "\nYaş:" +
-                                            listOfFields[index].get("age") +
-                                            "\nPozisyon:" +
-                                            listOfFields[index].get("position")+
-                                            "\nStatus:" +
-                                            listOfFields[index].get("status")+
-                                            "\ne-mail:" +
-                                            listOfFields[index].get("email"),
-                                        style: const TextStyle(
-                                          fontSize: 13.0,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      trailing:FirebaseAuth.instance.currentUser!.uid==listOfFields[index].get("uid") ?GestureDetector(
-                                          onTap: () => showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) => AlertDialog(
-                                                title: const Text('Dikkat'),
-                                                content: const Text('İlanı kaldırmak istediğinize emein misiniz ?'),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () => Navigator.pop(context, 'Cancel'),
-                                                    child: const Text('Hayır'),
+                                        itemCount: listOfFields.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return index >= 0 &&
+                                                  listOfFields[index]
+                                                          .get("validity") ==
+                                                      "1"
+                                              ? ListTile(
+                                                  title: Text(
+                                                    listOfFields[index]
+                                                            .get("firstName") +
+                                                        " " +
+                                                        listOfFields[index]
+                                                            .get("secondName"),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      String ?docId= listOfFields[index].get("docId");
-                                                      annRef
-                                                          .doc(docId) // <-- Doc ID where data should be updated.
-                                                          .update({'validity' : '0'});
-                                                      Navigator.pop(context, 'Cancel');
-                                                      Fluttertoast.showToast(msg: "İlan başarıyla silindi ");
-                                                    },
-                                                    child: const Text('Evet'),
+                                                  subtitle: Text(
+                                                    "Açıklama:" +
+                                                        listOfFields[index]
+                                                            .get("desc") +
+                                                        "\nYaş:" +
+                                                        listOfFields[index]
+                                                            .get("age") +
+                                                        "\nPozisyon:" +
+                                                        listOfFields[index]
+                                                            .get("position") +
+                                                        "\nStatus:" +
+                                                        listOfFields[index]
+                                                            .get("status") +
+                                                        "\ne-mail:" +
+                                                        listOfFields[index]
+                                                            .get("email"),
+                                                    style: const TextStyle(
+                                                      fontSize: 13.0,
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                          child: const Icon(Icons.delete,
-                                              color: Colors.white)
-                                      ):
-                                      GestureDetector(
-                                          onTap: () {
-                                          },
-                                          child: const Icon(Icons.message,
-                                              color: Colors.white)
-                                      ),
-                                      leading: CircleAvatar(
-                                          radius: 25.0,
-                                          backgroundImage: NetworkImage(
-                                              listOfFields[index].get("image"))),
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfileUI(listOfFields[index].get("firstName"),listOfFields[index].get("secondName"),
-                                                        listOfFields[index].get("age"),listOfFields[index].get("city"),listOfFields[index].get("town"),listOfFields[index].get("country"),
-                                                        listOfFields[index].get("phoneNumber"),listOfFields[index].get("position"),
-                                                        listOfFields[index].get("image"),listOfFields[index].get("email"))));
-                                      },
-                                    )
-                                        : const SizedBox(
-                                      height: 0,
-                                      width: 0,
-                                    );
-                                  },
-                                )
+                                                  trailing:
+                                                      FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser!
+                                                                  .uid ==
+                                                              listOfFields[
+                                                                      index]
+                                                                  .get("uid")
+                                                          ? GestureDetector(
+                                                              onTap:
+                                                                  () =>
+                                                                      showDialog<
+                                                                          String>(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (BuildContext context) =>
+                                                                                AlertDialog(
+                                                                          title:
+                                                                              const Text('Dikkat'),
+                                                                          content:
+                                                                              const Text('İlanı kaldırmak istediğinize emein misiniz ?'),
+                                                                          actions: <
+                                                                              Widget>[
+                                                                            TextButton(
+                                                                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                                                                              child: const Text('Hayır'),
+                                                                            ),
+                                                                            TextButton(
+                                                                              onPressed: () {
+                                                                                String? docId = listOfFields[index].get("docId");
+                                                                                annRef
+                                                                                    .doc(
+                                                                                        docId) // <-- Doc ID where data should be updated.
+                                                                                    .update({
+                                                                                  'validity': '0'
+                                                                                });
+                                                                                Navigator.pop(context, 'Cancel');
+                                                                                Fluttertoast.showToast(msg: "İlan başarıyla silindi ");
+                                                                              },
+                                                                              child: const Text('Evet'),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                              child: const Icon(
+                                                                  Icons.delete,
+                                                                  color: Colors
+                                                                      .white))
+                                                          : GestureDetector(
+                                                              onTap: () {},
+                                                              child: const Icon(
+                                                                  Icons.message,
+                                                                  color: Colors
+                                                                      .white)),
+                                                  leading: CircleAvatar(
+                                                      radius: 25.0,
+                                                      backgroundImage:
+                                                          NetworkImage(
+                                                              listOfFields[
+                                                                      index]
+                                                                  .get(
+                                                                      "image"))),
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => ProfileUI(
+                                                                listOfFields[index].get(
+                                                                    "firstName"),
+                                                                listOfFields[index].get(
+                                                                    "secondName"),
+                                                                listOfFields[index]
+                                                                    .get("age"),
+                                                                listOfFields[index]
+                                                                    .get(
+                                                                        "city"),
+                                                                listOfFields[index]
+                                                                    .get(
+                                                                        "town"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "country"),
+                                                                listOfFields[index].get(
+                                                                    "phoneNumber"),
+                                                                listOfFields[index].get(
+                                                                    "position"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "image"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "email"))));
+                                                  },
+                                                )
+                                              : const SizedBox(
+                                                  height: 0,
+                                                  width: 0,
+                                                );
+                                        },
+                                      )
                                     : const SizedBox(
-                                  height: 0,
-                                  width: 0,
-                                )
-                            ),
+                                        height: 0,
+                                        width: 0,
+                                      )),
                           );
-                        }
-                    )
+                        })
                   ],
                 );
-              }
-          )
-      ),
+              })),
       floatingActionButton: buildFloating(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
     );
   }
-  void addAnnouncement(String descr,String status,String firstName,String secondName,String phoneNumber,String town,
-      String city,String country,String age,String email,String position,String image){
+
+  void addAnnouncement(
+      String descr,
+      String status,
+      String firstName,
+      String secondName,
+      String phoneNumber,
+      String town,
+      String city,
+      String country,
+      String age,
+      String email,
+      String position,
+      String image) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference announcementRef =
-    FirebaseFirestore.instance.collection("announcement");
-    String docId=announcementRef.doc().id;
+        FirebaseFirestore.instance.collection("announcement");
+    String docId = announcementRef.doc().id;
 
-    announcementRef.doc(docId).set({'desc': '$descr','status': '$status','firstName': '$firstName', 'secondName': '$secondName',
-      'phoneNumber': '$phoneNumber','age': '$age','town': '$town','city': '$city',
-      'country': '$country', 'email': '$email','position': '$position',
-      'image': '$image','validity': '1','docId': docId,'uid':FirebaseAuth.instance.currentUser!.uid});
+    announcementRef.doc(docId).set({
+      'desc': '$descr',
+      'status': '$status',
+      'firstName': '$firstName',
+      'secondName': '$secondName',
+      'phoneNumber': '$phoneNumber',
+      'age': '$age',
+      'town': '$town',
+      'city': '$city',
+      'country': '$country',
+      'email': '$email',
+      'position': '$position',
+      'image': '$image',
+      'validity': '1',
+      'docId': docId,
+      'uid': FirebaseAuth.instance.currentUser!.uid
+    });
     Fluttertoast.showToast(msg: "İlan başarıyla paylaşıldı ");
-
   }
 }

@@ -9,12 +9,10 @@ import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import 'HomePage_s.dart';
 
-
 enum SingingCharacter { lafayette, jefferson }
 
 class RouteRakipBul extends StatefulWidget {
   const RouteRakipBul({Key? key}) : super(key: key);
-
 
   @override
   _RouteRakipBul createState() => _RouteRakipBul();
@@ -30,8 +28,7 @@ class _RouteRakipBul extends State<RouteRakipBul> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
   CollectionReference usersCollection =
-  FirebaseFirestore.instance.collection('users');
-
+      FirebaseFirestore.instance.collection('users');
 
   TextEditingController emailController = TextEditingController();
   SingingCharacter? _character = SingingCharacter.lafayette;
@@ -47,6 +44,7 @@ class _RouteRakipBul extends State<RouteRakipBul> {
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
   }
+
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -110,19 +108,18 @@ class _RouteRakipBul extends State<RouteRakipBul> {
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/images/background.png"),
-                  fit: BoxFit.cover)
-          ),
+                  fit: BoxFit.cover)),
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: StreamBuilder<DocumentSnapshot>(
               stream: usersCollection.doc(user?.uid).snapshots(),
               builder: (ctx, streamSnapshot) {
-                /*if (streamSnapshot.connectionState == ConnectionState.waiting) {
-                 return Center(
-                  child: CircularProgressIndicator(
+                if (streamSnapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(
                       color: Colors.blue,
-                  ),
-                );
-              }*/
+                    ),
+                  );
+                }
                 return Column(
                   children: [
                     Container(
@@ -136,10 +133,11 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                         child: Column(
                           children: [
                             Container(
-                              padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                              child:  CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    streamSnapshot.data?['image']),
+                              padding:
+                                  const EdgeInsets.only(top: 10.0, bottom: 10),
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(streamSnapshot.data?['image']),
                                 radius: 30.0,
                               ),
                             ),
@@ -150,37 +148,55 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                             ),
                             ButtonTheme(
                               buttonColor: Colors.white,
-                              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 4.0,
+                                  horizontal:
+                                      8.0), //adds padding inside the button
+                              materialTapTargetSize: MaterialTapTargetSize
+                                  .shrinkWrap, //limits the touch area to the button area
                               minWidth: 0, //wraps child's width
                               height: 0, //wraps child's height
                               child: RaisedButton(
-                                  onPressed: (){
-                                    final firstName= streamSnapshot.data?['firstName'];
-                                    final secondName= streamSnapshot.data?['secondName'];
-                                    final age= streamSnapshot.data?['age'];
-                                    final image= streamSnapshot.data?['image'];
-                                    final email= streamSnapshot.data?['email'];
-                                    final position= streamSnapshot.data?['position'];
-                                    final phoneNumber= streamSnapshot.data?['phoneNumber'];
-                                    final country= streamSnapshot.data?['country'];
-                                    final city= streamSnapshot.data?['city'];
-                                    final town= streamSnapshot.data?['town'];
+                                  onPressed: () {
+                                    final firstName =
+                                        streamSnapshot.data?['firstName'];
+                                    final secondName =
+                                        streamSnapshot.data?['secondName'];
+                                    final age = streamSnapshot.data?['age'];
+                                    final image = streamSnapshot.data?['image'];
+                                    final email = streamSnapshot.data?['email'];
+                                    final position =
+                                        streamSnapshot.data?['position'];
+                                    final phoneNumber =
+                                        streamSnapshot.data?['phoneNumber'];
+                                    final country =
+                                        streamSnapshot.data?['country'];
+                                    final city = streamSnapshot.data?['city'];
+                                    final town = streamSnapshot.data?['town'];
 
-                                    addAnnouncement(descrController.text,firstName,secondName,phoneNumber
-                                        ,town,city,country,age,email,position,image);
+                                    addAnnouncement(
+                                        descrController.text,
+                                        firstName,
+                                        secondName,
+                                        phoneNumber,
+                                        town,
+                                        city,
+                                        country,
+                                        age,
+                                        email,
+                                        position,
+                                        image);
 
                                     descrController.clear();
-
                                   },
-                                  child: Text("Gönder")
-                              ), //your original button
+                                  child: Text("Gönder")), //your original button
                             ),
                           ],
                         )),
                     StreamBuilder<QuerySnapshot>(
                         stream: annRef.snapshots(),
-                        builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                        builder: (BuildContext context,
+                            AsyncSnapshot asyncSnapshot) {
                           List<DocumentSnapshot> listOfFields =
                               asyncSnapshot.data.docs;
 
@@ -188,84 +204,136 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                             child: Container(
                                 child: listOfFields.isNotEmpty
                                     ? ListView.builder(
-                                  itemCount: listOfFields.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return index >= 0
-                                        ? ListTile(
-                                      title: Text(
-                                        listOfFields[index].get("firstName") +
-                                            " " +
-                                            listOfFields[index].get("secondName"),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        "Açıklama:" +
-                                            listOfFields[index].get("desc")+
-                                            "\nYaş:" +
-                                            listOfFields[index].get("age") +
-                                            "\nPozisyon:" +
-                                            listOfFields[index].get("position"),
-                                        style: const TextStyle(
-                                          fontSize: 13.0,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      trailing: GestureDetector(
-                                          onTap: () {
-                                          },
-                                          child: const Icon(Icons.message,
-                                              color: Colors.white)),
-                                      leading: CircleAvatar(
-                                          radius: 25.0,
-                                          backgroundImage: NetworkImage(
-                                              listOfFields[index].get("image"))),
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfileUI(listOfFields[index].get("firstName"),listOfFields[index].get("secondName"),
-                                                        listOfFields[index].get("age"),listOfFields[index].get("city"),listOfFields[index].get("town"),listOfFields[index].get("country"),
-                                                        listOfFields[index].get("phoneNumber"),listOfFields[index].get("position"),
-                                                        listOfFields[index].get("image"),listOfFields[index].get("email"))));
-                                      },
-                                    )
-                                        : const SizedBox(
-                                      height: 0,
-                                      width: 0,
-                                    );
-                                  },
-                                )
+                                        itemCount: listOfFields.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return index >= 0
+                                              ? ListTile(
+                                                  title: Text(
+                                                    listOfFields[index]
+                                                            .get("firstName") +
+                                                        " " +
+                                                        listOfFields[index]
+                                                            .get("secondName"),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  subtitle: Text(
+                                                    "Açıklama:" +
+                                                        listOfFields[index]
+                                                            .get("desc") +
+                                                        "\nYaş:" +
+                                                        listOfFields[index]
+                                                            .get("age") +
+                                                        "\nPozisyon:" +
+                                                        listOfFields[index]
+                                                            .get("position"),
+                                                    style: const TextStyle(
+                                                      fontSize: 13.0,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  trailing: GestureDetector(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                          Icons.message,
+                                                          color: Colors.white)),
+                                                  leading: CircleAvatar(
+                                                      radius: 25.0,
+                                                      backgroundImage:
+                                                          NetworkImage(
+                                                              listOfFields[
+                                                                      index]
+                                                                  .get(
+                                                                      "image"))),
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => ProfileUI(
+                                                                listOfFields[index].get(
+                                                                    "firstName"),
+                                                                listOfFields[index].get(
+                                                                    "secondName"),
+                                                                listOfFields[index]
+                                                                    .get("age"),
+                                                                listOfFields[index]
+                                                                    .get(
+                                                                        "city"),
+                                                                listOfFields[index]
+                                                                    .get(
+                                                                        "town"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "country"),
+                                                                listOfFields[index].get(
+                                                                    "phoneNumber"),
+                                                                listOfFields[index].get(
+                                                                    "position"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "image"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "email"))));
+                                                  },
+                                                )
+                                              : const SizedBox(
+                                                  height: 0,
+                                                  width: 0,
+                                                );
+                                        },
+                                      )
                                     : const SizedBox(
-                                  height: 0,
-                                  width: 0,
-                                )
-                            ),
+                                        height: 0,
+                                        width: 0,
+                                      )),
                           );
-                        }
-                    )
+                        })
                   ],
                 );
-              }
-          )
-      ),
+              })),
       floatingActionButton: buildFloating(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
     );
   }
-  void addAnnouncement(String descr,String firstName,String secondName,String phoneNumber,String town,
-      String city,String country,String age,String email,String position,String image){
+
+  void addAnnouncement(
+      String descr,
+      String firstName,
+      String secondName,
+      String phoneNumber,
+      String town,
+      String city,
+      String country,
+      String age,
+      String email,
+      String position,
+      String image) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference announcementRef =
-    FirebaseFirestore.instance.collection("rakipbul");
-    announcementRef.add({'desc': '$descr','firstName': '$firstName', 'secondName': '$secondName',
-      'phoneNumber': '$phoneNumber','age': '$age','town': '$town','city': '$city',
-      'country': '$country', 'email': '$email','position': '$position',
-      'image': '$image','uid':FirebaseAuth.instance.currentUser!.uid});
+        FirebaseFirestore.instance.collection("rakipbul");
+    announcementRef.add({
+      'desc': '$descr',
+      'firstName': '$firstName',
+      'secondName': '$secondName',
+      'phoneNumber': '$phoneNumber',
+      'age': '$age',
+      'town': '$town',
+      'city': '$city',
+      'country': '$country',
+      'email': '$email',
+      'position': '$position',
+      'image': '$image',
+      'uid': FirebaseAuth.instance.currentUser!.uid
+    });
     Fluttertoast.showToast(msg: "İlan başarıyla paylaşıldı ");
   }
 }

@@ -1,24 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sportal/screens/messageSearch_s.dart/';
 
 class ChatRoom extends StatelessWidget {
   final Map<String, dynamic> userMap;
   final String chatRoomId;
+  final String currentName;
 
-  ChatRoom({required this.chatRoomId, required this.userMap});
+  ChatRoom({required this.chatRoomId, required this.userMap, required this.currentName});
 
   final TextEditingController _message = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  getCurrentUser() async {
-    final user = await _auth.currentUser!;
-    final uid = user.uid.toString();
-    // Similarly we can get email as well
-    //final uemail = user.email;
-    print(uid);
-    //print(uemail);
-  }
+
 
   void onSendMessage() async {
     if (_message.text.isNotEmpty) {

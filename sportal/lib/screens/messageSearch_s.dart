@@ -31,23 +31,30 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
   }
 
   void onSearch() async {
+    getCurrentUser();
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     setState(() {
-      isLoading = true;
-    });
-
-    await _firestore
-        .collection('users')
-        .where("email", isEqualTo: _search.text)
-        .get()
-        .then((value) {
+        isLoading = true;
+        });
+          await _firestore
+          .collection('users')
+          .where("email", isEqualTo: _search.text)
+          .get()
+          .then((value) {
+      if (value.docs.isEmpty) {
+      isLoading = false;
+      } else {
       setState(() {
-        userMap = value.docs[0].data();
-        isLoading = false;
+      if (!value.docs[0].data().isEmpty) {
+      userMap = value.docs[0].data();
+      }
+      isLoading = false;
       });
+      }
       print(userMap);
-    });
+      });
+
   }
 
 
@@ -56,24 +63,27 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     User? user = _auth.currentUser;
-    final uuid = user!.uid;
+    print(user!.uid);
+    final uuid = user.uid;
     print(uuid);
-
-    setState(() {
-      isLoading = true;
-    });
 
     await _firestore
         .collection('users')
         .where("uid", isEqualTo: uuid)
         .get()
         .then((value) {
-      setState(() {
+      if (value.docs.isEmpty) {
+          isLoading = false;
+        } else {
+        setState(() {
+        if (!value.docs[0].data().isEmpty) {
         userMap2 = value.docs[0].data();
+        }
         isLoading = false;
+        });
+        }
+        print(userMap2);
       });
-      print(userMap2);
-    });
   }
 
 
@@ -140,7 +150,7 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
               if (userMap != null) ListTile(
                 onTap: () {
                   String roomId = chatRoomId(
-                      'Okan',
+                      userMap2!['firstName'],
                       userMap!['firstName']);
 
                   Navigator.of(context).push(
@@ -148,6 +158,7 @@ class _MessageSearchScreenState extends State<MessageSearchScreen> with WidgetsB
                       builder: (_) => ChatRoom(
                         chatRoomId: roomId,
                         userMap: userMap!,
+                        currentName: userMap2!['firstName'],
                       ),
                     ),
                   );

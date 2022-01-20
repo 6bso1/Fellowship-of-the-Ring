@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,9 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sportal/bars/buildAppBar.dart';
+import 'package:sportal/model/il_model.dart';
 import 'package:sportal/model/user_model.dart';
 
 import 'Background.dart';
+import 'il-secim.dart';
+import 'ilce-secim.dart';
 
 class Sign_up extends StatefulWidget {
   const Sign_up({Key? key}) : super(key: key);
@@ -346,6 +350,10 @@ class _profile_informationState extends State<profile_information> {
   late DateTime _dateTime;
   File? image;
   get firstNameEditingController => null;
+  String birthday = 'Doğum Tarihi';
+  String photo = 'Profil Fotoğrafı';
+  String il = 'İl Seçiniz';
+  String ilce = 'İlçe Seçiniz';
 
   Future pickImage() async {
     try {
@@ -354,6 +362,7 @@ class _profile_informationState extends State<profile_information> {
 
       final imageTemp = File(image.path);
       setState(() => this.image = imageTemp);
+      photo = imageTemp.toString();
     } on PlatformException catch (e) {
       print('Fotoğraf yüklenemedi: $e');
     }
@@ -361,6 +370,95 @@ class _profile_informationState extends State<profile_information> {
 
   @override
   Widget build(BuildContext context) {
+    bool _yuklemeTamamlandiMi = false;
+    String _secilenIl;
+    String _secilenIlce;
+
+    bool _ilSecilmisMi = false;
+    bool _ilceSecilmisMi = false;
+
+    List<dynamic> _illerListesi = [];
+
+    List<String> _ilIsimleriListesi = [];
+    List<String> _ilceIsimleriListesi = [];
+
+    int _secilenIlIndexi = 0;
+    int _secilenIlceIndexi;
+
+    /// JSON'u okuyup içinden Il nesnelerini listede toplama
+    Future<void> _illeriGetir() async {
+      String jsonString = await rootBundle.loadString('assets/js/il-ilce.json');
+      print("jsonnnnnnnnn");
+
+      final jsonResponse = json.decode(jsonString);
+      print(jsonResponse);
+      _illerListesi = jsonResponse.map((x) => Il.fromJson(x)).toList();
+    }
+
+    /// Il nesnelerinden sadece il_adi değişkenlerini ayrı bir listede toplama
+    void _ilIsimleriniGetir() {
+      _ilIsimleriListesi = [];
+
+      _illerListesi.forEach((element) {
+        _ilIsimleriListesi.add(element.ilAdi);
+      });
+
+      setState(() {
+        _yuklemeTamamlandiMi = true;
+      });
+    }
+
+    /// Ilce seçimi için seçilen ile göre ilçeleri getirme
+    void _secilenIlinIlceleriniGetir(String _secilenIl) {
+      _ilceIsimleriListesi = [];
+      _illerListesi.forEach((element) {
+        if (element.ilAdi == _secilenIl) {
+          element.ilceler.forEach((element) {
+            _ilceIsimleriListesi.add(element.ilceAdi);
+          });
+        }
+      });
+    }
+
+    Future<void> _ilSecmeSayfasinaGit() async {
+      if (_yuklemeTamamlandiMi) {
+        _secilenIlIndexi = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                IlSecimiSayfasi(ilIsimleri: _ilIsimleriListesi),
+          ),
+        );
+        _secilenIlceIndexi = 0;
+        _ilSecilmisMi = true;
+        _secilenIl = _ilIsimleriListesi[_secilenIlIndexi];
+        _secilenIlinIlceleriniGetir(_illerListesi[_secilenIlIndexi].toString());
+        setState(() {});
+      }
+    }
+
+    Future<void> _ilceSecmeSayfasinaGit() async {
+      if (_ilSecilmisMi) {
+        _secilenIlinIlceleriniGetir(_ilIsimleriListesi[_secilenIlIndexi]);
+        _secilenIlceIndexi = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                IlceSecmeSayfasi(ilceIsimleri: _ilceIsimleriListesi),
+          ),
+        );
+        _ilceSecilmisMi = true;
+        _secilenIlce = _ilceIsimleriListesi[_secilenIlceIndexi];
+        setState(() {});
+      }
+    }
+
+    @override
+    void initState() {
+      super.initState();
+      _illeriGetir().then((value) => _ilIsimleriniGetir());
+    }
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: buildAppBar(),
@@ -439,7 +537,7 @@ class _profile_informationState extends State<profile_information> {
                               Expanded(
                                 flex: 5,
                                 child: Text(
-                                  'Profil Fotoğrafı',
+                                  photo,
                                   style: TextStyle(
                                       color: Colors.white70, fontSize: 20.0),
                                 ),
@@ -457,8 +555,8 @@ class _profile_informationState extends State<profile_information> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {
-                          showDatePicker(
+                        onTap: () async {
+                          await showDatePicker(
                                   context: context,
                                   initialDate: _dateTime == null
                                       ? DateTime.now()
@@ -468,6 +566,7 @@ class _profile_informationState extends State<profile_information> {
                               .then((date) {
                             setState(() {
                               _dateTime = date!;
+                              birthday = _dateTime.toString();
                             });
                           });
                         },
@@ -485,7 +584,7 @@ class _profile_informationState extends State<profile_information> {
                               Expanded(
                                 flex: 5,
                                 child: Text(
-                                  'Doğum Tarihi',
+                                  birthday,
                                   style: TextStyle(
                                       color: Colors.white70, fontSize: 20.0),
                                 ),
@@ -498,6 +597,43 @@ class _profile_informationState extends State<profile_information> {
                                       color: Colors.white24, width: 2))),
                         ),
                       ),
+                      InkWell(
+                        onTap: () {
+                          _illeriGetir().then((value) => _ilIsimleriniGetir());
+                          _ilSecmeSayfasinaGit();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 15, 20, 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Icon(
+                                  Icons.location_on,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: Text(
+                                  il,
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 20.0),
+                                ),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.white70,
+                              ),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.white24, width: 2))),
+                        ),
+                      ),
+
                       SizedBox(height: 20),
                       Text(
                           'Kaydolduğunda Hizmet Şartları’nı ve Çerez Kullanımı dahil olmak üzere Gizlilik Politikası’nı kabul etmiş olursun. Gizlilik Seçeneklerini buna göre belirlediğinde başkaları seni e-postan veya telefon numaranla bulabilir.',

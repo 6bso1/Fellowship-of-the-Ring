@@ -28,13 +28,17 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  File _image = File(MyProfileUI.myMap["image"].toString());
-  String? firstName = MyProfileUI.myMap["firstName"];
-  String? secondName = MyProfileUI.myMap["secondName"];
-  String? age = MyProfileUI.myMap["age"];
-  String? mail = MyProfileUI.myMap["email"];
-  String? imageURL = MyProfileUI.myMap["image"];
-  String? uid = MyProfileUI.myMap["uid"];
+  File _image = File("not updated");
+  int flagImage=0;
+  TextEditingController firstName = TextEditingController();
+  TextEditingController secondName = TextEditingController();
+  TextEditingController age = TextEditingController();
+  TextEditingController city = TextEditingController();
+  TextEditingController town = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController position = TextEditingController();
+
 
   bool showPassword = false;
   @override
@@ -47,6 +51,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _image = File(image!.path);
         print('Image Path $_image');
       });
+      flagImage=1;
     }
 
     Future uploadPic(BuildContext context) async {
@@ -111,15 +116,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           child: new SizedBox(
                             width: 180.0,
                             height: 180.0,
-                            child: (_image != null)
-                                ? Image.file(
+                            child: (flagImage == 0)
+                                ? Image.network(
+                              MyProfileUI.myMap["image"].toString(),
+                              fit: BoxFit.fill,
+                            ):Image.file(
                                     _image,
                                     fit: BoxFit.fill,
-                                  )
-                                : Image.network(
-                                    "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                                    fit: BoxFit.fill,
-                                  ),
+                              )
+
                           ),
                         ),
                       ),
@@ -154,16 +159,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 height: 30,
               ),
               buildTextField(
-                  1, MyProfileUI.myMap["firstName"].toString(), false),
+                  1, MyProfileUI.myMap["firstName"].toString(), false,firstName),
               buildTextField(
-                  2, MyProfileUI.myMap["secondName"].toString(), false),
-              buildTextField(3, MyProfileUI.myMap["email"].toString(), false),
-              buildTextField(5, MyProfileUI.myMap["town"].toString(), false),
-              buildTextField(6, MyProfileUI.myMap["city"].toString(), false),
-              buildTextField(7, MyProfileUI.myMap["phone"].toString(), false),
-              buildTextField(8, MyProfileUI.myMap["age"].toString(), false),
-              buildTextField(
-                  9, MyProfileUI.myMap["position"].toString(), false),
+                  2, MyProfileUI.myMap["secondName"].toString(), false,secondName),
+              buildTextField(3, MyProfileUI.myMap["email"].toString(), false,email),
+              buildTextField(5, MyProfileUI.myMap["town"].toString(), false,town),
+              buildTextField(6, MyProfileUI.myMap["city"].toString(), false,city),
+              buildTextField(7, MyProfileUI.myMap["phone"].toString(), false,phone),
+              buildTextField(8, MyProfileUI.myMap["age"].toString(), false,age),
+              buildTextField(9, MyProfileUI.myMap["position"].toString(), false,position),
               SizedBox(
                 height: 5,
               ),
@@ -230,15 +234,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget buildTextField(
-      int labelText, String placeholder, bool isPasswordTextField) {
+      int labelText, String placeholder, bool isPasswordTextField,TextEditingController ctrl) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
         style: TextStyle(color: Colors.white),
         obscureText: isPasswordTextField ? showPassword : false,
-        onChanged: (text) {
-          print('First text field: $text');
-        },
+        controller: ctrl,
         decoration: InputDecoration(
             prefixIcon: labelText == 1
                 ? Icon(Icons.account_circle, color: Colors.white)
@@ -304,5 +306,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
+  }
+  void updateInformation(){
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference userRef = firestore.collection('users');
+    userRef.doc(MyProfileUI.myMap["docId"]) // <-- Doc ID where data should be updated.
+                .update({'firstName': MyProfileUI.myMap["firstName"],'secondName': MyProfileUI.myMap["secondName"],
+                      'town': MyProfileUI.myMap["town"],'city': MyProfileUI.myMap["city"],'age': MyProfileUI.myMap["age"],
+                      'phoneNumber': MyProfileUI.myMap["phone"],'email': MyProfileUI.myMap["email"],'position': MyProfileUI.myMap["position"]});
   }
 }

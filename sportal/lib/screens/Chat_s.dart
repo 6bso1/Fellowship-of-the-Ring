@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sportal/screens/messageSearch_s.dart/';
+import 'package:sportal/screens/messageSearch_s.dart';
 
 class ChatRoom extends StatelessWidget {
   final Map<String, dynamic> userMap;

@@ -347,7 +347,7 @@ class profile_information extends StatefulWidget {
 }
 
 class _profile_informationState extends State<profile_information> {
-  late DateTime _dateTime;
+  late DateTime _dateTime = DateTime.now();
   File? image;
   get firstNameEditingController => null;
   String birthday = 'Doğum Tarihi';
@@ -642,7 +642,21 @@ class _profile_informationState extends State<profile_information> {
                             color: Colors.white70,
                           )),
                       SizedBox(height: 20),
-//buton
+                      Material(
+                        elevation: 5,
+                        borderRadius: BorderRadius.circular(7),
+                        color: Color(0xFFCC3DE7),
+                        child: MaterialButton(
+                            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                            minWidth: MediaQuery.of(context).size.width,
+                            onPressed: () {},
+                            child: Text(
+                              "Profil Bilgilerini Kaydet",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.white70),
+                            )),
+                      )
                     ],
                   ),
                 ),

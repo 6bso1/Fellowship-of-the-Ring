@@ -34,11 +34,25 @@ class _RouteRakipBul extends State<RouteRakipBul> {
   AppBar buildHeader() {
     return AppBar(
         elevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                      current_user: FirebaseAuth.instance.currentUser,
+                    )));
+          },
+        ),
         title: Center(
             child: Image.asset('assets/images/Header-Rakip-Bul.png',
                 height: AppBar()
                     .preferredSize
-                    .height)), //image'i app bar'ın yüksekliğine görse resize ediyor
+                    .height)),//image'i app bar'ın yüksekliğine görse resize ediyor
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
   }

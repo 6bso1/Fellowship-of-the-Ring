@@ -232,8 +232,6 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                         streamSnapshot.data?['position'];
                                     final phoneNumber =
                                         streamSnapshot.data?['phoneNumber'];
-                                    final country =
-                                        streamSnapshot.data?['country'];
                                     final city = streamSnapshot.data?['city'];
                                     final town = streamSnapshot.data?['town'];
                                     if (status1 == 1) {
@@ -245,7 +243,6 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                           phoneNumber,
                                           town,
                                           city,
-                                          country,
                                           age,
                                           email,
                                           position,
@@ -260,7 +257,6 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                           phoneNumber,
                                           town,
                                           city,
-                                          country,
                                           age,
                                           email,
                                           position,
@@ -407,10 +403,6 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                                                 listOfFields[index]
                                                                     .get(
                                                                         "town"),
-                                                                listOfFields[
-                                                                        index]
-                                                                    .get(
-                                                                        "country"),
                                                                 listOfFields[index].get(
                                                                     "phoneNumber"),
                                                                 listOfFields[index].get(
@@ -454,7 +446,6 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
       String phoneNumber,
       String town,
       String city,
-      String country,
       String age,
       String email,
       String position,
@@ -473,7 +464,6 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
       'age': '$age',
       'town': '$town',
       'city': '$city',
-      'country': '$country',
       'email': '$email',
       'position': '$position',
       'image': '$image',

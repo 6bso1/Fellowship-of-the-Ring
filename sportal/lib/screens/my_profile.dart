@@ -104,9 +104,7 @@ class MyProfileUI extends StatelessWidget {
                 Text(
                   streamSnapshot.data?['age'] +
                       "," +
-                      streamSnapshot.data?['city'] +
-                      "/" +
-                      streamSnapshot.data?['country'],
+                      streamSnapshot.data?['city'] ,
                   style: const TextStyle(
                       fontSize: 14.0,
                       color: Colors.white,

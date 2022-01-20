@@ -13,20 +13,18 @@ class ProfileUI extends StatelessWidget {
   String age;
   String city;
   String town;
-  String country;
   String phoneNumber;
   String position;
   String image;
   String email;
   ProfileUI(String this.firstName,String this.secondName,String this.age,String this.city,String this.town,
-                          String this.country,String this.phoneNumber,String this.position,String this.image,String this.email)
+                          String this.phoneNumber,String this.position,String this.image,String this.email)
   {
     this.firstName=firstName;
     this.secondName=secondName;
     this.age=age;
     this.city=city;
     this.town=town;
-    this.country=country;
     this.phoneNumber=phoneNumber;
     this.position=position;
     this.image=image;
@@ -94,7 +92,7 @@ class ProfileUI extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                age+","+city+"/"+country,
+                age+","+city,
                 style: TextStyle(
                   fontSize: 14.0,
                   color:Colors.white,

@@ -331,10 +331,6 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                                                                 listOfFields[index]
                                                                     .get(
                                                                         "town"),
-                                                                listOfFields[
-                                                                        index]
-                                                                    .get(
-                                                                        "country"),
                                                                 listOfFields[index].get(
                                                                     "phoneNumber"),
                                                                 listOfFields[index].get(

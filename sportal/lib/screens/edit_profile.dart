@@ -1,17 +1,17 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-import 'my_profile.dart';
-import 'my_profile.dart';
-import 'dart:io';
-import 'dart:async';
+
 import 'HomePage_s.dart';
+import 'my_profile.dart';
 
 class SettingsUI extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,14 +23,11 @@ class SettingsUI extends StatelessWidget {
 }
 
 class EditProfilePage extends StatefulWidget {
-
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-
-
   File _image = File(MyProfileUI.myMap["firstName"].toString());
   String? firstName = MyProfileUI.myMap["firstName"];
   String? secondName = MyProfileUI.myMap["secondName"];
@@ -43,23 +40,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     Future getImage() async {
-      var image = await ImagePicker.platform.getImage(source: ImageSource.gallery);
+      var image =
+          await ImagePicker.platform.getImage(source: ImageSource.gallery);
 
       setState(() {
         _image = File(image!.path);
         print('Image Path $_image');
       });
     }
-    Future uploadPic(BuildContext context) async{
+
+    Future uploadPic(BuildContext context) async {
       String fileName = basename(_image.path);
-      Reference reference = FirebaseStorage.instance.ref().child("images").child(
-          new DateTime.now().millisecondsSinceEpoch.toString() +
+      Reference reference = FirebaseStorage.instance
+          .ref()
+          .child("images")
+          .child(new DateTime.now().millisecondsSinceEpoch.toString() +
               "." +
               _image.path);
       UploadTask uploadTask = reference.putFile(_image);
       fileName = await (await uploadTask).ref.getDownloadURL();
       DatabaseReference databaseReference =
-        FirebaseDatabase.instance.ref().child("Data");
+          FirebaseDatabase.instance.ref().child("Data");
       String? uploadID = databaseReference.push().key;
 
       FirebaseFirestore.instance
@@ -68,20 +69,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
           .update({'image': fileName});
       setState(() {
         print("Profile Picture uploaded");
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
       });
     }
+
     return Scaffold(
       appBar: buildHeader(context),
-      extendBodyBehindAppBar:
-      true,
-
+      extendBodyBehindAppBar: true,
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("assets/images/background.png"),
-                fit: BoxFit.cover)
-        ),
+                fit: BoxFit.cover)),
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: GestureDetector(
           onTap: () {
@@ -91,7 +91,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
             children: [
               Text(
                 "Profili Düzenle",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500,color: Colors.white ),
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
               ),
               SizedBox(
                 height: 15,
@@ -108,13 +111,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           child: new SizedBox(
                             width: 180.0,
                             height: 180.0,
-                            child: (_image!=null)?Image.file(
-                              _image,
-                              fit: BoxFit.fill,
-                            ):Image.network(
-                              "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                              fit: BoxFit.fill,
-                            ),
+                            child: (_image != null)
+                                ? Image.file(
+                                    _image,
+                                    fit: BoxFit.fill,
+                                  )
+                                : Image.network(
+                                    "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                                    fit: BoxFit.fill,
+                                  ),
                           ),
                         ),
                       ),
@@ -137,7 +142,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             //Icons.edit,
                             icon: Icon(Icons.edit),
                             color: Colors.white,
-                            onPressed: (){
+                            onPressed: () {
                               getImage();
                             },
                           ),
@@ -148,14 +153,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 30,
               ),
-              buildTextField(1, MyProfileUI.myMap["firstName"].toString(), false),
-              buildTextField(2, MyProfileUI.myMap["secondName"].toString(), false),
+              buildTextField(
+                  1, MyProfileUI.myMap["firstName"].toString(), false),
+              buildTextField(
+                  2, MyProfileUI.myMap["secondName"].toString(), false),
               buildTextField(3, MyProfileUI.myMap["email"].toString(), false),
               buildTextField(5, MyProfileUI.myMap["town"].toString(), false),
               buildTextField(6, MyProfileUI.myMap["city"].toString(), false),
               buildTextField(7, MyProfileUI.myMap["phone"].toString(), false),
               buildTextField(8, MyProfileUI.myMap["age"].toString(), false),
-              buildTextField(9, MyProfileUI.myMap["position"].toString(), false),
+              buildTextField(
+                  9, MyProfileUI.myMap["position"].toString(), false),
               SizedBox(
                 height: 5,
               ),
@@ -164,8 +172,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 children: [
                   RaisedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => HomePage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage(
+                                    current_mail: '',
+                                  )));
                     },
                     color: Colors.green,
                     padding: EdgeInsets.symmetric(horizontal: 50),
@@ -183,13 +195,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   RaisedButton(
                     onPressed: () {
                       uploadPic(context);
-                          child: CircularProgressIndicator(
-                            color: Colors.blue,
-                          );
+                      child:
+                      CircularProgressIndicator(
+                        color: Colors.blue,
+                      );
 
-                      Future.delayed(Duration(seconds: 5), () =>
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => MyProfileUI())));
+                      Future.delayed(
+                          Duration(seconds: 5),
+                          () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyProfileUI())));
                     },
                     color: Colors.green,
                     padding: EdgeInsets.symmetric(horizontal: 50),
@@ -224,25 +240,42 @@ class _EditProfilePageState extends State<EditProfilePage> {
           print('First text field: $text');
         },
         decoration: InputDecoration(
-            prefixIcon: labelText==1 ? Icon(Icons.account_circle,color: Colors.white): labelText==2 ? Icon(Icons.account_circle,color: Colors.white):
-            labelText==3 ? Icon(Icons.mail,color: Colors.white):labelText==4 ? Icon(Icons.lock,color: Colors.white):
-            labelText==5 ? Icon(Icons.location_on,color: Colors.white): labelText==6 ? Icon(Icons.location_on,color: Colors.white):
-            labelText==7 ? Icon(Icons.phone,color: Colors.white): labelText==8 ? Icon(Icons.calendar_today,color: Colors.white):
-            labelText==9 ? Icon(Icons.sports_football,color: Colors.white):null,
+            prefixIcon: labelText == 1
+                ? Icon(Icons.account_circle, color: Colors.white)
+                : labelText == 2
+                    ? Icon(Icons.account_circle, color: Colors.white)
+                    : labelText == 3
+                        ? Icon(Icons.mail, color: Colors.white)
+                        : labelText == 4
+                            ? Icon(Icons.lock, color: Colors.white)
+                            : labelText == 5
+                                ? Icon(Icons.location_on, color: Colors.white)
+                                : labelText == 6
+                                    ? Icon(Icons.location_on,
+                                        color: Colors.white)
+                                    : labelText == 7
+                                        ? Icon(Icons.phone, color: Colors.white)
+                                        : labelText == 8
+                                            ? Icon(Icons.calendar_today,
+                                                color: Colors.white)
+                                            : labelText == 9
+                                                ? Icon(Icons.sports_football,
+                                                    color: Colors.white)
+                                                : null,
 
             // prefixIcon: Icon(Icons.mail) ,
             suffixIcon: isPasswordTextField
                 ? IconButton(
-              onPressed: () {
-                setState(() {
-                  showPassword = !showPassword;
-                });
-              },
-              icon: Icon(
-                Icons.remove_red_eye,
-                color: Colors.grey,
-              ),
-            )
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.remove_red_eye,
+                      color: Colors.grey,
+                    ),
+                  )
                 : null,
             contentPadding: EdgeInsets.only(bottom: 1),
             //labelText: labelText,
@@ -255,6 +288,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
+
   AppBar buildHeader(BuildContext context) {
     return AppBar(
         elevation: 0.0,
@@ -264,14 +298,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        MyProfileUI()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MyProfileUI()));
           },
         ),
-
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
   }

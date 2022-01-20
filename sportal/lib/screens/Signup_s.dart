@@ -1,12 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sportal/bars/buildAppBar.dart';
 import 'package:sportal/model/user_model.dart';
 
 import 'Background.dart';
-import 'Login_s.dart';
 
 class Sign_up extends StatefulWidget {
   const Sign_up({Key? key}) : super(key: key);
@@ -322,7 +325,196 @@ class Sign_upState extends State<Sign_up> {
 
     Navigator.pushAndRemoveUntil(
         (context),
-        MaterialPageRoute(builder: (context) => Login_screen()),
+        MaterialPageRoute(
+            builder: (context) =>
+                profile_information(firebaseFirestore, userModel)),
         (route) => false);
+  }
+}
+
+class profile_information extends StatefulWidget {
+  const profile_information(
+      FirebaseFirestore firebaseFirestore, UserModel userModel,
+      {Key? key})
+      : super(key: key);
+
+  @override
+  _profile_informationState createState() => _profile_informationState();
+}
+
+class _profile_informationState extends State<profile_information> {
+  late DateTime _dateTime;
+  File? image;
+  get firstNameEditingController => null;
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      final imageTemp = File(image.path);
+      setState(() => this.image = imageTemp);
+    } on PlatformException catch (e) {
+      print('Fotoğraf yüklenemedi: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: buildAppBar(),
+      extendBodyBehindAppBar:
+          true, //Body'i appbar kısmına çekiyor (Arka planı uzatmak için)
+      body: Stack(
+        children: [
+          Background(),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(36.0),
+              child: Form(
+                child: Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(height: 65),
+                      Text('Profil Bilgileri',
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.bold)),
+                      SizedBox(height: 30),
+//bölgeler gelcek
+                      TextFormField(
+                          autofocus: false,
+                          controller: firstNameEditingController,
+                          keyboardType: TextInputType.name,
+                          style: TextStyle(color: Colors.white),
+                          validator: (value) {
+                            RegExp regex = new RegExp(r'^.{3,}$');
+                            if (value!.isEmpty) {
+                              return ("İsim boş bırakılamaz");
+                            }
+                            if (!regex.hasMatch(value)) {
+                              return ("Geçerli bir isim giriniz (En az 3 karakter)");
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            firstNameEditingController.text = value!;
+                          },
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.account_circle,
+                                color: Colors.white70),
+                            contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                            hintText: "Profil Fotoğrafı",
+                            hintStyle: TextStyle(
+                                fontSize: 20.0, color: Colors.white70),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white24, width: 2),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.cyan, width: 2),
+                            ),
+                          )),
+
+                      InkWell(
+                        onTap: () => pickImage(),
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 15, 20, 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Icon(
+                                  Icons.insert_photo,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: Text(
+                                  'Profil Fotoğrafı',
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 20.0),
+                                ),
+                              ),
+                              Icon(
+                                Icons.file_upload,
+                                color: Colors.white70,
+                              ),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.white24, width: 2))),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showDatePicker(
+                                  context: context,
+                                  initialDate: _dateTime == null
+                                      ? DateTime.now()
+                                      : _dateTime,
+                                  firstDate: DateTime(1950),
+                                  lastDate: DateTime.now())
+                              .then((date) {
+                            setState(() {
+                              _dateTime = date!;
+                            });
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 15, 20, 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Icon(
+                                  Icons.date_range,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: Text(
+                                  'Doğum Tarihi',
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 20.0),
+                                ),
+                              ),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.white24, width: 2))),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                          'Kaydolduğunda Hizmet Şartları’nı ve Çerez Kullanımı dahil olmak üzere Gizlilik Politikası’nı kabul etmiş olursun. Gizlilik Seçeneklerini buna göre belirlediğinde başkaları seni e-postan veya telefon numaranla bulabilir.',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white70,
+                          )),
+                      SizedBox(height: 20),
+//buton
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

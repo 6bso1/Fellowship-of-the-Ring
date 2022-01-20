@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import '../bars/bottom_bar_floating_action_button.dart';
+import '../bars/bottom_bar_player_search.dart';
 import '../bars/buildAppBar.dart';
 import 'Background.dart';
+import 'Login_s.dart';
 import 'RakipBul_s.dart';
 import 'SahaBul_s.dart';
-import 'TakimBul_s.dart';
 import 'player_search_buildBody.dart';
-import '../bars/bottom_bar_player_search.dart';
-import '../bars/bottom_bar_floating_action_button.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,27 +20,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sportal',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
-    );
+        title: 'Sportal',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: Login_screen());
   }
 }
 
 class HomePage extends StatefulWidget {
+  final String current_mail;
+
+  HomePage({required this.current_mail});
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState(current_mail: current_mail);
 }
 
 class _HomePageState extends State<HomePage> {
+  final String current_mail;
+
+  _HomePageState({required this.current_mail});
+
   @override
   Widget build(BuildContext context) {
+    print(current_mail);
     return Scaffold(
-        floatingActionButton: true
-            ? buildFloating(context)
-            : null,
+        floatingActionButton: true ? buildFloating(context) : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: buildBottomBar(),
         appBar: buildAppBar(),
@@ -132,7 +135,8 @@ class HomePageMenu extends StatelessWidget {
           Navigator.push(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => PlayerSearchBuildBody(),
+              pageBuilder: (context, animation1, animation2) =>
+                  PlayerSearchBuildBody(),
               transitionDuration: Duration.zero,
             ),
           );
@@ -166,7 +170,7 @@ FloatingActionButton buildFloatingActionButton(BuildContext context) {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => HomePage(),
+          pageBuilder: (context, animation1, animation2) => Login_screen(),
           transitionDuration: Duration.zero,
         ),
       );

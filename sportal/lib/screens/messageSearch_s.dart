@@ -30,8 +30,9 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
 
   void onSearch() async {
     getCurrentUser();
+    userMap = null;
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+    isLoading = true;
     setState(() {
       isLoading = true;
     });

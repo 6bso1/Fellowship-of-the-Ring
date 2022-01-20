@@ -49,7 +49,7 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomePage(
-                          current_user: null,
+                          current_user: FirebaseAuth.instance.currentUser,
                         )));
           },
         ),

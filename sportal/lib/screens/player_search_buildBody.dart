@@ -277,12 +277,30 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                         ),
                                       ),
                                       trailing:FirebaseAuth.instance.currentUser!.uid==listOfFields[index].get("uid") ?GestureDetector(
-                                          onTap: () {
-                                           String ?docId= listOfFields[index].get("docId");
-                                            annRef
-                                                .doc(docId) // <-- Doc ID where data should be updated.
-                                                .update({'validity' : '0'});
-                                          },
+                                          onTap: () => showDialog<String>(
+                                              context: context,
+                                              builder: (BuildContext context) => AlertDialog(
+                                                title: const Text('Dikkat'),
+                                                content: const Text('İlanı kaldırmak istediğinize emein misiniz ?'),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                                                    child: const Text('Hayır'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      String ?docId= listOfFields[index].get("docId");
+                                                      annRef
+                                                          .doc(docId) // <-- Doc ID where data should be updated.
+                                                          .update({'validity' : '0'});
+                                                      Navigator.pop(context, 'Cancel');
+                                                      Fluttertoast.showToast(msg: "İlan başarıyla silindi ");
+                                                    },
+                                                    child: const Text('Evet'),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           child: const Icon(Icons.delete,
                                               color: Colors.white)
                                       ):

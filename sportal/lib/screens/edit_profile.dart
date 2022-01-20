@@ -28,7 +28,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  File _image = File(MyProfileUI.myMap["firstName"].toString());
+  File _image = File(MyProfileUI.myMap["image"].toString());
   String? firstName = MyProfileUI.myMap["firstName"];
   String? secondName = MyProfileUI.myMap["secondName"];
   String? age = MyProfileUI.myMap["age"];

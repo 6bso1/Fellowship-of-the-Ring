@@ -268,7 +268,9 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                             "\nPozisyon:" +
                                             listOfFields[index].get("position")+
                                             "\nStatus:" +
-                                            listOfFields[index].get("status"),
+                                            listOfFields[index].get("status")+
+                                            "\ne-mail:" +
+                                            listOfFields[index].get("email"),
                                         style: const TextStyle(
                                           fontSize: 13.0,
                                           color: Colors.white,
@@ -302,7 +304,7 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                                     ProfileUI(listOfFields[index].get("firstName"),listOfFields[index].get("secondName"),
                                                         listOfFields[index].get("age"),listOfFields[index].get("city"),listOfFields[index].get("town"),listOfFields[index].get("country"),
                                                         listOfFields[index].get("phoneNumber"),listOfFields[index].get("position"),
-                                                        listOfFields[index].get("image"))));
+                                                        listOfFields[index].get("image"),listOfFields[index].get("email"))));
                                       },
                                     )
                                         : const SizedBox(

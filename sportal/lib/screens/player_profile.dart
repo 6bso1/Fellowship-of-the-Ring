@@ -17,8 +17,9 @@ class ProfileUI extends StatelessWidget {
   String phoneNumber;
   String position;
   String image;
+  String email;
   ProfileUI(String this.firstName,String this.secondName,String this.age,String this.city,String this.town,
-                          String this.country,String this.phoneNumber,String this.position,String this.image)
+                          String this.country,String this.phoneNumber,String this.position,String this.image,String this.email)
   {
     this.firstName=firstName;
     this.secondName=secondName;
@@ -29,6 +30,7 @@ class ProfileUI extends StatelessWidget {
     this.phoneNumber=phoneNumber;
     this.position=position;
     this.image=image;
+    this.email=email;
   }
   AppBar buildHeader(BuildContext context) {
     return AppBar(
@@ -58,12 +60,9 @@ class ProfileUI extends StatelessWidget {
               image: DecorationImage(
                   image: AssetImage("assets/images/background.png"),
                   fit: BoxFit.cover)),
-
           child: Column(
-
             children: [
               Container(
-
                 child: Container(
                   width: double.infinity,
                   height: 200,
@@ -179,13 +178,13 @@ class ProfileUI extends StatelessWidget {
                   ),
                 ),],),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
               Stack(
                 children:<Widget>[
                   Positioned(
                     child: Container(
-                      alignment: Alignment(-0.9,0.0),
+                      alignment: Alignment(-0.90,0.0),
                       child: Icon(
                         Icons.location_on,
                         color: Colors.white,
@@ -197,9 +196,41 @@ class ProfileUI extends StatelessWidget {
                     width: double.infinity,
                     child: Container(
                       //color: Colors.red,
-                      alignment: Alignment(-0.7,4),
+                      alignment: Alignment(-0.65,4),
                       child: Text(
                         city+"/"+town,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 13.0,
+                            color:Colors.white,
+                            //letterSpacing: 0.5,
+                            fontWeight: FontWeight.w400
+                        ),
+                      ),
+                    ),
+                  ),],),
+              SizedBox(
+                height: 15,
+              ),
+              Stack(
+                children:<Widget>[
+                  Positioned(
+                    child: Container(
+                      alignment: Alignment(-0.90,0.0),
+                      child: Icon(
+                        Icons.mail,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      //color: Colors.red,
+                      alignment: Alignment(-0.65,4),
+                      child: Text(
+                        email,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 13.0,

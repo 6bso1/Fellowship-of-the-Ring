@@ -230,7 +230,7 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                                                     ProfileUI(listOfFields[index].get("firstName"),listOfFields[index].get("secondName"),
                                                         listOfFields[index].get("age"),listOfFields[index].get("city"),listOfFields[index].get("town"),listOfFields[index].get("country"),
                                                         listOfFields[index].get("phoneNumber"),listOfFields[index].get("position"),
-                                                        listOfFields[index].get("image"))));
+                                                        listOfFields[index].get("image"),listOfFields[index].get("email"))));
                                       },
                                     )
                                         : const SizedBox(

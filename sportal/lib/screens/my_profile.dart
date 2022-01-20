@@ -176,7 +176,7 @@ class MyProfileUI extends StatelessWidget {
                 children:<Widget>[
                   Positioned(
                     child: Container(
-                      alignment: const Alignment(-0.9,0.0),
+                      alignment: const Alignment(-0.95,0.0),
                       child: const Icon(
                         Icons.phone,
                         color: Colors.white,
@@ -202,13 +202,13 @@ class MyProfileUI extends StatelessWidget {
                     ),
                   ),],),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               Stack(
                 children:<Widget>[
                   Positioned(
                     child: Container(
-                      alignment: const Alignment(-0.9,0.0),
+                      alignment: const Alignment(-0.95,0.0),
                       child: const Icon(
                         Icons.location_on,
                         color: Colors.white,
@@ -220,7 +220,7 @@ class MyProfileUI extends StatelessWidget {
                     width: double.infinity,
                     child: Container(
                       //color: Colors.red,
-                      alignment: const Alignment(-0.7,4),
+                      alignment: const Alignment(-0.65,4),
                       child: Text(
                         streamSnapshot.data?['town']+"/"+streamSnapshot.data?['city'],
                         textAlign: TextAlign.left,
@@ -233,6 +233,39 @@ class MyProfileUI extends StatelessWidget {
                       ),
                     ),
                   ),],),
+              const SizedBox(
+                height: 15,
+              ),
+              Stack(
+                children:<Widget>[
+                  Positioned(
+                    child: Container(
+                      alignment: Alignment(-0.95,0.0),
+                      child: Icon(
+                        Icons.mail,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      //color: Colors.red,
+                      alignment: Alignment(-0.6,4),
+                      child: Text(
+                        streamSnapshot.data?['email'],
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 13.0,
+                            color:Colors.white,
+                            //letterSpacing: 0.5,
+                            fontWeight: FontWeight.w400
+                        ),
+                      ),
+                    ),
+                  ),],),
+
 
 
             ],

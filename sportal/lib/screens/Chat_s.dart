@@ -18,7 +18,7 @@ class ChatRoom extends StatelessWidget {
   void onSendMessage() async {
     if (_message.text.isNotEmpty) {
       Map<String, dynamic> messages = {
-        "sendby": _auth.currentUser!.displayName,
+        "sendby": currentName,
         "message": _message.text,
         "type": "text",
         "time": FieldValue.serverTimestamp(),
@@ -112,7 +112,7 @@ class ChatRoom extends StatelessWidget {
   Widget messages(Size size, Map<String, dynamic> map) {
     return Container(
       width: size.width,
-      alignment: map['sendby'] == _auth.currentUser!.displayName
+      alignment: map['sendby'] == currentName
           ? Alignment.centerRight
           : Alignment.centerLeft,
       child: Container(

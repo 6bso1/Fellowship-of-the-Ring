@@ -1,3 +1,5 @@
+// ignore: file_names
+// ignore: file_names
 import 'dart:convert';
 import 'dart:io';
 
@@ -8,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sportal/bars/buildAppBar.dart';
+import 'package:sportal/model/Drowdownlist.dart';
 import 'package:sportal/model/il_model.dart';
 import 'package:sportal/model/user_model.dart';
 
@@ -354,7 +357,20 @@ class _profile_informationState extends State<profile_information> {
   String photo = 'Profil Fotoğrafı';
   String il = 'İl Seçiniz';
   String ilce = 'İlçe Seçiniz';
+  bool _yuklemeTamamlandiMi = false;
+  String _secilenIl = "İl Secin";
+  String _secilenIlce = "İlce Seçin";
+  Dropdownlist sehirler = new Dropdownlist();
 
+  List<dynamic> _illerListesi = [];
+
+  List<String> _ilIsimleriListesi = [];
+  List<String> _ilceIsimleriListesi = [];
+
+  int _secilenIlIndexi = 0;
+  int _secilenIlceIndexi = 0;
+  bool _ilSecilmisMi = false;
+  bool _ilceSecilmisMi = false;
   Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -370,57 +386,48 @@ class _profile_informationState extends State<profile_information> {
 
   @override
   Widget build(BuildContext context) {
-    bool _yuklemeTamamlandiMi = false;
-    String _secilenIl;
-    String _secilenIlce;
-
-    bool _ilSecilmisMi = false;
-    bool _ilceSecilmisMi = false;
-
-    List<dynamic> _illerListesi = [];
-
-    List<String> _ilIsimleriListesi = [];
-    List<String> _ilceIsimleriListesi = [];
-
-    int _secilenIlIndexi = 0;
-    int _secilenIlceIndexi;
-
     /// JSON'u okuyup içinden Il nesnelerini listede toplama
     Future<void> _illeriGetir() async {
-      String jsonString = await rootBundle.loadString('assets/js/il-ilce.json');
-      print("jsonnnnnnnnn");
-
-      final jsonResponse = json.decode(jsonString);
-      print(jsonResponse);
-      _illerListesi = jsonResponse.map((x) => Il.fromJson(x)).toList();
+      if (sehirler.ilceler.isEmpty) {
+        sehirler.fillSehirs().then((value) => sehirler.fillIlces());
+        setState(() {
+          _yuklemeTamamlandiMi = true;
+        });
+      }
     }
 
     /// Il nesnelerinden sadece il_adi değişkenlerini ayrı bir listede toplama
     void _ilIsimleriniGetir() {
       _ilIsimleriListesi = [];
 
-      _illerListesi.forEach((element) {
-        _ilIsimleriListesi.add(element.ilAdi);
+      sehirler.namesIl.forEach((element) {
+        _ilIsimleriListesi.add(element.sehir_title);
       });
-
+      _yuklemeTamamlandiMi = true;
       setState(() {
         _yuklemeTamamlandiMi = true;
       });
     }
 
-    /// Ilce seçimi için seçilen ile göre ilçeleri getirme
     void _secilenIlinIlceleriniGetir(String _secilenIl) {
+      print(_secilenIl);
       _ilceIsimleriListesi = [];
-      _illerListesi.forEach((element) {
-        if (element.ilAdi == _secilenIl) {
-          element.ilceler.forEach((element) {
-            _ilceIsimleriListesi.add(element.ilceAdi);
-          });
+      String? key;
+      for (var item in sehirler.illerListesi) {
+        if (item.sehir_title == _secilenIl) key = item.sehir_key;
+      }
+      if (key != null) {
+        sehirler.getIlces(key);
+        for (var item in sehirler.namesIlce) {
+          _ilceIsimleriListesi.add(item.ilce_title);
         }
-      });
+      }
+      print(_ilceIsimleriListesi.length);
+      _ilSecilmisMi = true;
     }
 
     Future<void> _ilSecmeSayfasinaGit() async {
+      ilce = "İlce secin";
       if (_yuklemeTamamlandiMi) {
         _secilenIlIndexi = await Navigator.push(
           context,
@@ -431,15 +438,17 @@ class _profile_informationState extends State<profile_information> {
         );
         _secilenIlceIndexi = 0;
         _ilSecilmisMi = true;
+        print(_secilenIlIndexi);
         _secilenIl = _ilIsimleriListesi[_secilenIlIndexi];
-        _secilenIlinIlceleriniGetir(_illerListesi[_secilenIlIndexi].toString());
+        _secilenIlinIlceleriniGetir(_secilenIl);
         setState(() {});
       }
     }
 
     Future<void> _ilceSecmeSayfasinaGit() async {
       if (_ilSecilmisMi) {
-        _secilenIlinIlceleriniGetir(_ilIsimleriListesi[_secilenIlIndexi]);
+        _secilenIl = _ilIsimleriListesi[_secilenIlIndexi];
+        _secilenIlinIlceleriniGetir(_secilenIl);
         _secilenIlceIndexi = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -599,8 +608,10 @@ class _profile_informationState extends State<profile_information> {
                       ),
                       InkWell(
                         onTap: () {
-                          _illeriGetir().then((value) => _ilIsimleriniGetir());
-                          _ilSecmeSayfasinaGit();
+                          _illeriGetir()
+                              .then((value) => _ilIsimleriniGetir())
+                              .then((value) => _ilSecmeSayfasinaGit())
+                              .then((value) => il = _secilenIl);
                         },
                         child: Container(
                           padding: EdgeInsets.fromLTRB(0, 15, 20, 15),
@@ -633,7 +644,43 @@ class _profile_informationState extends State<profile_information> {
                                       color: Colors.white24, width: 2))),
                         ),
                       ),
-
+                      InkWell(
+                        onTap: () {
+                          _illeriGetir()
+                              .then((value) => _ilceSecmeSayfasinaGit())
+                              .then((value) => ilce = _secilenIlce);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 15, 20, 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Icon(
+                                  Icons.location_on,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: Text(
+                                  ilce,
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 20.0),
+                                ),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.white70,
+                              ),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.white24, width: 2))),
+                        ),
+                      ),
                       SizedBox(height: 20),
                       Text(
                           'Kaydolduğunda Hizmet Şartları’nı ve Çerez Kullanımı dahil olmak üzere Gizlilik Politikası’nı kabul etmiş olursun. Gizlilik Seçeneklerini buna göre belirlediğinde başkaları seni e-postan veya telefon numaranla bulabilir.',

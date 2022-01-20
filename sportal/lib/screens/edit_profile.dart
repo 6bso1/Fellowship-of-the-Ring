@@ -199,6 +199,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   RaisedButton(
                     onPressed: () {
                       uploadPic(context);
+                      updateInformation();
                       child:
                       CircularProgressIndicator(
                         color: Colors.blue,
@@ -310,9 +311,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void updateInformation(){
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference userRef = firestore.collection('users');
+    if(firstName.text!="")
+        MyProfileUI.myMap["firstName"]=firstName.text;
+    if(secondName.text!="")
+      MyProfileUI.myMap["secondName"]=secondName.text;
+    if(age.text!="")
+      MyProfileUI.myMap["age"]=age.text;
+    if(town.text!="")
+      MyProfileUI.myMap["town"]=town.text;
+    if(city.text!="")
+      MyProfileUI.myMap["city"]=city.text;
+    if(phone.text!="")
+      MyProfileUI.myMap["phone"]=phone.text;
+    if(email.text!="")
+      MyProfileUI.myMap["email"]=email.text;
+    if(position.text!="")
+      MyProfileUI.myMap["position"]=position.text;
+    print("bbbbbbbbb   "+MyProfileUI.myMap["docId"].toString());
     userRef.doc(MyProfileUI.myMap["docId"]) // <-- Doc ID where data should be updated.
                 .update({'firstName': MyProfileUI.myMap["firstName"],'secondName': MyProfileUI.myMap["secondName"],
-                      'town': MyProfileUI.myMap["town"],'city': MyProfileUI.myMap["city"],'age': MyProfileUI.myMap["age"],
-                      'phoneNumber': MyProfileUI.myMap["phone"],'email': MyProfileUI.myMap["email"],'position': MyProfileUI.myMap["position"]});
+            'town': MyProfileUI.myMap["town"],'city': MyProfileUI.myMap["city"],'age': MyProfileUI.myMap["age"],
+            'phoneNumber': MyProfileUI.myMap["phone"],'email': MyProfileUI.myMap["email"],'position': MyProfileUI.myMap["position"]});
   }
 }

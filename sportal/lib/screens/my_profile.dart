@@ -62,6 +62,7 @@ class MyProfileUI extends StatelessWidget {
           myMap["city"]=streamSnapshot.data?['city'];
           myMap["email"]=streamSnapshot.data?['email'];
           myMap["password"]=streamSnapshot.data?['password'];
+          myMap["docId"]=streamSnapshot.data?['docId'];
           if (streamSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(

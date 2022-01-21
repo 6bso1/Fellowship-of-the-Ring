@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sportal/screens/player_search_buildBody.dart';
-import 'edit_profile.dart';
-import '../bars/bottom_bar_player_search.dart';
+
 import '../bars/bottom_bar_floating_action_button.dart';
+import '../bars/bottom_bar_player_search.dart';
 import 'HomePage_s.dart';
+import 'edit_profile.dart';
 
 class MyProfileUI extends StatelessWidget {
   static Map<String, String> myMap = {};
@@ -38,7 +38,7 @@ class MyProfileUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: true ? buildFloating(context) : null,
+      floatingActionButton: true ? buildFloating(context, user) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
       appBar: buildHeader(context),
@@ -104,7 +104,7 @@ class MyProfileUI extends StatelessWidget {
                 Text(
                   streamSnapshot.data?['age'] +
                       "," +
-                      streamSnapshot.data?['city'] ,
+                      streamSnapshot.data?['city'],
                   style: const TextStyle(
                       fontSize: 14.0,
                       color: Colors.white,

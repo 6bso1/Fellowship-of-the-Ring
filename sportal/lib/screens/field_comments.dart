@@ -27,7 +27,8 @@ class _FieldCommentsState extends State<FieldComments> {
     final _formKey = GlobalKey<FormState>();
     CollectionReference commentRef = fieldVar.reference.collection('Rewieves');
     return Scaffold(
-        floatingActionButton: true ? buildFloating(context) : null,
+        floatingActionButton:
+            true ? buildFloating(context, current_user) : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: buildBottomBar(),
         appBar: buildHeader(),
@@ -111,6 +112,7 @@ class _FieldCommentsState extends State<FieldComments> {
                                           }
                                           Map<String, dynamic> reviewData = {
                                             'userID': current_user!.uid,
+                                            'userMail': current_user!.email,
                                             'comment': reviewController.text,
                                             'rate': rating,
                                             'date': DateTime.now()

@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'Player.dart';
-import 'player_profile.dart';
+
 import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import 'HomePage_s.dart';
+import 'player_profile.dart';
 
 enum SingingCharacter { lafayette, jefferson }
 
@@ -44,15 +43,15 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomePage(
-                      current_user: FirebaseAuth.instance.currentUser,
-                    )));
+                          current_user: FirebaseAuth.instance.currentUser,
+                        )));
           },
         ),
         title: Center(
             child: Image.asset('assets/images/Header-Rakip-Bul.png',
                 height: AppBar()
                     .preferredSize
-                    .height)),//image'i app bar'ın yüksekliğine görse resize ediyor
+                    .height)), //image'i app bar'ın yüksekliğine görse resize ediyor
         backgroundColor: Colors.transparent, //AppBar'ı tramsparan yapıyor
         automaticallyImplyLeading: false);
   }
@@ -333,22 +332,33 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) => ProfileUI(
-                                                                listOfFields[index].get(
-                                                                    "firstName"),
-                                                                listOfFields[index].get(
-                                                                    "secondName"),
-                                                                listOfFields[index]
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "firstName"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "secondName"),
+                                                                listOfFields[
+                                                                        index]
                                                                     .get("age"),
-                                                                listOfFields[index]
+                                                                listOfFields[
+                                                                        index]
                                                                     .get(
                                                                         "city"),
-                                                                listOfFields[index]
+                                                                listOfFields[
+                                                                        index]
                                                                     .get(
                                                                         "town"),
-                                                                listOfFields[index].get(
-                                                                    "phoneNumber"),
-                                                                listOfFields[index].get(
-                                                                    "position"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "phoneNumber"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "position"),
                                                                 listOfFields[
                                                                         index]
                                                                     .get(
@@ -356,7 +366,8 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                                                                 listOfFields[
                                                                         index]
                                                                     .get(
-                                                                        "email"))));
+                                                                        "email"),
+                                                                user)));
                                                   },
                                                 )
                                               : const SizedBox(
@@ -374,7 +385,7 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                   ],
                 );
               })),
-      floatingActionButton: buildFloating(context),
+      floatingActionButton: buildFloating(context, user),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
     );

@@ -36,7 +36,7 @@ class FieldProfileState extends State<FieldProfile> {
   Widget build(BuildContext context) {
     List<String> images = List.from(fieldVar.get('photos'));
     return Scaffold(
-      floatingActionButton: true ? buildFloating(context) : null,
+      floatingActionButton: true ? buildFloating(context, current_user) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
       appBar: buildAppBar(),

@@ -45,7 +45,8 @@ class _HomePageState extends State<HomePage> {
     print(current_user!.uid);
     print(current_user);
     return Scaffold(
-        floatingActionButton: true ? buildFloating(context) : null,
+        floatingActionButton:
+            true ? buildFloating(context, current_user) : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: buildBottomBar(),
         appBar: buildAppBar(),

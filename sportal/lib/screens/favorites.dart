@@ -2,20 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sportal/bars/bottom_bar_floating_action_button.dart';
+import 'package:sportal/bars/bottom_bar_player_search.dart';
 
-import '../bars/bottom_bar_floating_action_button.dart';
-import '../bars/bottom_bar_player_search.dart';
 import 'Background.dart';
 import 'field_profile.dart';
 
-class RouteSahaBul extends StatelessWidget {
+class Favorites extends StatefulWidget {
   final User? current_user;
-  RouteSahaBul({required this.current_user});
+  Favorites({required this.current_user});
 
+  @override
+  State<Favorites> createState() => _FavoritesState(current_user: current_user);
+}
+
+class _FavoritesState extends State<Favorites> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final User? current_user;
+  _FavoritesState({required this.current_user});
+
   @override
   Widget build(BuildContext context) {
-    print(current_user!.uid);
+    print("User idsi şudur: ");
+    print(widget.current_user!.uid);
+    print(widget.current_user!.email);
     CollectionReference sahaRef = firestore.collection('sahalar');
     return Scaffold(
       floatingActionButton: true ? buildFloating(context, current_user) : null,
@@ -31,7 +41,11 @@ class RouteSahaBul extends StatelessWidget {
             child: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream: sahaRef.snapshots(),
+              stream: firestore
+                  .collection('users')
+                  .doc(current_user!.uid)
+                  .collection('favoriteFields')
+                  .snapshots(),
               builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
                 if (asyncSnapshot.hasError) {
                   return Center(child: Text("Bir Hata oluştu."));
@@ -44,7 +58,7 @@ class RouteSahaBul extends StatelessWidget {
                           itemCount: listOfFields.length,
                           itemBuilder: (context, index) {
                             return fieldCards(
-                              current_user: current_user,
+                              current_user: widget.current_user,
                               fieldVar: listOfFields[index],
                             );
                           }),
@@ -181,16 +195,7 @@ class fieldCards extends StatelessWidget {
         right: 15,
         top: 15,
         child: InkWell(
-          onTap: () {
-            print(fieldVar.id);
-            Map<String, dynamic> tempField = {'fieldID': fieldVar.id};
-            FirebaseFirestore.instance
-                .collection('users')
-                .doc(current_user!.uid)
-                .collection('favoriteFields')
-                .doc(fieldVar.id)
-                .set(tempField);
-          },
+          onTap: () {},
           child: Image.asset(
             'assets/images/heart.png',
             height: 35,

@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'Player.dart';
-import 'player_profile.dart';
+
 import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import 'HomePage_s.dart';
+import 'player_profile.dart';
 
 enum SingingCharacter { lafayette, jefferson }
 
@@ -391,22 +390,33 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) => ProfileUI(
-                                                                listOfFields[index].get(
-                                                                    "firstName"),
-                                                                listOfFields[index].get(
-                                                                    "secondName"),
-                                                                listOfFields[index]
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "firstName"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "secondName"),
+                                                                listOfFields[
+                                                                        index]
                                                                     .get("age"),
-                                                                listOfFields[index]
+                                                                listOfFields[
+                                                                        index]
                                                                     .get(
                                                                         "city"),
-                                                                listOfFields[index]
+                                                                listOfFields[
+                                                                        index]
                                                                     .get(
                                                                         "town"),
-                                                                listOfFields[index].get(
-                                                                    "phoneNumber"),
-                                                                listOfFields[index].get(
-                                                                    "position"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "phoneNumber"),
+                                                                listOfFields[
+                                                                        index]
+                                                                    .get(
+                                                                        "position"),
                                                                 listOfFields[
                                                                         index]
                                                                     .get(
@@ -414,7 +424,8 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                                                 listOfFields[
                                                                         index]
                                                                     .get(
-                                                                        "email"))));
+                                                                        "email"),
+                                                                user)));
                                                   },
                                                 )
                                               : const SizedBox(
@@ -432,7 +443,7 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                   ],
                 );
               })),
-      floatingActionButton: buildFloating(context),
+      floatingActionButton: buildFloating(context, user),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
     );

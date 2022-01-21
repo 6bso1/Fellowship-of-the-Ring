@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sportal/screens/favorites.dart';
 import 'package:sportal/screens/messageSearch_s.dart';
 
 import '../screens/messageSearch_s.dart';
@@ -42,7 +44,14 @@ class _DemoBottomAppBar extends StatelessWidget {
                 icon: const Icon(Icons.favorite),
                 iconSize: 35,
                 color: Colors.black,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Favorites(
+                              current_user:
+                                  FirebaseAuth.instance.currentUser)));
+                },
               ),
               Expanded(
                 flex: 1,

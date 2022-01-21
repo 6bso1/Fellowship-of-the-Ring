@@ -31,7 +31,7 @@ class ChatRoom extends StatelessWidget {
           .collection('chats')
           .add(messages);
     } else {
-      print("Enter Some Text");
+      print("Mesaj girin");
     }
   }
 
@@ -136,7 +136,7 @@ class ChatRoom extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.blue,
+          color: Colors.purple,
         ),
         child: Text(
           map['message'],

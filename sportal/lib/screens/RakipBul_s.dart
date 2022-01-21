@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import '../screens/Chat_s.dart';
 import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import 'HomePage_s.dart';
@@ -12,6 +12,8 @@ enum SingingCharacter { lafayette, jefferson }
 
 class RouteRakipBul extends StatefulWidget {
   const RouteRakipBul({Key? key}) : super(key: key);
+
+
 
   @override
   _RouteRakipBul createState() => _RouteRakipBul();
@@ -29,6 +31,14 @@ class _RouteRakipBul extends State<RouteRakipBul> {
 
   TextEditingController emailController = TextEditingController();
   SingingCharacter? _character = SingingCharacter.lafayette;
+  String chatRoomId(String user1, String user2) {
+    if (user1[0].toLowerCase().codeUnits[0] >
+        user2.toLowerCase().codeUnits[0]) {
+      return "$user1$user2";
+    } else {
+      return "$user2$user1";
+    }
+  }
 
   AppBar buildHeader() {
     return AppBar(
@@ -314,7 +324,22 @@ class _RouteRakipBul extends State<RouteRakipBul> {
                                                                   color: Colors
                                                                       .white))
                                                           : GestureDetector(
-                                                              onTap: () {},
+                                                              onTap: () {
+
+                                                                String roomId = chatRoomId(streamSnapshot.data?['firstName'],  listOfFields[index].get("firstName"));
+
+                                                                Navigator.of(context).push(
+                                                                  MaterialPageRoute(
+                                                                    builder: (_) => ChatRoom(
+                                                                      chatRoomId: roomId,
+                                                                      currentName: streamSnapshot.data?['firstName'],
+                                                                      oppName: listOfFields[index].get("firstName"),
+                                                                      oppSName: listOfFields[index].get("secondName"),
+                                                                    ),
+                                                                  ),
+                                                                );
+
+                                                              },
                                                               child: const Icon(
                                                                   Icons.message,
                                                                   color: Colors

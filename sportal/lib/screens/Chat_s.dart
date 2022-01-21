@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:sportal/screens/messageSearch_s.dart';
 
 class ChatRoom extends StatelessWidget {
-  final Map<String, dynamic> userMap;
   final String chatRoomId;
   final String currentName;
+  final String oppName;
+  final String oppSName;
 
-  ChatRoom({required this.chatRoomId, required this.userMap, required this.currentName});
+  ChatRoom({required this.chatRoomId, required this.currentName, required this.oppName, required this.oppSName});
 
   final TextEditingController _message = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -50,7 +51,7 @@ class ChatRoom extends StatelessWidget {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.purple,
-        title: Text(userMap['firstName'] + ' ' + userMap['secondName']),
+        title: Text(oppName + ' ' + oppSName),
       ),
       body: SingleChildScrollView(
         child: Column(

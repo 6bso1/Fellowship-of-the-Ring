@@ -170,8 +170,9 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
                               MaterialPageRoute(
                                 builder: (_) => ChatRoom(
                                   chatRoomId: roomId,
-                                  userMap: userMap!,
                                   currentName: userMap2!['firstName'],
+                                  oppName: userMap!['firstName'],
+                                  oppSName: userMap!['secondName'],
                                 ),
                               ),
                             );

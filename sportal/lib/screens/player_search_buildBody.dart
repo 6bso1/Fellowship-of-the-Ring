@@ -7,6 +7,7 @@ import '../bars/bottom_bar_floating_action_button.dart';
 import '../bars/bottom_bar_player_search.dart';
 import 'HomePage_s.dart';
 import 'player_profile.dart';
+import '../screens/Chat_s.dart';
 
 enum SingingCharacter { lafayette, jefferson }
 
@@ -63,6 +64,14 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  String chatRoomId(String user1, String user2) {
+    if (user1[0].toLowerCase().codeUnits[0] >
+        user2.toLowerCase().codeUnits[0]) {
+      return "$user1$user2";
+    } else {
+      return "$user2$user1";
+    }
+  }
   @override
   Widget build(BuildContext context) {
     CollectionReference annRef = firestore.collection('announcement');
@@ -372,7 +381,20 @@ class _PlayerSearchBuildBodyState extends State<PlayerSearchBuildBody> {
                                                                   color: Colors
                                                                       .white))
                                                           : GestureDetector(
-                                                              onTap: () {},
+                                                              onTap: () {
+                                                                String roomId = chatRoomId(streamSnapshot.data?['firstName'],  listOfFields[index].get("firstName"));
+
+                                                                Navigator.of(context).push(
+                                                                  MaterialPageRoute(
+                                                                    builder: (_) => ChatRoom(
+                                                                      chatRoomId: roomId,
+                                                                      currentName: streamSnapshot.data?['firstName'],
+                                                                      oppName: listOfFields[index].get("firstName"),
+                                                                      oppSName: listOfFields[index].get("secondName"),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
                                                               child: const Icon(
                                                                   Icons.message,
                                                                   color: Colors

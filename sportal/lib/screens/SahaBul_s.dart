@@ -183,7 +183,26 @@ class fieldCards extends StatelessWidget {
         child: InkWell(
           onTap: () {
             print(fieldVar.id);
-            Map<String, dynamic> tempField = {'fieldID': fieldVar.id};
+
+            Map<String, dynamic> tempField = {
+              'fieldID': fieldVar.id,
+              'adress': fieldVar.get('adress'),
+              'commenNum': fieldVar.get('commenNum'),
+              'cost': fieldVar.get('cost'),
+              'end': fieldVar.get('end'),
+              'favNum': fieldVar.get('favNum'),
+              'il': fieldVar.get('il'),
+              'ilce': fieldVar.get('ilce'),
+              'mahalle': fieldVar.get('mahalle'),
+              'mail': fieldVar.get('mail'),
+              'name': fieldVar.get('name'),
+              'phone': fieldVar.get('phone'),
+              'photos': fieldVar.get('photos'),
+              'properties': fieldVar.get('properties'),
+              'rate': fieldVar.get('rate'),
+              'start': fieldVar.get('start'),
+              'type': fieldVar.get('type'),
+            };
             FirebaseFirestore.instance
                 .collection('users')
                 .doc(current_user!.uid)

@@ -6,10 +6,12 @@ import '../screens/HomePage_s.dart';
 Widget buildFloating(BuildContext context, User? current_user) {
   return FloatingActionButton(
     onPressed: () {
-      Navigator.push(
-          context,
+      Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (context) => HomePage(current_user: current_user)));
+              builder: (context) => HomePage(
+                    current_user: current_user,
+                  )),
+          (Route<dynamic> route) => false);
     },
     child: CircleAvatar(
       radius: 30,

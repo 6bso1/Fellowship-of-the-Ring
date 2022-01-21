@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sportal/bars/bottom_bar_floating_action_button.dart';
 import 'package:sportal/bars/bottom_bar_player_search.dart';
 
@@ -17,13 +18,16 @@ class FieldComments extends StatefulWidget {
 }
 
 class _FieldCommentsState extends State<FieldComments> {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final DocumentSnapshot fieldVar;
   final User? current_user;
   TextEditingController reviewController = TextEditingController();
   _FieldCommentsState({required this.current_user, required this.fieldVar});
-  double rating = 3.5;
+  double rating = 3.0;
   @override
   Widget build(BuildContext context) {
+    int commentNum = fieldVar.get('commenNum');
+    double rate = fieldVar.get('rate') + 0.0;
     final _formKey = GlobalKey<FormState>();
     CollectionReference commentRef = fieldVar.reference.collection('Rewieves');
     return Scaffold(
@@ -115,12 +119,36 @@ class _FieldCommentsState extends State<FieldComments> {
                                             'userMail': current_user!.email,
                                             'comment': reviewController.text,
                                             'rate': rating,
-                                            'date': DateTime.now()
+                                            'date': DateFormat('dd-MM-yyyy')
+                                                .format(DateTime.now())
                                           };
 
                                           await commentRef
                                               .doc()
                                               .set(reviewData);
+
+                                          rate = (rate * commentNum + rating) /
+                                              (commentNum + 1);
+                                          Map<String, dynamic> dataRate = {
+                                            'rate': rate
+                                          };
+
+                                          commentNum = commentNum + 1;
+                                          Map<String, dynamic> data = {
+                                            'commenNum': commentNum
+                                          };
+
+                                          await FirebaseFirestore.instance
+                                              .collection('sahalar')
+                                              .doc(fieldVar.id)
+                                              .update(data);
+
+                                          await FirebaseFirestore.instance
+                                              .collection('sahalar')
+                                              .doc(fieldVar.id)
+                                              .update(dataRate);
+                                          print(rate);
+                                          Navigator.of(context).pop();
                                         },
                                       ),
                                     )
@@ -196,7 +224,7 @@ class _FieldCommentsState extends State<FieldComments> {
 class commentCards extends StatelessWidget {
   final DocumentSnapshot commentVar;
   final DocumentSnapshot fieldVar;
-
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final User? current_user;
   commentCards(
       {required this.current_user,
@@ -211,18 +239,48 @@ class commentCards extends StatelessWidget {
             border: Border(
           bottom: BorderSide(width: 2, color: Colors.white70),
         )),
-        child: Column(children: [
-          Text(commentVar.get('userID'),
-              style: TextStyle(color: Colors.white, fontSize: 20)),
-          Text(
-            commentVar.get('comment'),
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          Text(
-            commentVar.get('rate').toString(),
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ]),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(children: [
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(commentVar.get('userMail'),
+                      style: TextStyle(color: Colors.white, fontSize: 15)),
+                ),
+                SizedBox(width: 2),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  commentVar.get('rate').toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+                SizedBox(width: 2),
+                Image.asset(
+                  'assets/images/star.png',
+                  height: 16,
+                ),
+                SizedBox(width: 3),
+                Text(
+                  commentVar.get('date').toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  commentVar.get('comment'),
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                SizedBox(width: 1),
+              ],
+            ),
+          ]),
+        ),
       );
     } else {
       return Text("Hiçbir Yorum Bulunamadı",
@@ -233,7 +291,7 @@ class commentCards extends StatelessWidget {
 
 typedef void RatingChangeCallback(double rating);
 
-class StarRating extends StatelessWidget {
+class StarRating extends StatefulWidget {
   final int starCount;
   final double rating;
   final RatingChangeCallback onRatingChanged;
@@ -245,14 +303,19 @@ class StarRating extends StatelessWidget {
       required this.onRatingChanged,
       required this.color});
 
+  @override
+  State<StarRating> createState() => _StarRatingState();
+}
+
+class _StarRatingState extends State<StarRating> {
   Widget buildStar(BuildContext context, int index) {
     Icon icon;
-    if (index >= rating) {
+    if (index >= widget.rating) {
       icon = new Icon(
         Icons.star_border,
-        color: Theme.of(context).buttonColor,
+        color: Colors.blue,
       );
-    } else if (index > rating - 1 && index < rating) {
+    } else if (index > widget.rating - 1 && index < widget.rating) {
       icon = new Icon(
         Icons.star_half,
         color: Colors.grey,
@@ -264,8 +327,9 @@ class StarRating extends StatelessWidget {
       );
     }
     return new InkResponse(
-      onTap:
-          onRatingChanged == null ? null : () => onRatingChanged(index + 1.0),
+      onTap: widget.onRatingChanged == null
+          ? null
+          : () => widget.onRatingChanged(index + 1.0),
       child: icon,
     );
   }
@@ -273,7 +337,7 @@ class StarRating extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Row(
-        children:
-            new List.generate(starCount, (index) => buildStar(context, index)));
+        children: new List.generate(
+            widget.starCount, (index) => buildStar(context, index)));
   }
 }

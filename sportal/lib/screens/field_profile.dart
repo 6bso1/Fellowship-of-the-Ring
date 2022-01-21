@@ -107,10 +107,7 @@ class FieldProfileState extends State<FieldProfile> {
                       ),
                     ]),
                   ),
-                  Text(
-                    fieldVar.get('rate').toString(),
-                    style: const TextStyle(fontSize: 14, color: Colors.white),
-                  ),
+                  rate(),
                   const SizedBox(width: 2),
                   Image.asset(
                     'assets/images/star.png',
@@ -226,5 +223,20 @@ class FieldProfileState extends State<FieldProfile> {
             shape: BoxShape.circle),
       );
     });
+  }
+
+  Widget rate() {
+    String r = fieldVar.get('rate').toString();
+    if (r.length < 3) {
+      r = r + '.0';
+    }
+
+    if (r.length > 3) {
+      r = r[0] + r[1] + r[2];
+    }
+    return Text(
+      r,
+      style: TextStyle(fontSize: 14, color: Colors.white),
+    );
   }
 }

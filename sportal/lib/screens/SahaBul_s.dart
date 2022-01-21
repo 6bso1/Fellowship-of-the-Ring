@@ -8,17 +8,24 @@ import '../bars/bottom_bar_player_search.dart';
 import 'Background.dart';
 import 'field_profile.dart';
 
-class RouteSahaBul extends StatelessWidget {
+class RouteSahaBul extends StatefulWidget {
   final User? current_user;
   RouteSahaBul({required this.current_user});
 
+  @override
+  State<RouteSahaBul> createState() => _RouteSahaBulState();
+}
+
+class _RouteSahaBulState extends State<RouteSahaBul> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
-    print(current_user!.uid);
+    print(widget.current_user!.uid);
     CollectionReference sahaRef = firestore.collection('sahalar');
     return Scaffold(
-      floatingActionButton: true ? buildFloating(context, current_user) : null,
+      floatingActionButton:
+          true ? buildFloating(context, widget.current_user) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomBar(),
       appBar: buildHeader(),
@@ -44,7 +51,7 @@ class RouteSahaBul extends StatelessWidget {
                           itemCount: listOfFields.length,
                           itemBuilder: (context, index) {
                             return fieldCards(
-                              current_user: current_user,
+                              current_user: widget.current_user,
                               fieldVar: listOfFields[index],
                             );
                           }),
@@ -78,7 +85,11 @@ class fieldCards extends StatelessWidget {
   final DocumentSnapshot fieldVar;
   final User? current_user;
   fieldCards({required this.current_user, required this.fieldVar});
-
+  Image fav = Image.asset(
+    'assets/images/heart.png',
+    height: 35,
+  );
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -154,7 +165,11 @@ class fieldCards extends StatelessWidget {
                           Expanded(
                             flex: 1,
                             child: Text(
-                              fieldVar.get('adress'),
+                              fieldVar.get('mahalle') +
+                                  " / " +
+                                  fieldVar.get('ilce') +
+                                  " / " +
+                                  fieldVar.get('il'),
                               style:
                                   TextStyle(fontSize: 14, color: Colors.black),
                             ),
@@ -209,11 +224,21 @@ class fieldCards extends StatelessWidget {
                 .collection('favoriteFields')
                 .doc(fieldVar.id)
                 .set(tempField);
+
+            if (firestore
+                    .collection('users')
+                    .doc(current_user!.uid)
+                    .collection('favoriteFields')
+                    .doc(fieldVar.id)
+                    .id ==
+                fieldVar.id) {
+              fav = Image.asset(
+                'assets/images/red-heart.png',
+                height: 35,
+              );
+            }
           },
-          child: Image.asset(
-            'assets/images/heart.png',
-            height: 35,
-          ),
+          child: fav,
         ),
       ),
     ]);
@@ -221,7 +246,6 @@ class fieldCards extends StatelessWidget {
 
   Widget rate() {
     String r = fieldVar.get('rate').toString();
-
     if (r.length < 3) {
       r = r + '.0';
     }

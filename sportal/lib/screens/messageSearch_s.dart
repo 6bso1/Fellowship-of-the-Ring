@@ -95,11 +95,11 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
-              backgroundColor: Color(0xFF631FC9),
+              backgroundColor: Colors.purple,
               title: Text("Kullanıcı ara",
                   style: TextStyle(
                       fontSize: 20,
-                      color: Color(0xFF4AC5F6),
+                      color: Colors.white,
                       fontWeight: FontWeight.bold)),
             ),
             body: isLoading
@@ -112,6 +112,12 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
                   )
                 : Column(
                     children: [
+                      SizedBox(
+                          height: 200,
+                          child: Image.asset(
+                            "assets/logobar.png",
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: size.height / 20,
                       ),
@@ -147,7 +153,9 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
                       ),
                       ElevatedButton(
                         onPressed: onSearch,
-                        child: Text("Search"),
+                        child: Text("Ara"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.purple),
                       ),
                       SizedBox(
                         height: size.height / 30,
@@ -170,7 +178,7 @@ class _MessageSearchScreenState extends State<MessageSearchScreen>
                           },
                           leading: Icon(Icons.account_box, color: Colors.white),
                           title: Text(
-                            userMap!['firstName'],
+                            userMap!['firstName'] + ' ' + userMap!['secondName'],
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 17,

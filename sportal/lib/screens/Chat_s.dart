@@ -39,9 +39,18 @@ class ChatRoom extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
+    return MaterialApp(
+        title: "welcome",
+        home: Container(
+        decoration: BoxDecoration(
+        image: DecorationImage(
+        image: AssetImage("assets/background.png"),
+    fit: BoxFit.cover)),
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text(userMap['firstName']),
+        backgroundColor: Colors.purple,
+        title: Text(userMap['firstName'] + ' ' + userMap['secondName']),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -90,15 +99,22 @@ class ChatRoom extends StatelessWidget {
                       child: TextField(
                         controller: _message,
                         decoration: InputDecoration(
-                            hintText: "Send Message",
+                            hintText: "Mesaj gönder",
+                            hintStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color:Colors.white,
+                                  width: 3),
                             )),
                       ),
                     ),
 
                     IconButton(
-                        icon: Icon(Icons.send), onPressed: onSendMessage),
+                        icon: Icon(Icons.send), color: Colors.white, onPressed: onSendMessage),
                   ],
                 ),
               ),
@@ -106,7 +122,7 @@ class ChatRoom extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ),));
   }
 
   Widget messages(Size size, Map<String, dynamic> map) {

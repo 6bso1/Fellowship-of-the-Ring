@@ -1,10 +1,14 @@
 // ignore: file_names
 // ignore: file_names
+// ignore: file_names
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +17,7 @@ import 'package:sportal/bars/buildAppBar.dart';
 import 'package:sportal/model/Drowdownlist.dart';
 import 'package:sportal/model/il_model.dart';
 import 'package:sportal/model/user_model.dart';
+import 'package:sportal/screens/HomePage_s.dart';
 
 import 'Background.dart';
 import 'il-secim.dart';
@@ -323,7 +328,7 @@ class Sign_upState extends State<Sign_up> {
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
     userModel.secondName = secondNameEditingController.text;
-
+    userModel.password = passwordEditingController.text;
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
@@ -360,10 +365,12 @@ class _profile_informationState extends State<profile_information> {
   bool _yuklemeTamamlandiMi = false;
   String _secilenIl = "İl Secin";
   String _secilenIlce = "İlce Seçin";
+  String? position;
   Dropdownlist sehirler = new Dropdownlist();
-
+  String? yas;
+  String? number;
   List<dynamic> _illerListesi = [];
-
+  File _image = File("Not selected yet");
   List<String> _ilIsimleriListesi = [];
   List<String> _ilceIsimleriListesi = [];
 
@@ -371,39 +378,44 @@ class _profile_informationState extends State<profile_information> {
   int _secilenIlceIndexi = 0;
   bool _ilSecilmisMi = false;
   bool _ilceSecilmisMi = false;
-  Future pickImage() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
 
-      final imageTemp = File(image.path);
-      setState(() => this.image = imageTemp);
-      photo = imageTemp.toString();
-    } on PlatformException catch (e) {
-      print('Fotoğraf yüklenemedi: $e');
-    }
+  Future getImage() async {
+    var image =
+        await ImagePicker.platform.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = File(image!.path);
+      print('Image Path $_image');
+    });
+  }
+
+  Future uploadPic() async {
+    print(FirebaseAuth.instance.currentUser!.uid.toString());
+    String fileName = _image.path;
+    Reference reference = FirebaseStorage.instance.ref().child("images").child(
+        new DateTime.now().millisecondsSinceEpoch.toString() +
+            "." +
+            _image.path);
+    UploadTask uploadTask = reference.putFile(_image);
+    fileName = await (await uploadTask).ref.getDownloadURL();
+    DatabaseReference databaseReference =
+        FirebaseDatabase.instance.ref().child("Data");
+    String? uploadID = databaseReference.push().key;
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid.toString())
+        .update({'image': fileName});
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    /// JSON'u okuyup içinden Il nesnelerini listede toplama
     Future<void> _illeriGetir() async {
+      ilce = "";
       if (sehirler.ilceler.isEmpty) {
         sehirler.fillSehirs().then((value) => sehirler.fillIlces());
-        setState(() {
-          _yuklemeTamamlandiMi = true;
-        });
       }
-    }
-
-    /// Il nesnelerinden sadece il_adi değişkenlerini ayrı bir listede toplama
-    void _ilIsimleriniGetir() {
-      _ilIsimleriListesi = [];
-
-      sehirler.namesIl.forEach((element) {
-        _ilIsimleriListesi.add(element.sehir_title);
-      });
-      _yuklemeTamamlandiMi = true;
       setState(() {
         _yuklemeTamamlandiMi = true;
       });
@@ -426,23 +438,56 @@ class _profile_informationState extends State<profile_information> {
       _ilSecilmisMi = true;
     }
 
+    /// Il nesnelerinden sadece il_adi değişkenlerini ayrı bir listede toplama
+    void _ilIsimleriniGetir() {
+      _ilIsimleriListesi = [];
+      print(sehirler.namesIl.length);
+      sehirler.namesIl.forEach((element) {
+        _ilIsimleriListesi.add(element.sehir_title);
+      });
+      _yuklemeTamamlandiMi = true;
+    }
+
     Future<void> _ilSecmeSayfasinaGit() async {
-      ilce = "İlce secin";
+      _ilIsimleriniGetir();
+      print(_yuklemeTamamlandiMi);
       if (_yuklemeTamamlandiMi) {
-        _secilenIlIndexi = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                IlSecimiSayfasi(ilIsimleri: _ilIsimleriListesi),
-          ),
-        );
-        _secilenIlceIndexi = 0;
-        _ilSecilmisMi = true;
-        print(_secilenIlIndexi);
-        _secilenIl = _ilIsimleriListesi[_secilenIlIndexi];
-        _secilenIlinIlceleriniGetir(_secilenIl);
-        setState(() {});
+        if (!_ilIsimleriListesi.isEmpty) {
+          _secilenIlIndexi = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  IlSecimiSayfasi(ilIsimleri: _ilIsimleriListesi),
+            ),
+          );
+          _secilenIlceIndexi = 0;
+          _ilSecilmisMi = true;
+          if (_secilenIlIndexi != null) {
+            _secilenIl = _ilIsimleriListesi[_secilenIlIndexi];
+            _secilenIlinIlceleriniGetir(_secilenIl);
+            setState(() {});
+          } else {
+            _secilenIlIndexi = 0;
+          }
+        }
       }
+    }
+
+    void updateInformation() {
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      yas = (DateTime.now().year - _dateTime.year).toString();
+      CollectionReference userRef = firestore.collection('users');
+      userRef
+          .doc(FirebaseAuth.instance.currentUser!.uid
+              .toString()) // <-- Doc ID where data should be updated.
+          .update({
+        'town': _secilenIlce,
+        'city': _secilenIl,
+        'age': yas,
+        'phoneNumber': number,
+        'position': position,
+        'docId': FirebaseAuth.instance.currentUser!.uid.toString()
+      });
     }
 
     Future<void> _ilceSecmeSayfasinaGit() async {
@@ -465,7 +510,6 @@ class _profile_informationState extends State<profile_information> {
     @override
     void initState() {
       super.initState();
-      _illeriGetir().then((value) => _ilIsimleriniGetir());
     }
 
     return Scaffold(
@@ -495,43 +539,28 @@ class _profile_informationState extends State<profile_information> {
                       SizedBox(height: 30),
 //bölgeler gelcek
                       TextFormField(
-                          autofocus: false,
-                          controller: firstNameEditingController,
-                          keyboardType: TextInputType.name,
-                          style: TextStyle(color: Colors.white),
-                          validator: (value) {
-                            RegExp regex = new RegExp(r'^.{3,}$');
-                            if (value!.isEmpty) {
-                              return ("İsim boş bırakılamaz");
-                            }
-                            if (!regex.hasMatch(value)) {
-                              return ("Geçerli bir isim giriniz (En az 3 karakter)");
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            firstNameEditingController.text = value!;
-                          },
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.account_circle,
-                                color: Colors.white70),
-                            contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                            hintText: "Profil Fotoğrafı",
-                            hintStyle: TextStyle(
-                                fontSize: 20.0, color: Colors.white70),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white24, width: 2),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.cyan, width: 2),
-                            ),
-                          )),
+                        autofocus: false,
+                        controller: firstNameEditingController,
+                        keyboardType: TextInputType.name,
+                        style: TextStyle(color: Colors.white),
+                        validator: (value) {
+                          RegExp regex = new RegExp(r'^.{3,}$');
+                          if (value!.isEmpty) {
+                            return ("İsim boş bırakılamaz");
+                          }
+                          if (!regex.hasMatch(value)) {
+                            return ("Geçerli bir isim giriniz (En az 3 karakter)");
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          firstNameEditingController.text = value!;
+                        },
+                        textInputAction: TextInputAction.next,
+                      ),
 
                       InkWell(
-                        onTap: () => pickImage(),
+                        onTap: () => getImage(),
                         child: Container(
                           padding: EdgeInsets.fromLTRB(0, 15, 20, 15),
                           child: Row(
@@ -608,10 +637,10 @@ class _profile_informationState extends State<profile_information> {
                       ),
                       InkWell(
                         onTap: () {
-                          _illeriGetir()
-                              .then((value) => _ilIsimleriniGetir())
-                              .then((value) => _ilSecmeSayfasinaGit())
-                              .then((value) => il = _secilenIl);
+                          _illeriGetir().then((value) => {
+                                _ilSecmeSayfasinaGit()
+                                    .then((value) => il = _secilenIl)
+                              });
                         },
                         child: Container(
                           padding: EdgeInsets.fromLTRB(0, 15, 20, 15),
@@ -682,6 +711,29 @@ class _profile_informationState extends State<profile_information> {
                         ),
                       ),
                       SizedBox(height: 20),
+                      TextField(
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                            labelText: "Pozisyon",
+                            labelStyle: TextStyle(color: Colors.white),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20))),
+                        onChanged: (text) {
+                          position = text;
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      TextField(
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                            labelText: "Telefon Numarası",
+                            labelStyle: TextStyle(color: Colors.white),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20))),
+                        onChanged: (text) {
+                          number = text;
+                        },
+                      ),
                       Text(
                           'Kaydolduğunda Hizmet Şartları’nı ve Çerez Kullanımı dahil olmak üzere Gizlilik Politikası’nı kabul etmiş olursun. Gizlilik Seçeneklerini buna göre belirlediğinde başkaları seni e-postan veya telefon numaranla bulabilir.',
                           style: TextStyle(
@@ -689,6 +741,7 @@ class _profile_informationState extends State<profile_information> {
                             color: Colors.white70,
                           )),
                       SizedBox(height: 20),
+
                       Material(
                         elevation: 5,
                         borderRadius: BorderRadius.circular(7),
@@ -696,7 +749,17 @@ class _profile_informationState extends State<profile_information> {
                         child: MaterialButton(
                             padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
                             minWidth: MediaQuery.of(context).size.width,
-                            onPressed: () {},
+                            onPressed: () {
+                              uploadPic()
+                                  .then((value) => updateInformation())
+                                  .then((value) => Navigator.pushAndRemoveUntil(
+                                      (context),
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage(
+                                              current_user: FirebaseAuth
+                                                  .instance.currentUser)),
+                                      (route) => false));
+                            },
                             child: Text(
                               "Profil Bilgilerini Kaydet",
                               textAlign: TextAlign.center,

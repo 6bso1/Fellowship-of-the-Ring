@@ -1,11 +1,10 @@
-
 class UserModel {
   String? uid;
   String? email;
   String? firstName;
   String? secondName;
-
-  UserModel({this.uid, this.email, this.firstName, this.secondName});
+  String? password;
+  UserModel({this.uid, this.email, this.firstName, this.secondName, password});
 
   // receiving data from server
   factory UserModel.fromMap(map) {
@@ -14,6 +13,7 @@ class UserModel {
       email: map['email'],
       firstName: map['firstName'],
       secondName: map['secondName'],
+      password: map['password'],
     );
   }
 
@@ -24,6 +24,7 @@ class UserModel {
       'email': email,
       'firstName': firstName,
       'secondName': secondName,
+      'password': password,
     };
   }
 }
